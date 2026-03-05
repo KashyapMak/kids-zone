@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MathWiz Adventure</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        :root { --primary: #6366f1; --bg: #eef2ff; --text: #1e293b; --prog: #22c55e; }
+        .theme-girl { --primary: #ec4899; --bg: #fdf2f8; --text: #831843; --prog: #db2777; }
+        .hidden { 
+    display: none !important; 
+}
+        body { font-family: 'Comic Sans MS', cursive, sans-serif; margin: 0; background: var(--bg); color: var(--text); min-height: 100vh; transition: 0.3s; }
+        
+        header { background: white; padding: 0.5rem 2rem; position: relative; display: flex; justify-content: space-between; align-items: center; border-bottom: 4px solid #eee; }
+        #header-progress { position: absolute; bottom: -4px; left: 0; height: 4px; background: var(--prog); width: 0%; transition: width 0.5s ease; }
+        
+        /* Centered Quiz Info */
+        #quiz-info { text-align: center; margin: 20px 0; font-weight: bold; }
+        #timer-clock { font-family: 'Orbitron', sans-serif; font-size: 2.5rem; color: var(--primary); display: block; margin-top: 5px; }
+        
+        main { display: flex; justify-content: center; align-items: center; padding: 20px; min-height: 70vh; }
+        .card { background: white; padding: 2rem; border-radius: 25px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 600px; text-align: center; border: 3px solid var(--primary); }
+        
+        .options-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; margin-top: 25px; }
+        .option-btn { cursor:pointer; padding: 15px 30px; font-size: 1.5rem; background: white; border: 3px solid var(--primary); border-radius: 12px; transition: 0.2s; font-weight: bold; }
+        .option-btn:hover { background: var(--primary); color: white; transform: scale(1.05); }
+        
+        .review-list { text-align: left; max-height: 300px; overflow-y: auto; margin: 20px 0; border: 1px solid #ddd; padding: 15px; border-radius: 10px; }
+        .review-item { padding: 8px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; }
+        
+        .main-btn { cursor: pointer; padding: 12px 30px; border: none; border-radius: 15px; background: var(--primary); color: white; font-weight: bold; font-size: 1.1rem; margin-top: 15px; }
+        
+        footer { padding: 15px; text-align: center; font-size: 0.8rem; }
+        footer a { color: var(--primary); text-decoration: none; font-weight: bold; margin: 0 10px; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1 style="margin:0; font-size: 1.5rem;">🚀 MathWiz</h1>
+    <div>
+        <button onclick="toggleTheme()" style="background:none; border:none; cursor:pointer;">🎨</button>
+        <button onclick="toggleSound()" style="background:none; border:none; cursor:pointer;" id="mute-btn">🔊</button>
+    </div>
+    <div id="header-progress"></div>
+</header>
+
+<main>
+    <div id="setup-screen" class="card">
+        <h2>Start Your Quest</h2>
+        <select id="range-select" onchange="toggleCustom()">
+            <option value="1-10">Tables 1 to 10</option>
+            <option value="11-15">Tables 11 to 15</option>
+            <option value="custom">✨ Custom Range</option>
+        </select>
+        <div id="custom-fields" class="hidden">
+            <input type="number" id="start-num" placeholder="Start Table">
+            <input type="number" id="end-num" placeholder="End Table">
+            <input type="number" id="qty-num" placeholder="Questions" value="15">
+        </div>
+        <div style="margin: 15px 0;">
+            <button class="main-btn" id="btn-relaxed" onclick="setMode(false)">😌 Relaxed</button>
+            <button class="main-btn" id="btn-timed" onclick="setMode(true)">⏱️ Timed</button>
+        </div>
+        <button class="main-btn" onclick="startQuiz()" style="background:var(--prog);">START GAME 🏁</button>
+    </div>
+
+    <div id="quiz-screen" class="card hidden">
+        <div id="quiz-info">
+            <span id="q-progress">Question 1/15</span>
+            <div id="timer-clock"></div>
+        </div>
+        <h2 id="question-text" style="font-size: 4rem; margin: 10px 0;">0 x 0</h2>
+        <div id="options" class="options-container"></div>
+    </div>
+
+    <div id="result-screen" class="card hidden">
+        <h2>Quiz Complete! 🎉</h2>
+        <h1 id="score-display">0/0</h1>
+        <div id="review-list" class="review-list"></div>
+        <button class="main-btn" onclick="location.reload()">Play Again! 🔄</button>
+    </div>
+</main>
+
+<footer>
+    <p>MathWiz © 2026 | <a href="https://linkedin.com/in/yourname" target="_blank">🔗 LinkedIn</a> | <a href="https://github.com/yourrepo" target="_blank">💻 GitHub</a></p>
+</footer>
+
+<script>
+    let config = { start: 1, end: 10, total: 15, isTimed: false };
+    let score = 0, current = 0, questions = [], history = [], isMuted = false, timerObj, timeLeft;
+
+    function toggleCustom() { document.getElementById('custom-fields').classList.toggle('hidden', document.getElementById('range-select').value !== 'custom'); }
+    function toggleTheme() { document.body.classList.toggle('theme-girl'); }
+    function toggleSound() { isMuted = !isMuted; document.getElementById('mute-btn').innerText = isMuted ? '🔇' : '🔊'; }
+    function setMode(timed) { config.isTimed = timed; document.getElementById('btn-relaxed').style.opacity = timed ? '0.5' : '1'; document.getElementById('btn-timed').style.opacity = timed ? '1' : '0.5'; }
+
+    function startQuiz() {
+        const sel = document.getElementById('range-select').value;
+        if(sel === 'custom') {
+            config.start = parseInt(document.getElementById('start-num').value) || 1;
+            config.end = parseInt(document.getElementById('end-num').value) || 10;
+            config.total = parseInt(document.getElementById('qty-num').value) || 15;
+        } else {
+            const p = sel.split('-');
+            config.start = parseInt(p[0]); config.end = parseInt(p[1]);
+            config.total = 15;
+        }
+        document.getElementById('setup-screen').classList.add('hidden');
+        document.getElementById('quiz-screen').classList.remove('hidden');
+        generateQuestions();
+        loadQuestion();
+    }
+
+    function generateQuestions() {
+        questions = []; history = [];
+        for(let i=0; i<config.total; i++) {
+            let n1 = Math.floor(Math.random() * (config.end - config.start + 1)) + config.start;
+            let n2 = Math.floor(Math.random() * 12) + 1;
+            questions.push({ n1, n2, ans: n1 * n2, opts: [n1*n2, n1*n2+2, n1*n2-1].sort(() => Math.random() - 0.5) });
+        }
+    }
+
+    function loadQuestion() {
+        if(current >= config.total) return endQuiz();
+        document.getElementById('q-progress').innerText = `Question ${current + 1}/${config.total}`;
+        document.getElementById('header-progress').style.width = ((current + 1) / config.total) * 100 + "%";
+        
+        const q = questions[current];
+        document.getElementById('question-text').innerText = `${q.n1} × ${q.n2}`;
+        const container = document.getElementById('options');
+        container.innerHTML = '';
+        q.opts.forEach(o => {
+            const b = document.createElement('button');
+            b.className = 'option-btn';
+            b.innerText = o;
+            b.onclick = () => check(o);
+            container.appendChild(b);
+        });
+        
+        if(config.isTimed) startTimer();
+        else document.getElementById('timer-clock').innerText = "";
+    }
+
+    function startTimer() {
+        timeLeft = 10;
+        document.getElementById('timer-clock').innerText = "00:10";
+        clearInterval(timerObj);
+        timerObj = setInterval(() => {
+            timeLeft--;
+            document.getElementById('timer-clock').innerText = `00:${timeLeft.toString().padStart(2, '0')}`;
+            if(timeLeft <= 0) { clearInterval(timerObj); check(null); }
+        }, 1000);
+    }
+
+    function check(val) {
+        clearInterval(timerObj);
+        const q = questions[current];
+        history.push({ q: `${q.n1} × ${q.n2}`, ans: q.ans, user: val });
+        if(val === q.ans) score++;
+        current++;
+        loadQuestion();
+    }
+
+    function endQuiz() {
+        document.getElementById('quiz-screen').classList.add('hidden');
+        document.getElementById('result-screen').classList.remove('hidden');
+        document.getElementById('score-display').innerText = `${score} / ${config.total}`;
+        const list = document.getElementById('review-list');
+        list.innerHTML = "";
+        history.forEach(h => {
+            list.innerHTML += `<div class="review-item"><span>${h.q} = <b>${h.ans}</b></span><span style="color:${h.user === h.ans ? 'green' : 'red'}">${h.user === h.ans ? '✅' : '❌ ' + (h.user || 'None')}</span></div>`;
+        });
+        if(score === config.total) confetti();
+    }
+</script>
+</body>
+</html>
