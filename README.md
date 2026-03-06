@@ -5,6 +5,8 @@ All activities are **offline‑friendly** and **distraction‑free**, built with
 
 Our mission: **help kids learn through play**.
 
+Open **[`Play mode`](https://kashyapmak.github.io/kids-zone)**
+
 ---
 
 ## 📦 What’s Inside
