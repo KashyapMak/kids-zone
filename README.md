@@ -13,7 +13,7 @@ Our mission: **help kids learn through play**.
 A kid‑friendly multiplication practice game covering tables **1–30** with custom ranges, **Practice** & **Test (Timed)** modes (per‑question or total‑time), smart distractors, visual arrays, audio feedback, streaks, badges, and a printable summary.
 
 - **Folder:** `time-table/`  
-- **Run:** open `times-table-trail.html`  
+- **Run:** open [`times-table-trail.html`](https://kashyapmak.github.io/kids-zone/time-table/times-table-trail.html)  
 - **Docs:** `time-table/README.md`
 
 ---
@@ -22,7 +22,8 @@ A kid‑friendly multiplication practice game covering tables **1–30** with cu
 An addition & subtraction practice game for **1–4 digit** numbers with **Addition**, **Subtraction**, or **Mixed** modes. Includes **No negatives**, **No carry**, **No borrow** toggles, **Practice** & **Test (Timed)** modes, optional **Number line**, audio feedback, streaks/badges, and printable results.
 
 - **Folder:** `add-sub/`  
-- **Run:** open `add-sub-trail.html`  
+- **Run:** open `add-sub-trail.html`
+- **Run:** open [`add-sub-trail.html`](https://kashyapmak.github.io/kids-zone/add-sub/add-sub-trail.html)  
 - **Docs:** `add-sub/README.md`
 
 ---
