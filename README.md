@@ -1,94 +1,83 @@
-
 # 🌈 Kids Zone
 
 **Kids Zone** is a growing collection of **safe, fun, and educational web tools for children**.  
-All activities are designed to be **simple**, **offline‑friendly**, and **distraction‑free**, using only **HTML, CSS, and JavaScript**.
+All activities are **offline‑friendly** and **distraction‑free**, built with **HTML, CSS, and JavaScript**—no frameworks, no tracking, no accounts.
 
-This repository focuses on helping kids **learn through play** — without ads, tracking, or complex setups.
+Our mission: **help kids learn through play**.
 
 ---
 
 ## 📦 What’s Inside
 
-### 🧮 Times Table Trail  
-A kid‑friendly multiplication practice game.
+### 🧮 Times Table Trail
+A kid‑friendly multiplication practice game covering tables **1–30** with custom ranges, **Practice** & **Test (Timed)** modes (per‑question or total‑time), smart distractors, visual arrays, audio feedback, streaks, badges, and a printable summary.
 
-📁 **Folder:** `time-table/`  
-▶️ **Run:** Open `times-table-trail.html` in any modern browser  
-📘 **Documentation:** `time-table/README.md`
+- **Folder:** `time-table/`  
+- **Run:** open `times-table-trail.html`  
+- **Docs:** `time-table/README.md`
 
-**Key Features:**
-- Practice mode (retry until correct)
-- Timed test mode with:
-  - Per‑question timer
-  - Total‑time challenge
-- Tables from **1 to 30** + custom ranges
-- Adaptive difficulty (easy → hard)
-- Jungle theme (default) + multiple fun themes
-- Visual dot arrays for conceptual learning
-- Audio feedback & optional read‑aloud
-- Streaks, badges & celebration effects
-- Local progress tracking (no internet required)
-- Printable results summary
+---
 
-Perfect for:
-- Home learning
-- Classroom practice
-- Offline or low‑bandwidth environments
+### ➕➖ Add & Sub Trail
+An addition & subtraction practice game for **1–4 digit** numbers with **Addition**, **Subtraction**, or **Mixed** modes. Includes **No negatives**, **No carry**, **No borrow** toggles, **Practice** & **Test (Timed)** modes, optional **Number line**, audio feedback, streaks/badges, and printable results.
 
-➡️ **See full details:** `time-table/README.md`
+- **Folder:** `add-sub/`  
+- **Run:** open `add-sub-trail.html`  
+- **Docs:** `add-sub/README.md`
 
 ---
 
 ## 🎯 Design Principles
 
-Every Kids Zone tool follows these principles:
-
 - ✅ **Offline‑first**
-- ✅ **Single‑file apps**
+- ✅ **Single‑file apps** where possible
 - ✅ **No ads, no tracking, no sign‑ups**
-- ✅ **Kid‑friendly visuals & fonts**
-- ✅ **Accessible & easy to use**
-- ✅ **Safe for schools and homes**
+- ✅ **Kid‑friendly** fonts, colors, and buttons
+- ✅ **Accessible** (keyboard, high‑contrast, readable sizes)
+- ✅ **Safe** for classrooms and homes
 
 ---
 
-## 🚀 What’s Coming Next
+## 🛡️ Kids‑Safe & Privacy‑First
 
-Kids Zone is actively evolving. Planned additions include:
+Kids Zone apps:
 
-- ➕ Addition & subtraction games
+- Do **not** collect personal data
+- Make **no** analytics/advertising calls
+- Store progress **locally** in the browser only
+- Run fully **offline** (optional CDN fonts/effects if online)
+- Provide a **Reset Progress** action to clear saved data
+
+---
+
+## 🚀 Roadmap
+
+- ➕ Addition & subtraction (done ✅) — ongoing refinements
 - ➗ Division practice
-- 🔢 Number sense & place‑value tools
+- 🔢 Number sense & place value
 - 🧠 Logic & pattern games
-- 🧩 Mini puzzles for early learners
-- 🌍 Multi‑language support
-- 👩‍🏫 Parent / teacher modes
-- 📄 Printable worksheets & reports
+- 🧩 Early‑learner mini puzzles
+- 🌍 Multi‑language UI
+- 👩‍🏫 Teacher/Parent modes
+- 📄 Printable worksheets & packs
 
-Each new tool will follow the same philosophy:
-
-> **Simple. Safe. Fun. Educational.**
+All future tools will remain: **Simple. Safe. Fun. Educational.**
 
 ---
 
 ## 🛠️ Technology
 
-- HTML5  
-- CSS3  
-- Vanilla JavaScript  
-- Optional CDN assets (fonts, effects)  
-- No frameworks  
-- No build tools  
+- HTML5, CSS3, Vanilla JavaScript  
+- Optional CDN assets for fonts/effects  
+- No frameworks, no build system
 
 ---
 
 ## 👨‍💻 Author
 
-Created and maintained by **Kashyap Makadia**
-
-- 🔗 LinkedIn: [https://www.linkedin.com/in/your-linkedin](https://www.linkedin.com/in/kashyapmakadia/)  
-
+- **Author:** Kashyap Makadia  
+- **LinkedIn:** https://www.linkedin.com/in/kashyapmakadia/  
+- **GitHub Repo:** https://github.com/KashyapMak/kids-zone
 
 ---
 
@@ -96,36 +85,19 @@ Created and maintained by **Kashyap Makadia**
 
 Contributions and ideas are welcome!
 
-You can help by:
-- Adding new kid‑friendly learning tools
-- Improving UI/UX or accessibility
-- Enhancing learning logic or difficulty progression
+- New kid‑friendly tools
+- UI/UX & accessibility improvements
+- Learning logic & difficulty refinements
 
-Please keep contributions:
-- Simple
-- Safe for children
-- Framework‑free where possible
+Please keep contributions **simple**, **kid‑safe**, and (ideally) **framework‑free**.
 
 ---
 
 ## 📄 License
 
-MIT License
+**MIT License** — free to use, modify, and share.
 
-Free to use, modify, and share.  
-Attribution appreciated:
-
-> *“Kids Zone by Your Name”*
-
----
-
-## ❤️ Final Note
-
-Kids Zone is built on one belief:
-
-> **Learning should feel like play — not pressure.**
-
-If this project helps children enjoy learning just a little more, it’s doing its job 🌱
+Attribution appreciated: _“Kids Zone by Kashyap Makadia.”_
 
 ---
 
@@ -134,8 +106,13 @@ If this project helps children enjoy learning just a little more, it’s doing i
 ```text
 kids-zone/
 │
+├── add-sub/
+│   ├── add-sub-trail.html
+│   └── README.md
+│
 ├── time-table/
 │   ├── times-table-trail.html
 │   └── README.md
 │
+├── LICENSE
 └── README.md   ← (this file)
