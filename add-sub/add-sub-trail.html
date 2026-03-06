@@ -5,10 +5,10 @@
   <meta
     name="viewport"
     content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Times Table Trail — Multiplication Practice</title>
+  <title>Add & Sub Trail — Kids Zone</title>
 
   <!-- Kid-friendly fonts (CDN allowed, still single file) -->
-  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700&family=Fredoka:wght@400;600;700&family=Orbitron:wght@700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700&family=Fredoka:wght@400;600;700&family=Orbitron:wght@700&display=swap" rel="stylesheet" />
   <!-- Confetti -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
@@ -141,14 +141,15 @@
 
     /* ---------- QUESTION ---------- */
     #question-wrap { text-align: center; margin: .3rem 0; }
-    #question-text { font-size: clamp(2.6rem, 7vw, 4.5rem); margin: .3rem 0; line-height: 1.1; }
-    #helper-visual {
-      display: grid; gap: 6px; justify-content: center; margin: .25rem 0 .5rem;
+    #question-text { font-size: clamp(2.6rem, 6.8vw, 4.5rem); margin: .3rem 0; line-height: 1.1; }
+    #helper-visual { margin: .25rem auto .5rem; width: 100%; max-width: 560px; }
+    .number-line { position: relative; height: 56px; margin-top: 8px; }
+    .number-line .track {
+      position: absolute; top: 26px; left: 8px; right: 8px; height: 4px; background: #cbd5e1; border-radius: 4px;
     }
-    .dot {
-      width: 16px; height: 16px; border-radius: 50%; background: var(--accent); display: inline-block;
-      box-shadow: inset 0 -2px 0 rgba(0,0,0,.15);
-    }
+    .number-line .tick { position: absolute; top: 18px; width: 2px; height: 14px; background: #64748b; }
+    .number-line .label { position: absolute; top: 0; transform: translateX(-50%); font-weight: 800; font-size: 0.9rem; color: var(--muted); }
+    .number-line .marker { position: absolute; top: 18px; transform: translateX(-50%); width: 10px; height: 10px; background: var(--accent); border-radius: 50%; box-shadow: 0 0 0 3px rgba(245, 158, 11, .25); }
 
     /* ---------- OPTIONS ---------- */
     .options { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: .6rem; margin-top: .6rem; }
@@ -199,19 +200,19 @@
 </head>
 <body class="theme-jungle">
   <header>
-    <div id="brand" aria-label="Times Table Trail">
+    <div id="brand" aria-label="Add & Sub Trail">
       <!-- Inline relative logo (SVG leaf) -->
       <svg class="logo" viewBox="0 0 64 64" aria-hidden="true">
         <defs>
-          <linearGradient id="leafGrad" x1="0" x2="1" y1="0" y2="1">
+          <linearGradient id="leafGrad2" x1="0" x2="1" y1="0" y2="1">
             <stop offset="0" stop-color="#34d399"/>
             <stop offset="1" stop-color="#059669"/>
           </linearGradient>
         </defs>
-        <path d="M54 10C30 10 14 20 8 40c8-4 16-5 24-2-4 1-8 4-12 9 8-2 14-1 20 2 8-10 14-22 14-39z" fill="url(#leafGrad)" stroke="#065f46" stroke-width="2" />
+        <path d="M54 10C30 10 14 20 8 40c8-4 16-5 24-2-4 1-8 4-12 9 8-2 14-1 20 2 8-10 14-22 14-39z" fill="url(#leafGrad2)" stroke="#065f46" stroke-width="2" />
         <path d="M12 42c10-8 22-12 36-12" stroke="#064e3b" stroke-width="2" fill="none" />
       </svg>
-      <h1>Times Table Trail</h1>
+      <h1>Add & Sub Trail</h1>
     </div>
 
     <div class="row" style="justify-content:center; gap:.4rem;">
@@ -240,26 +241,32 @@
   <main>
     <!-- ---------- SETUP ---------- -->
     <section id="setup-screen" class="card" aria-label="Setup">
-      <h2 style="margin:.2rem 0">Start Your Trail 🚀</h2>
+      <h2 style="margin:.2rem 0">Choose Your Challenge 🚀</h2>
 
       <div class="row" style="margin-top:.25rem">
-        <label for="range-select"><strong>Choose tables:</strong></label>
-        <select id="range-select" class="select" onchange="toggleCustom()">
-          <option value="1-5">1 to 5</option>
-          <option value="5-10">5 to 10</option>
-          <option value="1-10" selected>1 to 10</option>
-          <option value="11-15">11 to 15</option>
-          <option value="16-20">16 to 20</option>
-          <option value="21-25">21 to 25</option>
-          <option value="26-30">26 to 30</option>
-          <option value="custom">✨ Custom Range</option>
-        </select>
+        <strong>Digits:</strong>
+        <label><input type="radio" name="digits" value="1" checked> 1‑digit</label>
+        <label><input type="radio" name="digits" value="2"> 2‑digit</label>
+        <label><input type="radio" name="digits" value="3"> 3‑digit</label>
+        <label><input type="radio" name="digits" value="4"> 4‑digit</label>
+      </div>
 
-        <div id="custom-fields" class="row hidden">
-          <input type="number" id="start-num" min="1" max="50" placeholder="Start" style="width:95px">
-          <input type="number" id="end-num" min="1" max="50" placeholder="End" style="width:95px">
-          <input type="number" id="qty-num" min="5" max="50" value="15" title="Number of questions" style="width:120px">
-        </div>
+      <div class="row" style="margin-top:.25rem">
+        <strong>Operations:</strong>
+        <label><input type="radio" name="ops" value="add" checked> Addition (+)</label>
+        <label><input type="radio" name="ops" value="sub"> Subtraction (−)</label>
+        <label><input type="radio" name="ops" value="mix"> Mixed (+ / −)</label>
+      </div>
+
+      <div class="row" style="margin-top:.25rem">
+        <label><input type="checkbox" id="no-negative" checked> <strong>No negative answers</strong> (for subtraction)</label>
+        <label><input type="checkbox" id="avoid-carry"> <strong>No carry</strong> (addition)</label>
+        <label><input type="checkbox" id="avoid-borrow"> <strong>No borrow</strong> (subtraction)</label>
+      </div>
+
+      <div class="row" style="margin-top:.25rem">
+        <label for="qty-num"><strong>Questions:</strong></label>
+        <input type="number" id="qty-num" min="5" max="50" value="15" style="width:120px">
       </div>
 
       <div class="row" style="margin-top:.5rem">
@@ -284,7 +291,7 @@
       </div>
 
       <div class="row" style="margin-top:.4rem">
-        <label><input type="checkbox" id="show-arrays" checked> <strong>Show visual arrays (dots)</strong></label>
+        <label><input type="checkbox" id="show-numberline" checked> <strong>Show number line (small numbers)</strong></label>
         <label><input type="checkbox" id="shuffle-options" checked> <strong>Shuffle options</strong></label>
       </div>
 
@@ -309,8 +316,8 @@
 
       <div id="question-wrap">
         <div id="message" style="font-weight:800; color:var(--muted); min-height:1.2em"></div>
-        <h2 id="question-text" aria-label="Question">0 × 0</h2>
-        <div id="helper-visual" class="hidden" aria-hidden="true"></div>
+        <h2 id="question-text" aria-label="Question">0 + 0</h2>
+        <div id="helper-visual"></div>
       </div>
 
       <div id="options" class="options"></div>
@@ -344,7 +351,7 @@
 
   <footer class="no-print">
     <div class="footer-row">
-      <span>Times Table Trail © 2026</span>
+      <span>Add & Sub Trail © 2026</span>
       <span class="footer-sep">•</span>
       <a class="social-link" href="https://www.linkedin.com/in/kashyapmakadia/" target="_blank" rel="noopener">
         <!-- LinkedIn icon (inline SVG) -->
@@ -369,22 +376,26 @@
        State & Configuration
        ========================= */
     const cfg = {
-      start: 1, end: 10, total: 15,
-      mode: 'practice',            // 'practice' | 'test'
+      digits: 1,                 // 1|2|3|4
+      opMode: 'add',             // 'add' | 'sub' | 'mix'
+      total: 15,
+      mode: 'practice',          // 'practice' | 'test'
       timeboxType: 'per-question', // 'per-question' | 'total'
       perQSeconds: 10,
       totalSeconds: 180,
       theme: 'theme-jungle',
-      showArrays: true,
       shuffleOptions: true,
-      factorMax: 12,               // multiplier 1..12
+      showNumberLine: true,
+      noNegative: true,
+      avoidCarry: false,
+      avoidBorrow: false
     };
 
     let score = 0, current = 0, questions = [], history = [];
     let isMuted = false /* overridden to ON below */, speakQ = false;
     let timerObj = null, timeLeft = 0, streak = 0, awaitingAnswer = true;
-    let startTimeMs = 0, endTimeMs = 0; // for total time display
-    let totalTimerObj = null;           // for global total timebox
+    let startTimeMs = 0, endTimeMs = 0;
+    let totalTimerObj = null;
 
     const $ = sel => document.querySelector(sel);
 
@@ -425,7 +436,7 @@
       if(!speakQ) return;
       if(!('speechSynthesis' in window)) return;
       try {
-        const u = new SpeechSynthesisUtterance(text.replace('×',' times '));
+        const u = new SpeechSynthesisUtterance(text.replace('−',' minus ').replace('+',' plus '));
         u.rate = 0.95; u.pitch = 1.1;
         speechSynthesis.cancel(); speechSynthesis.speak(u);
       } catch {}
@@ -438,10 +449,10 @@
     }
 
     function updateSavedStats(){
-      const key = `mw_${cfg.start}-${cfg.end}_${cfg.mode}_${cfg.timeboxType}`;
+      const key = `as_${cfg.digits}_${cfg.opMode}_${cfg.mode}_${cfg.timeboxType}`;
       const data = JSON.parse(localStorage.getItem(key) || '{}');
       const text = [
-        `Preset: ${cfg.start}–${cfg.end} | ${cfg.mode.toUpperCase()} ${cfg.mode==='test' ? `(${cfg.timeboxType.replace('-',' ')})` : ''}`,
+        `Digits: ${cfg.digits} | Op: ${cfg.opMode.toUpperCase()} | ${cfg.mode.toUpperCase()} ${cfg.mode==='test' ? `(${cfg.timeboxType.replace('-',' ')})` : ''}`,
         data.best ? `Best: ${data.best.score}/${data.best.total}` : `Best: —`,
         data.last ? `Last: ${data.last.score}/${data.last.total}` : `Last: —`
       ].join('  •  ');
@@ -449,7 +460,7 @@
     }
 
     function saveResult(){
-      const key = `mw_${cfg.start}-${cfg.end}_${cfg.mode}_${cfg.timeboxType}`;
+      const key = `as_${cfg.digits}_${cfg.opMode}_${cfg.mode}_${cfg.timeboxType}`;
       const data = JSON.parse(localStorage.getItem(key) || '{}');
       const best = data.best && (data.best.score / data.best.total) >= (score / cfg.total) ? data.best : {score, total: cfg.total, date: Date.now()};
       const last = {score, total: cfg.total, date: Date.now()};
@@ -457,57 +468,104 @@
     }
 
     /* =========================
-       Question Generation
+       Generation Utilities
+       ========================= */
+    function pow10(n){ return Math.pow(10, n); }
+    function digitRange(d){ return d===1 ? [1,9] : [pow10(d-1), pow10(d)-1]; }
+
+    function hasCarry(a,b){
+      let carry = 0;
+      while(a>0 || b>0){
+        const da = a%10, db = b%10;
+        if (da + db + carry >= 10) return true;
+        carry = Math.floor((da+db+carry)/10);
+        a = Math.floor(a/10); b = Math.floor(b/10);
+      }
+      return false;
+    }
+
+    function needsBorrow(a,b){
+      // true if any digit in b > a (examining right to left)
+      while(a>0 || b>0){
+        const da = a%10, db = b%10;
+        if (db > da) return true;
+        a = Math.floor(a/10); b = Math.floor(b/10);
+      }
+      return false;
+    }
+
+    function generatePair(d, op){
+      // constraints
+      const [minV, maxV] = digitRange(d);
+      let tries = 0;
+      while(tries < 200){
+        tries++;
+        let a = randInt(minV, maxV);
+        let b = randInt(minV, maxV);
+
+        if(op === 'sub'){
+          if (cfg.noNegative && a < b){ const t=a; a=b; b=t; } // enforce non-negative
+          if (cfg.avoidBorrow && needsBorrow(a,b)) continue;
+          return {a,b,op};
+        } else if(op === 'add'){
+          if (cfg.avoidCarry && hasCarry(a,b)) continue;
+          return {a,b,op};
+        }
+      }
+      // Fallback: safe simple values
+      let a = minV, b = Math.min(minV, maxV);
+      if (op==='sub' && cfg.noNegative && a<b) [a,b]=[b,a];
+      return {a,b,op};
+    }
+
+    function smartOptions(correct, a, b, op, doShuffle=true){
+      const set = new Set([correct]);
+      const near = [
+        correct + 1, correct - 1, correct + 2, correct - 2,
+        correct + (op==='add'? a : -a),
+        correct + (op==='add'? b : -b),
+        (op==='add' ? a + (b+1) : a - (b-1)),
+        (op==='add' ? a + (b-1) : a - (b+1)),
+      ].filter(x => Number.isFinite(x));
+
+      near.forEach(v => { if(v>=0 && set.size<4) set.add(v); });
+      while(set.size < 4){
+        set.add(correct + randInt(-9,9));
+      }
+      const arr = Array.from(set).slice(0,4);
+      return doShuffle ? shuffle(arr) : arr;
+    }
+
+    /* =========================
+       Build Questions
        ========================= */
     function generateQuestions(){
       questions = []; history = []; current = 0; score = 0; streak = 0;
 
-      // Progressive difficulty
       for(let i=0;i<cfg.total;i++){
-        const n1 = randInt(cfg.start, cfg.end);
+        const op = (cfg.opMode==='mix') ? (Math.random()<0.5?'add':'sub') : cfg.opMode;
+        let {a,b} = generatePair(cfg.digits, op);
 
-        // Adaptive second factor
-        let n2;
+        // Gentle progression: shrink b early, grow later
         const p = i / cfg.total;
-        if (p < 0.33) n2 = randInt(1, 5);             // easy
-        else if (p < 0.66) n2 = randInt(3, 9);        // medium
-        else n2 = randInt(6, cfg.factorMax);          // hard (up to 12)
+        if (cfg.digits === 1){
+          if (p < 0.33) b = randInt(1,3);
+          else if (p < 0.66) b = randInt(2,7);
+        }
 
-        const ans = n1 * n2;
-        const opts = generateOptions(ans, n1, n2, cfg.shuffleOptions);
+        if (op==='sub' && cfg.noNegative && a<b) [a,b] = [b,a];
 
-        questions.push({ n1, n2, ans, opts });
+        const ans = (op==='add') ? a + b : a - b;
+        const opts = smartOptions(ans, a, b, op, cfg.shuffleOptions);
+        questions.push({ a, b, op, ans, opts });
       }
-    }
-
-    function generateOptions(correct, n1, n2, doShuffle=true){
-      const set = new Set([correct]);
-
-      const pool = [
-        n1*(n2+1), n1*(n2-1), (n1+1)*n2, (n1-1)*n2,
-        correct + n1, correct - n1, correct + n2, correct - n2,
-        correct + 1, correct - 1, correct + 2, correct - 2
-      ].filter(x => Number.isFinite(x) && x > 0);
-
-      shuffle(pool);
-      for(const v of pool){
-        if(set.size >= 4) break;
-        set.add(v);
-      }
-      while(set.size < 4){
-        set.add(correct + randInt(-9,9) || correct + randInt(2,7));
-      }
-
-      const arr = Array.from(set);
-      return doShuffle ? shuffle(arr) : arr;
     }
 
     /* =========================
        UI Flow
        ========================= */
-    function toggleCustom(){
-      const v = $('#range-select').value;
-      $('#custom-fields').classList.toggle('hidden', v !== 'custom');
+    function toggleTimedControls(show){
+      $('#timed-controls').classList.toggle('hidden', !show);
     }
 
     function setMode(mode){
@@ -517,7 +575,7 @@
       $('#btn-test').setAttribute('aria-pressed', String(isTest));
       $('#btn-practice').style.opacity = isTest ? .7 : 1;
       $('#btn-test').style.opacity = isTest ? 1 : .7;
-      $('#timed-controls').classList.toggle('hidden', !isTest);
+      toggleTimedControls(isTest);
       updateSavedStats();
     }
 
@@ -530,21 +588,16 @@
     }
 
     function startQuiz(){
-      const sel = $('#range-select').value;
-      if (sel === 'custom'){
-        cfg.start = Number($('#start-num').value) || 1;
-        cfg.end   = Number($('#end-num').value)   || 10;
-        cfg.total = Math.min(Math.max(Number($('#qty-num').value)||15, 5), 50);
-        if (cfg.start > cfg.end) [cfg.start, cfg.end] = [cfg.end, cfg.start];
-        cfg.start = Math.max(1, Math.min(cfg.start, 50));
-        cfg.end   = Math.max(1, Math.min(cfg.end, 50));
-      } else {
-        const [a,b] = sel.split('-').map(Number);
-        cfg.start = a; cfg.end = b; cfg.total = 15;
-      }
+      // Read setup values
+      cfg.digits = Number(document.querySelector('input[name="digits"]:checked').value);
+      cfg.opMode = document.querySelector('input[name="ops"]:checked').value;
+      cfg.total = Math.min(Math.max(Number($('#qty-num').value)||15, 5), 50);
+      cfg.noNegative = $('#no-negative').checked;
+      cfg.avoidCarry = $('#avoid-carry').checked;
+      cfg.avoidBorrow = $('#avoid-borrow').checked;
       cfg.perQSeconds = Math.min(Math.max(Number($('#per-q-secs').value)||10, 5), 60);
       cfg.totalSeconds = Math.min(Math.max(Number($('#total-secs').value)||180, 30), 1800);
-      cfg.showArrays = $('#show-arrays').checked;
+      cfg.showNumberLine = $('#show-numberline').checked;
       cfg.shuffleOptions = $('#shuffle-options').checked;
 
       generateQuestions();
@@ -561,7 +614,7 @@
           $('#timer-clock').textContent = fmtTime(left);
           if (left<=0){
             clearInterval(totalTimerObj);
-            endQuiz(true); // forced by time
+            endQuiz(true);
           }
         }, 1000);
       } else {
@@ -585,15 +638,16 @@
       if (current >= cfg.total) return endQuiz();
 
       const q = questions[current];
-      $('#question-text').textContent = `${q.n1} × ${q.n2}`;
-      renderVisual(q);
+      const symbol = (q.op==='add') ? '+' : '−';
+      $('#question-text').textContent = `${q.a} ${symbol} ${q.b}`;
+      renderNumberLine(q);
       renderOptions(q);
       updateProgress();
       awaitingAnswer = true;
 
-      say(`${q.n1} × ${q.n2} = ?`);
+      say(`${q.a} ${symbol} ${q.b} equals what?`);
 
-      // Per-question timer only for that mode
+      // Per-question timer
       clearInterval(timerObj);
       if (cfg.mode === 'test' && cfg.timeboxType==='per-question'){
         timeLeft = cfg.perQSeconds;
@@ -612,22 +666,56 @@
       }
     }
 
-    function renderVisual(q){
-      const box = $('#helper-visual');
-      if (!cfg.showArrays){ box.classList.add('hidden'); box.innerHTML = ''; return; }
-      const maxDots = 100;
-      const total = q.n1 * q.n2;
+    function renderNumberLine(q){
+      const hv = $('#helper-visual');
+      hv.innerHTML = '';
+      if (!cfg.showNumberLine) return;
 
-      if (total > maxDots){
-        box.classList.remove('hidden');
-        box.setAttribute('aria-hidden','false');
-        box.innerHTML = `<div style="font-weight:800; color:var(--muted)">(${q.n1} rows × ${q.n2} columns — too many dots, showing number only)</div>`;
-        return;
+      // Only show number line if numbers are small
+      const values = [q.a, q.b, q.ans];
+      const maxVal = Math.max(...values);
+      const minVal = Math.min(0, ...values);
+      if (maxVal > 30 || minVal < 0) return;
+
+      const maxTick = Math.max(10, maxVal);
+      const line = document.createElement('div');
+      line.className = 'number-line';
+      const track = document.createElement('div');
+      track.className = 'track';
+      line.appendChild(track);
+
+      for (let t=0; t<=maxTick; t++){
+        const pct = (t / maxTick) * 100;
+        const tick = document.createElement('div');
+        tick.className = 'tick';
+        tick.style.left = `calc(${pct}% + 8px)`;
+        line.appendChild(tick);
+
+        const lbl = document.createElement('div');
+        lbl.className = 'label';
+        lbl.style.left = `calc(${pct}% + 8px)`;
+        lbl.textContent = t;
+        line.appendChild(lbl);
       }
-      box.classList.remove('hidden');
-      box.setAttribute('aria-hidden','false');
-      box.style.gridTemplateColumns = `repeat(${q.n2}, 16px)`;
-      box.innerHTML = Array.from({length: total}).map(()=>'<span class="dot"></span>').join('');
+
+      // Markers
+      function placeMarker(value, color){
+        const pct = (value / maxTick) * 100;
+        const m = document.createElement('div');
+        m.className = 'marker';
+        m.style.left = `calc(${pct}% + 8px)`;
+        m.style.background = color;
+        line.appendChild(m);
+      }
+
+      placeMarker(q.a, '#10b981'); // green
+      if (q.op === 'add') {
+        placeMarker(q.a + q.b, '#f59e0b'); // result (orange)
+      } else {
+        placeMarker(q.a - q.b, '#f59e0b');
+      }
+
+      hv.appendChild(line);
     }
 
     function renderOptions(q){
@@ -652,9 +740,9 @@
       clearInterval(timerObj);
       const q = questions[current];
       const correct = (val === q.ans);
+      const symbol = (q.op==='add') ? '+' : '−';
 
-      // History
-      history.push({ q: `${q.n1} × ${q.n2}`, ans: q.ans, user: val, timeout: isTimeout });
+      history.push({ q: `${q.a} ${symbol} ${q.b}`, ans: q.ans, user: val, timeout: isTimeout });
 
       if (cfg.mode === 'practice'){
         const opts = [...document.querySelectorAll('.option-btn')];
@@ -713,31 +801,28 @@
       const pct = Math.round((score / cfg.total) * 100);
       $('#score-big').textContent = `${score} / ${cfg.total}  (${pct}%)`;
 
-      // Time taken
       const totalTakenSec = Math.max(0, Math.round((endTimeMs - startTimeMs)/1000));
       $('#time-taken').textContent = fmtTime(totalTakenSec);
 
-      // Appraise
       let msg = 'Great effort! Keep practicing and you’ll nail it!';
       if (forcedByTimer) msg = 'Time’s up! Awesome try — practice again and you’ll beat the clock! ⏰';
-      else if (pct === 100) msg = 'Perfect score! You’re a Times Table Trail Champion! 🏆';
+      else if (pct === 100) msg = 'Perfect score! You’re a Trail Champion! 🏆';
       else if (pct >= 80) msg = 'Awesome! You’re almost there! 🌟';
       else if (pct >= 60) msg = 'Good job! Practice a bit more! 💪';
       $('#appraise').textContent = msg;
 
-      // Badges
       const badges = [];
       if (pct === 100) badges.push('🏆 Flawless!');
       if (cfg.mode === 'test') badges.push(cfg.timeboxType==='per-question' ? '⏱️ Per‑Q Master' : '⏱️ Total‑Time Master');
-      if (cfg.end - cfg.start >= 9) badges.push('🧠 Big Range');
       if (streak >= 5) badges.push(`🔥 Streak ${streak}`);
+      if (cfg.opMode==='mix') badges.push('➕➖ Mixed Ops');
+      if (cfg.digits >= 3) badges.push('💪 Big Digits');
       $('#badges').innerHTML = badges.map(b=>`<span class="badge">${b}</span>`).join('');
 
       if (pct >= 80) {
         confetti({ particleCount: 160, spread: 70, origin: { y: 0.6 } });
       }
 
-      // Summary
       const list = $('#review-list');
       list.innerHTML = history.map(h => {
         const ok = (h.user === h.ans);
@@ -775,7 +860,9 @@
     });
     $('#read-btn').addEventListener('click', ()=> {
       const q = questions[current];
-      if (q) say(`${q.n1} × ${q.n2} = ?`);
+      if (!q) return;
+      const symbol = (q.op==='add') ? 'plus' : 'minus';
+      say(`${q.a} ${symbol} ${q.b} equals what?`);
     });
 
     // Contrast
@@ -801,7 +888,7 @@
     $('#next-btn').addEventListener('click', ()=>{ current++; renderQuestion(); });
     $('#skip-btn').addEventListener('click', ()=>{
       const q = questions[current];
-      if (q) { history.push({ q: `${q.n1} × ${q.n2}`, ans: q.ans, user: null, timeout: false }); streak = 0; }
+      if (q) { history.push({ q: `${q.a} ${(q.op==='add')?'+':'−'} ${q.b}`, ans: q.ans, user: null, timeout: false }); streak = 0; }
       current++; renderQuestion();
     });
 
@@ -811,7 +898,7 @@
 
     // Reset saved best/last
     $('#reset-progress').addEventListener('click', ()=>{
-      const keys = Object.keys(localStorage).filter(k => k.startsWith('mw_'));
+      const keys = Object.keys(localStorage).filter(k => k.startsWith('as_'));
       keys.forEach(k => localStorage.removeItem(k));
       updateSavedStats();
       alert('Progress reset!');
@@ -837,7 +924,6 @@
     setMode('practice');                 // Practice default
     setTimeboxType('per-question');      // default timebox type (used only in Test)
     updateSavedStats();
-    toggleCustom();
 
     // Help dialog
     $('#help-btn').addEventListener('click', ()=>{
@@ -850,8 +936,13 @@
 • Sound (🔊), Voice (🗣️), High contrast (🌓) toggles in header.
 
 Modes:
-• Practice: no timer, retry allowed; we still track total time taken.
-• Test: choose Per-question timer or a Total-time countdown.`
+• Practice: no timer, retry allowed; total time is still tracked.
+• Test: choose Per-question timer or a Total-time countdown.
+
+Options:
+• No negative answers (subtraction)
+• No carry (addition) / No borrow (subtraction)
+• Number line appears for small values.`
       );
     });
   </script>
