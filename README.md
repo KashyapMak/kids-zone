@@ -22,7 +22,6 @@ A kid‑friendly multiplication practice game covering tables **1–30** with cu
 An addition & subtraction practice game for **1–4 digit** numbers with **Addition**, **Subtraction**, or **Mixed** modes. Includes **No negatives**, **No carry**, **No borrow** toggles, **Practice** & **Test (Timed)** modes, optional **Number line**, audio feedback, streaks/badges, and printable results.
 
 - **Folder:** `add-sub/`  
-- **Run:** open `add-sub-trail.html`
 - **Run:** open [`add-sub-trail.html`](https://kashyapmak.github.io/kids-zone/add-sub/add-sub-trail.html)  
 - **Docs:** `add-sub/README.md`
 
