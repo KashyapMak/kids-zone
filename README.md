@@ -9,7 +9,7 @@ Our mission: **help kids learn through play**.
 
 ---
 
-## 📦 What’s Inside
+## 📦 What's Inside
 
 ### 🧮 Times Table Trail
 A kid‑friendly multiplication practice game covering tables **1–30** with custom ranges, **Practice** & **Test (Timed)** modes (per‑question or total‑time), smart distractors, visual arrays, audio feedback, streaks, badges, and a printable summary.
@@ -66,6 +66,58 @@ Perimeter practice for **Squares, Rectangles, Equilateral Triangles, Regular Pen
 - **Folder:** `perimeter/`
 - **Run:** [perimeter/perimeter-trail.html](https://kashyapmak.github.io/kids-zone/perimeter/perimeter-trail.html)   
 - **Docs:** `perimeter/README.md`
+
+---
+
+### ⚖️ Number Nature Trail
+A number **comparison** game where learners pick the correct symbol — **`<`**, **`>`**, or **`=`** — between two numbers drawn from any mix of four types: **whole numbers**, **decimals**, **simple fractions** (denom 2–5), and **complex fractions** (denom 6–20).
+
+Fractions are displayed **stacked** for clarity:
+```
+  3
+ ───
+  4
+```
+
+**Key features:**
+- Compare any mix of whole numbers, decimals, simple & complex fractions
+- Stacked fraction display (same style as Deci‑Frac Trail)
+- Optional **number line visual aid** plots both values in real time
+- Toggle **equal pairs** on/off
+- Practice & Test (Timed) modes with per‑question or total‑time timers
+- Keyboard shortcuts (`1` `<`, `2` `=`, `3` `>`), audio feedback, read‑aloud, streaks, badges
+- Printable summary
+
+- **Folder:** `compare-number/`
+- **Run:** [compare-number/number-compare-trail.html](https://kashyapmak.github.io/kids-zone/compare-number/number-compare-trail.html)
+- **Docs:** `compare-number/README.md`
+
+---
+
+### 🔢 Number Order Trail
+A number **ordering** game where learners arrange **3–5 shuffled cards** into the correct **ascending** or **descending** order. Cards can be any mix of **whole numbers**, **decimals**, **simple fractions**, and **complex fractions**.
+
+```
+⬆️  Ascending — Smallest → Largest
+
+[ 1/3 ]  [ 0.75 ]  [ 5 ]  [ 7/12 ]   →   drag into slots   →   #1  #2  #3  #4
+```
+
+**Key features:**
+- Order any mix of whole numbers, decimals, simple & complex fractions
+- **Drag‑and‑drop** on desktop; **tap‑to‑select then tap‑to‑place** on mobile
+- Card **swapping** — drag one slot card onto another to swap instantly
+- **3, 4, or 5 cards** per question (easy / medium / hard)
+- **Ascending ⬆️, Descending ⬇️, or Mixed 🔀** direction
+- Slots flash green ✅ or red ❌ per position on submission
+- Correct order revealed automatically on wrong answers
+- Practice & Test (Timed) modes with per‑question or total‑time timers
+- Keyboard shortcuts (`C` check, `X` clear, `S` skip), audio feedback, read‑aloud, streaks, badges
+- Printable summary
+
+- **Folder:** `order-number/`
+- **Run:** [order-number/number-order-trail.html](https://kashyapmak.github.io/kids-zone/number-order-trail/number-order-trail.html)
+- **Docs:** `order-number/README.md`
 
 ---
 
@@ -144,7 +196,7 @@ Please keep contributions:
 **MIT License** — free to use, modify, and share.  
 Attribution appreciated:
 
-> _“Kids Zone by Kashyap Makadia.”_
+> _"Kids Zone by Kashyap Makadia."_
 
 ---
 
@@ -167,6 +219,14 @@ kids-zone/
 │
 ├── perimeter/
 │   ├── perimeter-trail.html
+│   └── README.md
+│
+├── compare-number/
+│   ├── number-nature-trail.html
+│   └── README.md
+│
+├── order-number/
+│   ├── number-order-trail.html
 │   └── README.md
 │
 ├── LICENSE

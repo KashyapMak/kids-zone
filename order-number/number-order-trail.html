@@ -1,0 +1,1361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Number Order Trail — Kids Zone</title>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700&family=Fredoka:wght@400;600;700&family=Orbitron:wght@700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <style>
+    /* ---------- THEME TOKENS ---------- */
+    :root {
+      --primary: #059669;
+      --bg: #ecfdf5;
+      --text: #052e1c;
+      --muted: #475569;
+      --prog: #10b981;
+      --accent: #f59e0b;
+      --card: #ffffff;
+      --danger: #ef4444;
+      --ok: #16a34a;
+      --shadow: 0 10px 25px rgba(0,0,0,.08);
+      --radius: 20px;
+    }
+    .theme-blue   { --primary:#2563eb; --bg:#eff6ff; --text:#0b1220; --prog:#22c55e; --accent:#f59e0b; --card:#ffffff; }
+    .theme-pink   { --primary:#ec4899; --bg:#fdf2f8; --text:#831843; --prog:#db2777; --accent:#fbbf24; --card:#ffffff; }
+    .theme-space  { --primary:#7c3aed; --bg:#0b1020; --text:#e5e7eb; --prog:#22d3ee; --accent:#fbbf24; --card:#141a2a; }
+    .theme-jungle { --primary:#059669; --bg:#ecfdf5; --text:#052e1c; --prog:#10b981; --accent:#f59e0b; --card:#ffffff; }
+    .theme-ocean  { --primary:#0ea5e9; --bg:#e0f2fe; --text:#06243b; --prog:#22c55e; --accent:#f97316; --card:#ffffff; }
+    .theme-candy  { --primary:#f43f5e; --bg:#fff1f2; --text:#7f1d1d; --prog:#34d399; --accent:#fb7185; --card:#ffffff; }
+    .high-contrast { --bg:#000; --text:#fff; --card:#111; --primary:#ffd000; --accent:#00ffff; --prog:#00ff66; --muted:#bbb; --shadow:0 0 0 rgba(0,0,0,0); }
+
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Baloo 2', 'Fredoka', 'Comic Sans MS', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      transition: background .3s, color .3s;
+    }
+
+    /* ---------- HEADER ---------- */
+    header {
+      background: var(--card);
+      position: sticky; top: 0; z-index: 100;
+      border-bottom: 4px solid rgba(0,0,0,.05);
+      box-shadow: var(--shadow);
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: .5rem;
+      padding: .5rem 1rem;
+    }
+    #brand { display: flex; align-items: center; gap: .6rem; font-weight: 800; }
+    #brand .logo { width: 28px; height: 28px; }
+    #brand h1 { font-size: 1.25rem; margin: 0; letter-spacing: .5px; }
+    .header-actions { display: flex; align-items: center; gap: .5rem; justify-self: end; }
+    .icon-btn {
+      background: transparent; border: 2px solid var(--primary); color: var(--primary);
+      border-radius: 999px; padding: .35rem .6rem; cursor: pointer; font-size: 1rem; font-weight: 700;
+      font-family: inherit;
+    }
+    .icon-btn[aria-pressed="true"] { background: var(--primary); color: #fff; }
+    .select, select, input[type="number"] {
+      font-family: inherit; font-weight: 700; color: var(--text);
+      border-radius: 12px; border: 2px solid var(--primary);
+      background: var(--card); padding: .55rem .7rem; outline: none;
+    }
+    #header-progress {
+      grid-column: 1 / -1;
+      height: 6px; background: #e2e8f0; border-radius: 999px; overflow: hidden; margin-top: .5rem;
+    }
+    #header-progress > span {
+      display: block; height: 100%; width: 0%;
+      background: linear-gradient(90deg, var(--prog), var(--accent));
+      transition: width .35s ease;
+    }
+
+    /* ---------- LAYOUT ---------- */
+    main { display: grid; place-items: center; padding: 20px; }
+    .card {
+      width: min(960px, 96vw);
+      background: var(--card);
+      border: 3px solid var(--primary);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 1.25rem;
+    }
+    .row { display: flex; flex-wrap: wrap; gap: .75rem; align-items: center; }
+    .row > * { flex: none; }
+    .grow { flex: 1; }
+    .divider { height: 2px; background: linear-gradient(90deg, transparent, var(--primary), transparent); margin: .75rem 0 1rem; }
+    .main-btn, .mode-btn {
+      cursor: pointer; padding: .75rem 1.1rem; border-radius: 14px; border: 0;
+      background: var(--primary); color: #fff; font-weight: 800;
+      box-shadow: 0 6px 0 rgba(0,0,0,.1); font-family: inherit; font-size: 1rem;
+    }
+    .secondary-btn {
+      cursor: pointer; padding: .6rem 1rem; border-radius: 12px; border: 2px dashed var(--primary);
+      background: transparent; color: var(--primary); font-weight: 800; font-family: inherit; font-size: 1rem;
+    }
+    .ghost-btn { background: transparent; border: 0; color: var(--primary); font-weight: 800; cursor: pointer; font-family: inherit; font-size: 1rem; }
+
+    /* ---------- QUIZ INFO ---------- */
+    #quiz-info {
+      display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
+      gap: .5rem; text-align: center; margin: .25rem 0 .75rem; font-weight: 800; color: var(--muted);
+    }
+    #timer-clock { font-family: 'Orbitron', monospace; font-size: 1.75rem; color: var(--primary); }
+    .streak { justify-self: start; }
+
+    /* ---------- DIRECTION BANNER ---------- */
+    .direction-banner {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: .6rem;
+      margin: .3rem 0 .6rem;
+      font-size: 1.35rem;
+      font-weight: 900;
+      color: var(--primary);
+      letter-spacing: .5px;
+    }
+    .direction-banner .dir-arrow {
+      font-size: 2rem;
+      line-height: 1;
+    }
+    .direction-badge {
+      background: var(--primary);
+      color: #fff;
+      border-radius: 999px;
+      padding: .3rem .9rem;
+      font-size: 1rem;
+    }
+
+    /* ---------- MESSAGE ---------- */
+    #message {
+      text-align: center;
+      font-weight: 800;
+      min-height: 1.4em;
+      font-size: 1.05rem;
+      margin-bottom: .4rem;
+    }
+
+    /* ---------- SORTING ARENA ---------- */
+
+    /* SOURCE TRAY: shuffled cards to pick from */
+    .tray-label {
+      font-size: .82rem; font-weight: 800; color: var(--muted);
+      text-transform: uppercase; letter-spacing: .5px;
+      margin-bottom: .35rem;
+    }
+
+    .source-tray {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .55rem;
+      justify-content: center;
+      min-height: 90px;
+      background: rgba(0,0,0,.03);
+      border: 2px dashed var(--primary);
+      border-radius: 14px;
+      padding: .5rem .6rem;
+      margin-bottom: .7rem;
+    }
+
+    /* DROP ZONE: numbered slots */
+    .slots-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .55rem;
+      justify-content: center;
+      align-items: flex-start;
+      margin-bottom: .6rem;
+    }
+    .slot-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: .25rem;
+    }
+    .slot-num {
+      font-size: .78rem; font-weight: 900; color: var(--muted);
+    }
+    .drop-slot {
+      width: 108px;
+      min-height: 90px;
+      border: 3px dashed var(--primary);
+      border-radius: 14px;
+      background: rgba(0,0,0,.03);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background .15s ease, border-color .15s ease;
+      position: relative;
+    }
+    .drop-slot.drag-over {
+      background: color-mix(in srgb, var(--primary) 12%, transparent);
+      border-color: var(--accent);
+      border-style: solid;
+    }
+    .drop-slot.slot-correct {
+      border-color: #10b981;
+      background: #d1fae5;
+    }
+    .drop-slot.slot-wrong {
+      border-color: #ef4444;
+      background: #fee2e2;
+    }
+    .slot-empty-hint {
+      font-size: 1.8rem;
+      opacity: .18;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    /* ---------- NUMBER CARDS ---------- */
+    .num-card {
+      width: 100px;
+      min-height: 80px;
+      background: var(--card);
+      border: 3px solid var(--primary);
+      border-radius: 14px;
+      box-shadow: 0 4px 12px rgba(0,0,0,.09);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: grab;
+      user-select: none;
+      padding: .4rem .3rem;
+      transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease, opacity .15s;
+      touch-action: none;
+    }
+    .num-card:active { cursor: grabbing; }
+    .num-card.dragging {
+      opacity: .45;
+      transform: scale(.96);
+    }
+    .num-card.selected {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent);
+      transform: translateY(-3px);
+    }
+    .num-card .card-type {
+      font-size: .62rem; font-weight: 800; color: var(--muted);
+      text-transform: uppercase; letter-spacing: .4px;
+      margin-bottom: .1rem;
+    }
+    .num-card .card-val {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
+      font-size: clamp(1.3rem, 3.5vw, 1.8rem);
+      font-weight: 800;
+      line-height: 1.15;
+      color: var(--text);
+      text-align: center;
+    }
+    .num-card pre.frac-pre {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
+      font-size: clamp(1rem, 2.8vw, 1.35rem);
+      font-weight: 800;
+      line-height: 1.35;
+      margin: 0;
+      color: var(--text);
+      text-align: center;
+      white-space: pre;
+    }
+    /* Ghost clone while dragging */
+    #drag-ghost {
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: .88;
+      transform: rotate(3deg) scale(1.06);
+      display: none;
+    }
+
+    /* ---------- REVEALED CORRECT ORDER ---------- */
+    .reveal-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .55rem;
+      justify-content: center;
+      margin: .4rem 0 .2rem;
+      padding: .5rem;
+      background: rgba(0,0,0,.03);
+      border-radius: 14px;
+    }
+    .reveal-card {
+      background: #d1fae5;
+      border: 2px solid #10b981;
+      border-radius: 12px;
+      padding: .35rem .5rem;
+      font-weight: 800;
+      font-size: .95rem;
+      text-align: center;
+      min-width: 56px;
+      color: #065f46;
+    }
+
+    /* ---------- RESULT ---------- */
+    #score-big { font-size: clamp(2rem, 6vw, 3rem); margin: .25rem 0; }
+    .badges { display: flex; flex-wrap: wrap; gap: .4rem; margin: .25rem 0 .5rem; }
+    .badge { background: linear-gradient(135deg, var(--primary), var(--accent)); color:#fff; border-radius: 999px; padding: .35rem .7rem; font-weight: 900; letter-spacing: .3px; box-shadow: var(--shadow); }
+    .review-list { margin-top: .6rem; border: 1px dashed var(--primary); border-radius: 12px; padding: .5rem; max-height: 360px; overflow: auto; }
+    .review-item { display: grid; grid-template-columns: 1fr auto; gap: .5rem; border-bottom: 1px solid rgba(0,0,0,.07); padding: .4rem 0; }
+    .review-item:last-child { border-bottom: 0; }
+
+    /* ---------- TYPE CHIP ---------- */
+    .type-chip {
+      display: inline-flex; align-items: center; gap: .3rem;
+      background: var(--bg); border: 2px solid var(--primary);
+      border-radius: 999px; padding: .2rem .65rem;
+      font-size: .82rem; font-weight: 800; color: var(--primary);
+    }
+
+    /* ---------- FOOTER ---------- */
+    footer { text-align:center; padding:12px; font-size:.95rem; color:var(--muted); }
+    .footer-row { display:flex; gap:.75rem; align-items:center; justify-content:center; flex-wrap:wrap; }
+    .footer-sep { opacity:.3; }
+    .social-link { display:inline-flex; align-items:center; gap:.4rem; color:var(--primary); text-decoration:none; font-weight:800; }
+    .social-link:hover { text-decoration:underline; }
+    .icon { width:18px; height:18px; display:inline-block; }
+
+    /* ---------- UTILS ---------- */
+    .hidden { display: none !important; }
+    .sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); border:0; }
+
+    @keyframes bounce-in { 0%{transform:scale(.5);opacity:0} 70%{transform:scale(1.08)} 100%{transform:scale(1);opacity:1} }
+    .bounce-in { animation: bounce-in .3s ease forwards; }
+    @keyframes shake { 0%,100%{transform:translateX(0)} 20%,60%{transform:translateX(-6px)} 40%,80%{transform:translateX(6px)} }
+    .shake { animation: shake .35s ease; }
+
+    @media (max-width: 560px) {
+      .num-card { width: 84px; min-height: 68px; }
+      .drop-slot { width: 90px; min-height: 75px; }
+    }
+
+    @media print {
+      header, #setup-screen, #quiz-screen, .no-print { display: none !important; }
+      body { background:#fff; color:#000; }
+      .card { border: 0; box-shadow: none; }
+      .review-list { max-height: none; }
+    }
+  </style>
+</head>
+<body class="theme-jungle">
+
+  <!-- Drag ghost element -->
+  <div id="drag-ghost" class="num-card" aria-hidden="true"></div>
+
+  <header>
+    <div id="brand" aria-label="Number Order Trail">
+      <svg class="logo" viewBox="0 0 64 64" aria-hidden="true">
+        <defs>
+          <linearGradient id="leafGrad" x1="0" x2="1" y1="0" y2="1">
+            <stop offset="0" stop-color="#34d399"/>
+            <stop offset="1" stop-color="#059669"/>
+          </linearGradient>
+        </defs>
+        <path d="M54 10C30 10 14 20 8 40c8-4 16-5 24-2-4 1-8 4-12 9 8-2 14-1 20 2 8-10 14-22 14-39z" fill="url(#leafGrad)" stroke="#065f46" stroke-width="2"/>
+        <path d="M12 42c10-8 22-12 36-12" stroke="#064e3b" stroke-width="2" fill="none"/>
+        <!-- 1 2 3 order hint arrows -->
+        <text x="13" y="55" font-size="9" font-weight="900" fill="#fff" font-family="sans-serif">1→2→3</text>
+      </svg>
+      <h1>Number Order Trail</h1>
+    </div>
+
+    <div class="row" style="justify-content:center; gap:.4rem;">
+      <label class="sr-only" for="theme">Theme</label>
+      <select id="theme" class="select" title="Pick a theme">
+        <option value="theme-blue">Blue (Classic)</option>
+        <option value="theme-pink">Pink (Classic)</option>
+        <option value="theme-space">Space</option>
+        <option value="theme-jungle" selected>Jungle</option>
+        <option value="theme-ocean">Ocean</option>
+        <option value="theme-candy">Candy</option>
+      </select>
+      <button id="sound-btn" class="icon-btn" aria-pressed="true" title="Toggle sound">🔊</button>
+      <button id="voice-btn" class="icon-btn" aria-pressed="false" title="Read numbers aloud">🗣️</button>
+      <button id="contrast-btn" class="icon-btn" aria-pressed="false" title="High contrast mode">🌓</button>
+    </div>
+
+    <div class="header-actions">
+      <button id="help-btn" class="icon-btn" title="Help / Shortcuts">❓</button>
+    </div>
+
+    <div id="header-progress"><span></span></div>
+  </header>
+
+  <main>
+
+    <!-- ========== SETUP ========== -->
+    <section id="setup-screen" class="card" aria-label="Setup">
+      <h2 style="margin:.2rem 0">Choose Your Trail 🚀</h2>
+      <p style="margin:.1rem 0 .5rem; color:var(--muted); font-weight:700;">
+        Arrange the number cards in the correct order — drag &amp; drop or tap to sort!
+      </p>
+
+      <div class="row" style="margin-top:.25rem; gap:.5rem;">
+        <strong>Number Types:</strong>
+        <label><input type="checkbox" id="use-whole" checked> <span class="type-chip">🔢 Whole</span></label>
+        <label><input type="checkbox" id="use-decimal" checked> <span class="type-chip">🔣 Decimal</span></label>
+        <label><input type="checkbox" id="use-simple-frac" checked> <span class="type-chip">½ Simple Fraction</span></label>
+        <label><input type="checkbox" id="use-complex-frac" checked> <span class="type-chip">⅞ Complex Fraction</span></label>
+      </div>
+
+      <div class="row" style="margin-top:.5rem; gap:.75rem; align-items:flex-start; flex-wrap:wrap;">
+        <div>
+          <strong>Whole number range:</strong><br>
+          <div class="row" style="gap:.4rem; margin-top:.3rem;">
+            <label>Min: <input type="number" id="whole-min" min="0" max="99" value="1" style="width:80px"></label>
+            <label>Max: <input type="number" id="whole-max" min="2" max="999" value="20" style="width:80px"></label>
+          </div>
+        </div>
+        <div>
+          <strong>Decimal places:</strong><br>
+          <div style="margin-top:.3rem;">
+            <select id="dec-places" class="select">
+              <option value="1">1 dp  (e.g. 3.5)</option>
+              <option value="2" selected>2 dp  (e.g. 3.75)</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <strong>Cards per question:</strong><br>
+          <div style="margin-top:.3rem;">
+            <select id="card-count" class="select">
+              <option value="3">3 cards (easy)</option>
+              <option value="4" selected>4 cards (medium)</option>
+              <option value="5">5 cards (hard)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="row" style="margin-top:.5rem;">
+        <strong>Direction:</strong>
+        <label><input type="radio" name="direction" value="asc" checked> ⬆️ Ascending (smallest → largest)</label>
+        <label><input type="radio" name="direction" value="desc"> ⬇️ Descending (largest → smallest)</label>
+        <label><input type="radio" name="direction" value="mix"> 🔀 Mixed (random each question)</label>
+      </div>
+
+      <div class="row" style="margin-top:.4rem;">
+        <label for="qty-num"><strong>Questions:</strong></label>
+        <input type="number" id="qty-num" min="5" max="50" value="12" style="width:120px">
+      </div>
+
+      <div class="row" style="margin-top:.5rem;">
+        <strong>Mode:</strong>
+        <button type="button" id="btn-practice" class="mode-btn" aria-pressed="true">😌 Practice</button>
+        <button type="button" id="btn-test" class="mode-btn" aria-pressed="false" style="opacity:.7">⏱️ Test (Timed)</button>
+
+        <div id="timed-controls" class="row hidden" style="align-items:flex-start;">
+          <div class="row" style="gap:.35rem;">
+            <label><input type="radio" name="tbtype" value="per-question" checked> Per question</label>
+            <label><input type="radio" name="tbtype" value="total"> Total time</label>
+          </div>
+          <div id="perq-wrap" class="row">
+            <label for="per-q-secs">Seconds per Q:</label>
+            <input id="per-q-secs" type="number" min="10" max="120" value="30" style="width:100px">
+          </div>
+          <div id="total-wrap" class="row hidden">
+            <label for="total-secs">Total seconds:</label>
+            <input id="total-secs" type="number" min="60" max="1800" value="300" style="width:120px">
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="row" style="justify-content:space-between;">
+        <div class="grow">
+          <div id="stats" style="font-weight:800; color:var(--muted);"></div>
+        </div>
+        <button class="main-btn" id="start-btn" style="min-width:180px">START TRAIL 🏁</button>
+      </div>
+    </section>
+
+    <!-- ========== QUIZ ========== -->
+    <section id="quiz-screen" class="card hidden" aria-label="Quiz" aria-live="polite">
+      <div id="quiz-info">
+        <div class="streak" id="streak">Streak: 0 🔥</div>
+        <div id="timer-clock" aria-live="assertive"></div>
+        <div id="q-progress" style="justify-self:end;">Question 1/12</div>
+      </div>
+
+      <!-- Direction instruction -->
+      <div class="direction-banner" id="direction-banner">
+        <span class="dir-arrow" id="dir-arrow">⬆️</span>
+        <span class="direction-badge" id="dir-label">Ascending — Smallest to Largest</span>
+      </div>
+
+      <div id="message"></div>
+
+      <!-- Slots row (drop targets) -->
+      <div class="tray-label" style="text-align:center;">📍 Drop your cards here in order:</div>
+      <div class="slots-row" id="slots-row"></div>
+
+      <!-- Source tray (shuffled cards) -->
+      <div class="tray-label" style="text-align:center;">🃏 Your cards — drag or tap to place:</div>
+      <div class="source-tray" id="source-tray"></div>
+
+      <!-- Revealed correct answer (hidden until checked wrong) -->
+      <div id="reveal-wrap" class="hidden">
+        <div class="tray-label" style="text-align:center; color:var(--danger);">✅ Correct order was:</div>
+        <div class="reveal-row" id="reveal-row"></div>
+      </div>
+
+      <div class="row" style="margin-top:.6rem; justify-content:space-between;">
+        <button class="ghost-btn no-print" id="read-btn">🔊 Read cards (R)</button>
+        <div class="row">
+          <button class="secondary-btn no-print" id="clear-btn">↺ Clear</button>
+          <button class="secondary-btn no-print" id="skip-btn">Skip ↷</button>
+          <button class="main-btn no-print" id="check-btn">✔ Check Order</button>
+          <button class="main-btn no-print hidden" id="next-btn">Next ➜</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== RESULT ========== -->
+    <section id="result-screen" class="card hidden" aria-label="Results">
+      <h2>Trail Complete! 🎉</h2>
+      <div id="appraise" style="font-size:1.1rem; font-weight:800; color:var(--muted);"></div>
+      <div id="score-big">0 / 0</div>
+      <div style="font-weight:800; color:var(--muted);">Time taken: <span id="time-taken">00:00</span></div>
+      <div class="badges" id="badges"></div>
+
+      <div class="row" style="gap:.5rem; margin:.25rem 0 .5rem;">
+        <button class="main-btn no-print" id="play-again">Play Again 🔄</button>
+        <button class="secondary-btn no-print" id="print-btn">🖨️ Print / Save PDF</button>
+      </div>
+
+      <div id="summary-title" style="font-weight:900; margin-top:.35rem;">Questions Summary</div>
+      <div id="review-list" class="review-list"></div>
+    </section>
+
+  </main>
+
+  <footer class="no-print">
+    <div class="footer-row">
+      <span>Kid Zone © 2026</span>
+      <span class="footer-sep">•</span>
+      <a class="social-link" href="https://www.linkedin.com/in/kashyapmakadia/" target="_blank" rel="noopener">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path fill="currentColor" d="M4.98 3.5C4.98 4.88 3.86 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM0 8h5v16H0V8zm7.5 0h4.8v2.2h.07c.67-1.26 2.32-2.6 4.78-2.6 5.11 0 6.05 3.36 6.05 7.73V24h-5v-7.9c0-1.88-.03-4.3-2.62-4.3-2.62 0-3.02 2.05-3.02 4.16V24h-5V8z"/>
+        </svg>
+        <span>Kashyap Makadia</span>
+      </a>
+      <span class="footer-sep">•</span>
+      <a class="social-link" href="https://github.com/KashyapMak/kids-zone" target="_blank" rel="noopener">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path fill="currentColor" d="M12 .5A11.5 11.5 0 0 0 .5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.8-.26.8-.58 0-.29-.01-1.06-.02-2.08-3.2.7-3.88-1.54-3.88-1.54-.52-1.33-1.27-1.68-1.27-1.68-1.04-.71.08-.69.08-.69 1.15.08 1.76 1.18 1.76 1.18 1.02 1.75 2.68 1.25 3.33.96.1-.75.4-1.25.72-1.54-2.56-.29-5.26-1.28-5.26-5.68 0-1.25.45-2.27 1.18-3.07-.12-.29-.51-1.47.11-3.06 0 0 .97-.31 3.17 1.17a11.02 11.02 0 0 1 5.78 0c2.2-1.48 3.17-1.17 3.17-1.17.62 1.59.24 2.77.12 3.06.74.8 1.18 1.82 1.18 3.07 0 4.41-2.7 5.39-5.28 5.67.41.35.77 1.05.77 2.12 0 1.53-.01 2.76-.01 3.14 0 .31.21.68.8.57A11.51 11.51 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5z"/>
+        </svg>
+        <span>GitHub Repo</span>
+      </a>
+    </div>
+  </footer>
+
+  <script>
+    /* =============================================
+       CONFIG & STATE
+       ============================================= */
+    const cfg = {
+      mode: 'practice',
+      timeboxType: 'per-question',
+      perQSeconds: 30,
+      totalSeconds: 300,
+      total: 12,
+      useWhole: true,
+      useDecimal: true,
+      useSimpleFrac: true,
+      useComplexFrac: true,
+      direction: 'asc',   // 'asc' | 'desc' | 'mix'
+      cardCount: 4,
+      wholeMin: 1,
+      wholeMax: 20,
+      decPlaces: 2,
+    };
+
+    let score = 0, current = 0, questions = [], history = [];
+    let isMuted = false, speakQ = false;
+    let timerObj = null, timeLeft = 0, streak = 0;
+    let startTimeMs = 0, endTimeMs = 0, totalTimerObj = null;
+    let answered = false; // has check been pressed this question
+
+    // Drag state
+    let dragSrcCard = null;      // the card DOM element being dragged
+    let dragSrcIsSlot = false;   // dragging from a slot (not the source tray)
+    let dragSrcSlotIdx = -1;
+    let selectedCard = null;     // for tap-to-place on mobile
+
+    // Slot state: array of card-data or null
+    let slots = [];
+
+    const $ = sel => document.querySelector(sel);
+    const randInt = (a, b) => Math.floor(Math.random() * (b - a + 1)) + a;
+    const clamp = (v, mn, mx) => Math.max(mn, Math.min(mx, v));
+
+    /* =============================================
+       HELPERS
+       ============================================= */
+    function fmtTime(s) {
+      const m = Math.floor(s / 60), sec = Math.max(0, Math.floor(s % 60));
+      return `${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`;
+    }
+    function beep(type = 'ok') {
+      if (isMuted) return;
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const o = ctx.createOscillator(), g = ctx.createGain();
+        o.connect(g); g.connect(ctx.destination);
+        o.type = 'sine';
+        o.frequency.setValueAtTime(type==='ok'?880:(type==='tick'?660:220), ctx.currentTime);
+        g.gain.value = 0.0001; g.gain.exponentialRampToValueAtTime(0.2, ctx.currentTime+0.01);
+        o.start(); g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime+0.15); o.stop(ctx.currentTime+0.16);
+      } catch {}
+    }
+    function say(text) {
+      if (!speakQ || !('speechSynthesis' in window)) return;
+      try {
+        const u = new SpeechSynthesisUtterance(text.replace(/\//g,' over '));
+        u.rate = 0.92; u.pitch = 1.1;
+        speechSynthesis.cancel(); speechSynthesis.speak(u);
+      } catch {}
+    }
+    function setMessage(text, type='info') {
+      const el = $('#message');
+      el.style.color = type==='ok'?'var(--ok)':(type==='warn'?'var(--danger)':'var(--muted)');
+      el.textContent = text;
+    }
+    function praise() {
+      const m = ['Brilliant!','Nice job!','You rock!','Fantastic!','Great work!','Super!','Math Hero!','Amazing!','Yes! Keep it up!','Perfect order! 🎯'];
+      return m[randInt(0, m.length-1)];
+    }
+    function shuffle(arr) {
+      const a = [...arr];
+      for (let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
+      return a;
+    }
+
+    /* Fraction math */
+    const gcd = (a,b) => b?gcd(b,a%b):Math.abs(a);
+    function simplifyFrac(n,d){const g=gcd(Math.abs(n),Math.abs(d))||1;let sn=n/g,sd=d/g;if(sd<0){sn=-sn;sd=-sd;}return{n:sn,d:sd};}
+
+    /* Build stacked fraction lines — same style as deci-frac-trail */
+    function buildFracLines(n, d) {
+      const ns = String(n), ds = String(d);
+      const w = Math.max(ns.length, ds.length);
+      const pad = s => {
+        const left = Math.floor((w - s.length) / 2);
+        const right = Math.ceil((w - s.length) / 2);
+        return ' '.repeat(left) + s + ' '.repeat(right);
+      };
+      return pad(ns) + '\n' + '─'.repeat(w) + '\n' + pad(ds);
+    }
+
+    /* =============================================
+       NUMBER GENERATION
+       ============================================= */
+    function makeWhole() {
+      const v = randInt(cfg.wholeMin, cfg.wholeMax);
+      return { kind:'whole', value:v, display:String(v), label:'Whole' };
+    }
+    function makeDecimal() {
+      const m = 10**cfg.decPlaces;
+      const maxV = cfg.wholeMax * m - 1;
+      const raw = randInt(0, maxV) / m;
+      const v = parseFloat(raw.toFixed(cfg.decPlaces));
+      return { kind:'decimal', value:v, display:v.toFixed(cfg.decPlaces), label:'Decimal' };
+    }
+    function makeSimpleFrac() {
+      const d = randInt(2, 5);
+      const n = randInt(1, d*2);
+      const f = simplifyFrac(n, d);
+      return { kind:'simple-frac', value:f.n/f.d, n:f.n, d:f.d, display:`${f.n}/${f.d}`, label:'Simple Frac' };
+    }
+    function makeComplexFrac() {
+      const d = randInt(6, 20);
+      const n = randInt(1, d*2);
+      const f = simplifyFrac(n, d);
+      return { kind:'complex-frac', value:f.n/f.d, n:f.n, d:f.d, display:`${f.n}/${f.d}`, label:'Complex Frac' };
+    }
+    function pickRandom() {
+      const pool = [];
+      if (cfg.useWhole) pool.push('whole');
+      if (cfg.useDecimal) pool.push('decimal');
+      if (cfg.useSimpleFrac) pool.push('simple-frac');
+      if (cfg.useComplexFrac) pool.push('complex-frac');
+      if (!pool.length) pool.push('whole');
+      const k = pool[randInt(0, pool.length-1)];
+      if (k==='whole') return makeWhole();
+      if (k==='decimal') return makeDecimal();
+      if (k==='simple-frac') return makeSimpleFrac();
+      return makeComplexFrac();
+    }
+
+    function generateOnePair() {
+      // Determine direction
+      let dir = cfg.direction;
+      if (dir === 'mix') dir = Math.random() < 0.5 ? 'asc' : 'desc';
+
+      // Generate N distinct numbers (by value)
+      let nums = [];
+      let tries = 0;
+      while (nums.length < cfg.cardCount && tries++ < 200) {
+        const n = pickRandom();
+        // Ensure no duplicates (by value within 1e-9)
+        if (!nums.some(x => Math.abs(x.value - n.value) < 1e-9)) {
+          nums.push(n);
+        }
+      }
+
+      // Correct sorted order
+      const sorted = [...nums].sort((a, b) => dir==='asc' ? a.value-b.value : b.value-a.value);
+      // Shuffled order for display
+      const shuffled = shuffle([...nums]);
+
+      return { nums: shuffled, sorted, dir };
+    }
+
+    function generateQuestions() {
+      questions = []; history = []; current = 0; score = 0; streak = 0;
+      for (let i = 0; i < cfg.total; i++) questions.push(generateOnePair());
+    }
+
+    /* =============================================
+       BUILD CARD DOM ELEMENT
+       ============================================= */
+    function buildCardEl(num, cardId) {
+      const el = document.createElement('div');
+      el.className = 'num-card';
+      el.draggable = true;
+      el.dataset.cardId = cardId;
+      el.dataset.kind = num.kind;
+
+      const typeDiv = document.createElement('div');
+      typeDiv.className = 'card-type';
+      typeDiv.textContent = num.label;
+      el.appendChild(typeDiv);
+
+      if (num.kind === 'whole' || num.kind === 'decimal') {
+        const valDiv = document.createElement('div');
+        valDiv.className = 'card-val';
+        valDiv.textContent = num.display;
+        el.appendChild(valDiv);
+      } else {
+        const pre = document.createElement('pre');
+        pre.className = 'frac-pre';
+        pre.textContent = buildFracLines(num.n, num.d);
+        el.appendChild(pre);
+      }
+
+      return el;
+    }
+
+    /* =============================================
+       RENDER QUESTION
+       ============================================= */
+    function renderQuestion() {
+      if (current >= cfg.total) { endQuiz(); return; }
+      answered = false;
+
+      const q = questions[current];
+      slots = new Array(cfg.cardCount).fill(null);
+
+      // Direction banner
+      const isAsc = q.dir === 'asc';
+      $('#dir-arrow').textContent = isAsc ? '⬆️' : '⬇️';
+      $('#dir-label').textContent = isAsc
+        ? 'Ascending — Smallest → Largest'
+        : 'Descending — Largest → Smallest';
+
+      setMessage('Drag cards into the slots, then press ✔ Check Order', 'info');
+
+      // Clear reveal
+      $('#reveal-wrap').classList.add('hidden');
+      $('#reveal-row').innerHTML = '';
+
+      // Build slots
+      const slotsRow = $('#slots-row');
+      slotsRow.innerHTML = '';
+      for (let i = 0; i < cfg.cardCount; i++) {
+        const wrap = document.createElement('div');
+        wrap.className = 'slot-wrap';
+
+        const lbl = document.createElement('div');
+        lbl.className = 'slot-num';
+        lbl.textContent = isAsc ? `#${i+1}` : `#${i+1}`;
+        wrap.appendChild(lbl);
+
+        const slot = document.createElement('div');
+        slot.className = 'drop-slot';
+        slot.dataset.slotIdx = i;
+        slot.innerHTML = `<span class="slot-empty-hint">${i+1}</span>`;
+
+        // Drag events
+        slot.addEventListener('dragover', onSlotDragOver);
+        slot.addEventListener('dragleave', onSlotDragLeave);
+        slot.addEventListener('drop', e => onSlotDrop(e, i));
+        // Tap event
+        slot.addEventListener('click', () => onSlotClick(i));
+
+        wrap.appendChild(slot);
+        slotsRow.appendChild(wrap);
+      }
+
+      // Build source tray
+      const tray = $('#source-tray');
+      tray.innerHTML = '';
+      selectedCard = null;
+
+      q.nums.forEach((num, idx) => {
+        const el = buildCardEl(num, idx);
+        // Drag events
+        el.addEventListener('dragstart', e => onCardDragStart(e, el, idx, false));
+        el.addEventListener('dragend', onCardDragEnd);
+        // Tap
+        el.addEventListener('click', () => onCardClick(el, idx, false));
+        tray.appendChild(el);
+      });
+
+      // Buttons
+      $('#check-btn').classList.remove('hidden');
+      $('#next-btn').classList.add('hidden');
+      $('#check-btn').disabled = false;
+      $('#clear-btn').disabled = false;
+
+      updateProgress();
+
+      // Timer
+      clearInterval(timerObj);
+      if (cfg.mode === 'test' && cfg.timeboxType === 'per-question') {
+        timeLeft = cfg.perQSeconds;
+        $('#timer-clock').textContent = fmtTime(timeLeft);
+        timerObj = setInterval(() => {
+          timeLeft--;
+          if (timeLeft <= 5) beep('tick');
+          $('#timer-clock').textContent = fmtTime(Math.max(0, timeLeft));
+          if (timeLeft <= 0) { clearInterval(timerObj); autoSubmit(); }
+        }, 1000);
+      } else if (cfg.mode === 'practice') {
+        $('#timer-clock').textContent = '';
+      }
+
+      // Say
+      say('Arrange these numbers in ' + (isAsc ? 'ascending' : 'descending') + ' order: ' +
+          q.nums.map(n => n.display).join(', '));
+    }
+
+    function autoSubmit() {
+      // Time's up — submit whatever is placed
+      if (!answered) checkOrder(true);
+    }
+
+    /* =============================================
+       DRAG & DROP (Desktop)
+       ============================================= */
+    function onCardDragStart(e, el, cardIdx, fromSlot, slotIdx) {
+      dragSrcCard = { cardIdx, fromSlot, slotIdx };
+      el.classList.add('dragging');
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/plain', String(cardIdx));
+      // Build ghost
+      const ghost = $('#drag-ghost');
+      ghost.innerHTML = el.innerHTML;
+      ghost.style.display = 'flex';
+      ghost.style.width = el.offsetWidth + 'px';
+      e.dataTransfer.setDragImage(ghost, el.offsetWidth/2, el.offsetHeight/2);
+    }
+    function onCardDragEnd(e) {
+      e.currentTarget.classList.remove('dragging');
+      $('#drag-ghost').style.display = 'none';
+      dragSrcCard = null;
+    }
+    function onSlotDragOver(e) {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      e.currentTarget.classList.add('drag-over');
+    }
+    function onSlotDragLeave(e) {
+      e.currentTarget.classList.remove('drag-over');
+    }
+    function onSlotDrop(e, slotIdx) {
+      e.preventDefault();
+      e.currentTarget.classList.remove('drag-over');
+      if (!dragSrcCard) return;
+      placeCard(dragSrcCard.cardIdx, slotIdx, dragSrcCard.fromSlot, dragSrcCard.slotIdx);
+    }
+
+    /* =============================================
+       TAP TO PLACE (Mobile / alternative)
+       ============================================= */
+    function onCardClick(el, cardIdx, fromSlot, slotIdx) {
+      if (answered) return;
+      // Deselect if same
+      if (selectedCard && selectedCard.el === el) {
+        el.classList.remove('selected');
+        selectedCard = null;
+        return;
+      }
+      // Deselect previous
+      if (selectedCard) selectedCard.el.classList.remove('selected');
+
+      selectedCard = { el, cardIdx, fromSlot, slotIdx };
+      el.classList.add('selected');
+      setMessage('Now tap an empty slot to place this card ✋', 'info');
+    }
+
+    function onSlotClick(slotIdx) {
+      if (answered) return;
+      if (!selectedCard) {
+        // If slot has a card, select it for moving
+        if (slots[slotIdx] !== null) {
+          // Find the card el in the slot DOM
+          const slotEl = document.querySelector(`.drop-slot[data-slot-idx="${slotIdx}"]`);
+          const cardEl = slotEl.querySelector('.num-card');
+          if (cardEl) {
+            if (selectedCard && selectedCard.el === cardEl) {
+              cardEl.classList.remove('selected');
+              selectedCard = null;
+              return;
+            }
+            if (selectedCard) selectedCard.el.classList.remove('selected');
+            selectedCard = { el: cardEl, cardIdx: slots[slotIdx], fromSlot: true, slotIdx };
+            cardEl.classList.add('selected');
+            setMessage('Now tap another slot or card tray to move it ✋', 'info');
+          }
+        }
+        return;
+      }
+      // Place selected card into this slot
+      placeCard(selectedCard.cardIdx, slotIdx, selectedCard.fromSlot, selectedCard.slotIdx);
+      selectedCard.el.classList.remove('selected');
+      selectedCard = null;
+      setMessage('', 'info');
+    }
+
+    /* =============================================
+       PLACE CARD LOGIC
+       ============================================= */
+    function placeCard(cardIdx, targetSlotIdx, fromSlot, fromSlotIdx) {
+      if (answered) return;
+
+      const q = questions[current];
+      const tray = $('#source-tray');
+      const targetSlotEl = document.querySelector(`.drop-slot[data-slot-idx="${targetSlotIdx}"]`);
+
+      // What's currently in the target slot?
+      const existingInTarget = slots[targetSlotIdx];
+
+      if (fromSlot) {
+        // Moving from one slot to another
+        if (existingInTarget !== null) {
+          // Swap: put existing back to the source slot
+          slots[fromSlotIdx] = existingInTarget;
+          renderSlotCard(fromSlotIdx, existingInTarget);
+        } else {
+          // Source slot becomes empty
+          slots[fromSlotIdx] = null;
+          const srcSlotEl = document.querySelector(`.drop-slot[data-slot-idx="${fromSlotIdx}"]`);
+          srcSlotEl.innerHTML = `<span class="slot-empty-hint">${fromSlotIdx+1}</span>`;
+        }
+        slots[targetSlotIdx] = cardIdx;
+        renderSlotCard(targetSlotIdx, cardIdx);
+
+      } else {
+        // Moving from source tray to slot
+        if (existingInTarget !== null) {
+          // Return existing slot card back to tray
+          returnCardToTray(existingInTarget);
+        }
+        // Remove from tray
+        const cardInTray = tray.querySelector(`.num-card[data-card-id="${cardIdx}"]`);
+        if (cardInTray) cardInTray.remove();
+
+        slots[targetSlotIdx] = cardIdx;
+        renderSlotCard(targetSlotIdx, cardIdx);
+      }
+    }
+
+    function renderSlotCard(slotIdx, cardIdx) {
+      const q = questions[current];
+      const num = q.nums[cardIdx];
+      const slotEl = document.querySelector(`.drop-slot[data-slot-idx="${slotIdx}"]`);
+      slotEl.innerHTML = '';
+      const el = buildCardEl(num, cardIdx);
+      el.style.border = 'none';
+      el.style.boxShadow = 'none';
+      el.style.background = 'transparent';
+      el.style.cursor = 'pointer';
+      el.draggable = true;
+      el.addEventListener('dragstart', e => onCardDragStart(e, el, cardIdx, true, slotIdx));
+      el.addEventListener('dragend', onCardDragEnd);
+      el.addEventListener('click', () => onSlotCardClick(el, cardIdx, slotIdx));
+      slotEl.appendChild(el);
+    }
+
+    function onSlotCardClick(el, cardIdx, slotIdx) {
+      if (answered) return;
+      if (selectedCard && selectedCard.el === el) {
+        el.classList.remove('selected');
+        selectedCard = null;
+        setMessage('', 'info');
+        return;
+      }
+      if (selectedCard) {
+        // Place selected card here (swap or fill)
+        placeCard(selectedCard.cardIdx, slotIdx, selectedCard.fromSlot, selectedCard.slotIdx);
+        selectedCard.el.classList.remove('selected');
+        selectedCard = null;
+        setMessage('', 'info');
+        return;
+      }
+      // Select this slot's card
+      if (selectedCard) selectedCard.el.classList.remove('selected');
+      selectedCard = { el, cardIdx, fromSlot: true, slotIdx };
+      el.classList.add('selected');
+      setMessage('Now tap a slot or another card to swap ✋', 'info');
+    }
+
+    function returnCardToTray(cardIdx) {
+      const q = questions[current];
+      const num = q.nums[cardIdx];
+      const tray = $('#source-tray');
+      const el = buildCardEl(num, cardIdx);
+      el.addEventListener('dragstart', e => onCardDragStart(e, el, cardIdx, false));
+      el.addEventListener('dragend', onCardDragEnd);
+      el.addEventListener('click', () => onCardClick(el, cardIdx, false));
+      el.classList.add('bounce-in');
+      tray.appendChild(el);
+    }
+
+    /* =============================================
+       CHECK ORDER
+       ============================================= */
+    function checkOrder(isTimeout = false) {
+      if (answered) return;
+      const q = questions[current];
+
+      // Check all slots filled
+      const allFilled = slots.every(s => s !== null);
+      if (!allFilled && !isTimeout) {
+        setMessage('Fill all slots before checking! 🧩', 'warn');
+        const slotsRow = $('#slots-row');
+        slotsRow.classList.add('shake');
+        setTimeout(() => slotsRow.classList.remove('shake'), 400);
+        return;
+      }
+
+      answered = true;
+      clearInterval(timerObj);
+
+      // Build user order (pad nulls with -1 for timeout)
+      const userOrder = slots.map(s => s === null ? -1 : s);
+      const correctOrder = q.sorted.map(sn => q.nums.findIndex(n => Math.abs(n.value - sn.value) < 1e-9));
+
+      const correct = userOrder.every((u, i) => u === correctOrder[i]);
+
+      // Colour slots
+      const slotEls = document.querySelectorAll('.drop-slot');
+      slotEls.forEach((el, i) => {
+        el.classList.remove('slot-correct', 'slot-wrong');
+        if (userOrder[i] === correctOrder[i]) el.classList.add('slot-correct');
+        else el.classList.add('slot-wrong');
+      });
+
+      // Record history
+      history.push({
+        nums: q.nums.map(n => n.display),
+        correctOrder: q.sorted.map(n => n.display),
+        userOrder: userOrder.map(i => i >= 0 ? q.nums[i].display : '—'),
+        dir: q.dir,
+        correct,
+        timeout: isTimeout
+      });
+
+      if (correct) {
+        score++; streak++;
+        setMessage(praise(), 'ok');
+        beep('ok');
+        if (cfg.mode === 'practice') {
+          setTimeout(() => { current++; renderQuestion(); }, 900);
+        } else {
+          showNextBtn();
+        }
+      } else {
+        streak = 0;
+        setMessage(isTimeout ? '⏰ Time\'s up! Check the correct order below.' : 'Not quite — see the correct order below! 💪', 'warn');
+        beep('bad');
+        showCorrectOrder(q);
+        if (cfg.mode === 'practice') {
+          // In practice, show correct order then auto advance
+          setTimeout(() => { current++; renderQuestion(); }, 2200);
+        } else {
+          showNextBtn();
+        }
+      }
+
+      updateProgress();
+    }
+
+    function showCorrectOrder(q) {
+      const row = $('#reveal-row');
+      row.innerHTML = '';
+      q.sorted.forEach((n, i) => {
+        const chip = document.createElement('div');
+        chip.className = 'reveal-card';
+        if (n.kind === 'whole' || n.kind === 'decimal') {
+          chip.textContent = n.display;
+        } else {
+          const pre = document.createElement('pre');
+          pre.style.cssText = 'margin:0;font-family:ui-monospace,monospace;font-size:.85rem;line-height:1.3;';
+          pre.textContent = buildFracLines(n.n, n.d);
+          chip.appendChild(pre);
+        }
+        row.appendChild(chip);
+      });
+      $('#reveal-wrap').classList.remove('hidden');
+    }
+
+    function showNextBtn() {
+      $('#check-btn').classList.add('hidden');
+      $('#next-btn').classList.remove('hidden');
+    }
+
+    /* =============================================
+       CLEAR SLOTS
+       ============================================= */
+    function clearSlots() {
+      if (answered) return;
+      const q = questions[current];
+      // Return all slot cards to tray
+      for (let i = 0; i < slots.length; i++) {
+        if (slots[i] !== null) {
+          returnCardToTray(slots[i]);
+          slots[i] = null;
+        }
+      }
+      // Reset slot visuals
+      const slotEls = document.querySelectorAll('.drop-slot');
+      slotEls.forEach((el, i) => {
+        el.innerHTML = `<span class="slot-empty-hint">${i+1}</span>`;
+        el.classList.remove('slot-correct', 'slot-wrong', 'drag-over');
+      });
+      setMessage('Cleared! Try again 🃏', 'info');
+      selectedCard = null;
+    }
+
+    /* =============================================
+       PROGRESS & END
+       ============================================= */
+    function updateProgress() {
+      $('#q-progress').textContent = `Question ${Math.min(current+1, cfg.total)}/${cfg.total}`;
+      $('#streak').textContent = `Streak: ${streak} 🔥`;
+      $('#header-progress > span').style.width = `${(current / cfg.total) * 100}%`;
+    }
+
+    function endQuiz(forcedByTimer = false) {
+      if (totalTimerObj) { clearInterval(totalTimerObj); totalTimerObj = null; }
+      endTimeMs = Date.now();
+      $('#quiz-screen').classList.add('hidden');
+      $('#result-screen').classList.remove('hidden');
+
+      const pct = Math.round((score / cfg.total) * 100);
+      $('#score-big').textContent = `${score} / ${cfg.total}  (${pct}%)`;
+      const totalSec = Math.max(0, Math.round((endTimeMs - startTimeMs) / 1000));
+      $('#time-taken').textContent = fmtTime(totalSec);
+
+      let msg = 'Great effort! Keep practicing and you\'ll nail it!';
+      if (forcedByTimer) msg = 'Time\'s up! Awesome try — practice again and beat the clock! ⏰';
+      else if (pct === 100) msg = 'Perfect score! You\'re a Number Order Trail Champion! 🏆';
+      else if (pct >= 80)  msg = 'Awesome! You\'re almost there! 🌟';
+      else if (pct >= 60)  msg = 'Good job! Practice a bit more! 💪';
+      $('#appraise').textContent = msg;
+
+      const badges = [];
+      if (pct === 100) badges.push('🏆 Flawless!');
+      if (cfg.mode === 'test') badges.push(cfg.timeboxType==='per-question'?'⏱️ Per‑Q Master':'⏱️ Total‑Time Master');
+      if (streak >= 5) badges.push(`🔥 Streak ${streak}`);
+      const types = [cfg.useWhole,cfg.useDecimal,cfg.useSimpleFrac,cfg.useComplexFrac].filter(Boolean).length;
+      if (types >= 4) badges.push('🔀 All Types!');
+      if (cfg.direction === 'mix') badges.push('🔀 Mixed Direction');
+      if (cfg.cardCount === 5) badges.push('⭐ Hard Mode (5 cards)');
+      $('#badges').innerHTML = badges.map(b=>`<span class="badge">${b}</span>`).join('');
+
+      if (pct >= 80) confetti({ particleCount: 160, spread: 70, origin: { y: 0.6 } });
+
+      const list = $('#review-list');
+      list.innerHTML = history.map(h => {
+        const dirLabel = h.dir === 'asc' ? '⬆️ Asc' : '⬇️ Desc';
+        const userStr = h.userOrder.join(' → ');
+        const corrStr = h.correctOrder.join(' → ');
+        return `<div class="review-item">
+          <div>
+            <span style="font-size:.8rem;color:var(--muted)">${dirLabel}</span>
+            &nbsp;<strong>${h.nums.join(', ')}</strong><br>
+            <span style="font-size:.82rem;">Correct: <b>${corrStr}</b></span>
+            ${!h.correct ? `<br><span style="font-size:.82rem;color:var(--danger)">Your answer: ${userStr}</span>` : ''}
+          </div>
+          <div style="font-weight:900;color:${h.correct?'#16a34a':'#ef4444'}">
+            ${h.correct?'✅':'❌'} ${h.timeout?'⏰':''}
+          </div>
+        </div>`;
+      }).join('');
+    }
+
+    /* =============================================
+       THEME & UI SETUP
+       ============================================= */
+    function setTheme(t) { document.body.className = t; }
+    function setMode(m) {
+      cfg.mode = m;
+      $('#btn-practice').style.opacity = m==='practice'?1:.7;
+      $('#btn-test').style.opacity = m==='test'?1:.7;
+      $('#timed-controls').classList.toggle('hidden', m!=='test');
+    }
+    function setTimeboxType(t) {
+      cfg.timeboxType = t;
+      $('#perq-wrap').classList.toggle('hidden', t!=='per-question');
+      $('#total-wrap').classList.toggle('hidden', t!=='total');
+    }
+
+    /* =============================================
+       EVENTS
+       ============================================= */
+    $('#theme').addEventListener('change', e => setTheme(e.target.value));
+
+    isMuted = false;
+    $('#sound-btn').addEventListener('click', e => {
+      isMuted = !isMuted;
+      e.currentTarget.setAttribute('aria-pressed', String(!isMuted));
+      e.currentTarget.textContent = isMuted ? '🔇' : '🔊';
+      if (!isMuted) beep('ok');
+    });
+    $('#voice-btn').addEventListener('click', e => {
+      speakQ = !speakQ;
+      e.currentTarget.setAttribute('aria-pressed', String(speakQ));
+      e.currentTarget.textContent = speakQ ? '🗣️' : '🤫';
+      if (speakQ) say('Voice is on. I will read the numbers.');
+    });
+    $('#read-btn').addEventListener('click', () => {
+      const q = questions[current];
+      if (q) say('The numbers are: ' + q.nums.map(n => n.display).join(', '));
+    });
+    $('#contrast-btn').addEventListener('click', e => {
+      const on = !document.body.classList.contains('high-contrast');
+      document.body.classList.toggle('high-contrast', on);
+      e.currentTarget.setAttribute('aria-pressed', String(on));
+    });
+    $('#btn-practice').addEventListener('click', () => setMode('practice'));
+    $('#btn-test').addEventListener('click', () => setMode('test'));
+    document.querySelectorAll('input[name="tbtype"]').forEach(r => r.addEventListener('change', e => setTimeboxType(e.target.value)));
+
+    $('#start-btn').addEventListener('click', () => {
+      cfg.useWhole       = $('#use-whole').checked;
+      cfg.useDecimal     = $('#use-decimal').checked;
+      cfg.useSimpleFrac  = $('#use-simple-frac').checked;
+      cfg.useComplexFrac = $('#use-complex-frac').checked;
+      if (!cfg.useWhole && !cfg.useDecimal && !cfg.useSimpleFrac && !cfg.useComplexFrac) {
+        alert('Please select at least one number type!'); return;
+      }
+      cfg.direction     = document.querySelector('input[name="direction"]:checked').value;
+      cfg.cardCount     = Number($('#card-count').value) || 4;
+      cfg.total         = clamp(Number($('#qty-num').value)||12, 5, 50);
+      cfg.wholeMin      = clamp(Number($('#whole-min').value)||1, 0, 99);
+      cfg.wholeMax      = clamp(Number($('#whole-max').value)||20, cfg.wholeMin+1, 999);
+      cfg.decPlaces     = Number($('#dec-places').value)||2;
+      cfg.perQSeconds   = clamp(Number($('#per-q-secs').value)||30, 10, 120);
+      cfg.totalSeconds  = clamp(Number($('#total-secs').value)||300, 60, 1800);
+
+      generateQuestions();
+      $('#setup-screen').classList.add('hidden');
+      $('#quiz-screen').classList.remove('hidden');
+      startTimeMs = Date.now();
+
+      if (cfg.mode === 'test' && cfg.timeboxType === 'total') {
+        let left = cfg.totalSeconds;
+        $('#timer-clock').textContent = fmtTime(left);
+        totalTimerObj = setInterval(() => {
+          left--;
+          if (left <= 5) beep('tick');
+          $('#timer-clock').textContent = fmtTime(left);
+          if (left <= 0) { clearInterval(totalTimerObj); endQuiz(true); }
+        }, 1000);
+      } else {
+        $('#timer-clock').textContent = '';
+      }
+
+      renderQuestion();
+    });
+
+    $('#check-btn').addEventListener('click', () => checkOrder(false));
+    $('#next-btn').addEventListener('click', () => { current++; renderQuestion(); });
+    $('#clear-btn').addEventListener('click', clearSlots);
+    $('#skip-btn').addEventListener('click', () => {
+      const q = questions[current];
+      if (q) {
+        history.push({
+          nums: q.nums.map(n=>n.display),
+          correctOrder: q.sorted.map(n=>n.display),
+          userOrder: Array(cfg.cardCount).fill('—'),
+          dir: q.dir, correct: false, timeout: false
+        });
+        streak = 0;
+      }
+      answered = true;
+      clearInterval(timerObj);
+      current++;
+      renderQuestion();
+    });
+    $('#play-again').addEventListener('click', () => location.reload());
+    $('#print-btn').addEventListener('click', () => window.print());
+
+    $('#help-btn').addEventListener('click', () => {
+      alert(
+`Number Order Trail — Shortcuts & Guide
+
+How to play:
+• Drag cards from the tray into the numbered slots
+• OR tap a card to select it (highlighted), then tap a slot to place it
+• Tap a card already in a slot to pick it up and move it
+• Press ✔ Check Order when all slots are filled
+• ↺ Clear returns all cards to the tray
+
+Keyboard shortcuts:
+• C → Check Order
+• X → Clear slots
+• S → Skip question
+• R → Read numbers aloud
+• N or Enter → Next (after checking)
+
+Number Types:
+• Whole Number: e.g. 5, 12, 20
+• Decimal: e.g. 3.75, 0.50
+• Simple Fraction (denom 2–5): e.g. ½, ¾
+• Complex Fraction (denom 6–20): e.g. 7/12, 11/16
+
+Modes:
+• Practice: no timer, see correct order on mistakes
+• Test: per-question timer OR total countdown`
+      );
+    });
+
+    // Keyboard
+    document.addEventListener('keydown', e => {
+      const k = e.key.toLowerCase();
+      if (k === 'r') $('#read-btn').click();
+      if (k === 'c' && !$('#check-btn').classList.contains('hidden')) $('#check-btn').click();
+      if (k === 'x') $('#clear-btn').click();
+      if (k === 's' && document.querySelector('#quiz-screen:not(.hidden)')) $('#skip-btn').click();
+      if ((k === 'n' || e.key === 'Enter') && !$('#next-btn').classList.contains('hidden')) $('#next-btn').click();
+    });
+
+    // Defaults
+    setTheme('theme-jungle');
+    setMode('practice');
+    setTimeboxType('per-question');
+  </script>
+</body>
+</html>

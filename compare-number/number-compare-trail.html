@@ -1,0 +1,1137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Number Nature Trail — Compare Numbers</title>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700&family=Fredoka:wght@400;600;700&family=Orbitron:wght@700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <style>
+    /* ---------- THEME TOKENS ---------- */
+    :root {
+      --primary: #059669;
+      --bg: #ecfdf5;
+      --text: #052e1c;
+      --muted: #475569;
+      --prog: #10b981;
+      --accent: #f59e0b;
+      --card: #ffffff;
+      --danger: #ef4444;
+      --ok: #16a34a;
+      --shadow: 0 10px 25px rgba(0,0,0,.08);
+      --radius: 20px;
+    }
+    .theme-blue   { --primary:#2563eb; --bg:#eff6ff; --text:#0b1220; --prog:#22c55e; --accent:#f59e0b; --card:#ffffff; }
+    .theme-pink   { --primary:#ec4899; --bg:#fdf2f8; --text:#831843; --prog:#db2777; --accent:#fbbf24; --card:#ffffff; }
+    .theme-space  { --primary:#7c3aed; --bg:#0b1020; --text:#e5e7eb; --prog:#22d3ee; --accent:#fbbf24; --card:#141a2a; }
+    .theme-jungle { --primary:#059669; --bg:#ecfdf5; --text:#052e1c; --prog:#10b981; --accent:#f59e0b; --card:#ffffff; }
+    .theme-ocean  { --primary:#0ea5e9; --bg:#e0f2fe; --text:#06243b; --prog:#22c55e; --accent:#f97316; --card:#ffffff; }
+    .theme-candy  { --primary:#f43f5e; --bg:#fff1f2; --text:#7f1d1d; --prog:#34d399; --accent:#fb7185; --card:#ffffff; }
+    .high-contrast { --bg:#000; --text:#fff; --card:#000; --primary:#ffd000; --accent:#00ffff; --prog:#00ff66; --muted:#bbb; --shadow:0 0 0 rgba(0,0,0,0); }
+
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Baloo 2', 'Fredoka', 'Comic Sans MS', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      transition: background .3s, color .3s;
+    }
+
+    /* ---------- HEADER ---------- */
+    header {
+      background: var(--card);
+      position: sticky; top: 0; z-index: 10;
+      border-bottom: 4px solid rgba(0,0,0,.05);
+      box-shadow: var(--shadow);
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: .5rem;
+      padding: .5rem 1rem;
+    }
+    #brand { display: flex; align-items: center; gap: .6rem; font-weight: 800; }
+    #brand .logo { width: 28px; height: 28px; }
+    #brand h1 { font-size: 1.25rem; margin: 0; letter-spacing: .5px; }
+    .header-actions { display: flex; align-items: center; gap: .5rem; justify-self: end; }
+    .icon-btn {
+      background: transparent; border: 2px solid var(--primary); color: var(--primary);
+      border-radius: 999px; padding: .35rem .6rem; cursor: pointer; font-size: 1rem; font-weight: 700;
+    }
+    .icon-btn[aria-pressed="true"] { background: var(--primary); color: #fff; }
+    .select, select, input[type="number"] {
+      font-family: inherit; font-weight: 700; color: var(--text);
+      border-radius: 12px; border: 2px solid var(--primary);
+      background: #fff; padding: .55rem .7rem; outline: none;
+    }
+    #header-progress {
+      grid-column: 1 / -1;
+      height: 6px; background: #e2e8f0; border-radius: 999px; overflow: hidden; margin-top: .5rem;
+    }
+    #header-progress > span { display: block; height: 100%; width: 0%; background: linear-gradient(90deg, var(--prog), var(--accent)); transition: width .35s ease; }
+
+    /* ---------- LAYOUT ---------- */
+    main { display: grid; place-items: center; padding: 20px; }
+    .card {
+      width: min(960px, 96vw);
+      background: var(--card);
+      border: 3px solid var(--primary);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 1.25rem;
+    }
+    .row { display: flex; flex-wrap: wrap; gap: .75rem; align-items: center; }
+    .row > * { flex: none; }
+    .grow { flex: 1; }
+    .divider { height: 2px; background: linear-gradient(90deg, transparent, var(--primary), transparent); margin: .75rem 0 1rem; }
+
+    .main-btn, .mode-btn {
+      cursor: pointer; padding: .75rem 1.1rem; border-radius: 14px; border: 0;
+      background: var(--primary); color: #fff; font-weight: 800; letter-spacing: .3px;
+      box-shadow: 0 6px 0 rgba(0,0,0,.1); font-family: inherit; font-size: 1rem;
+    }
+    .secondary-btn {
+      cursor: pointer; padding: .6rem 1rem; border-radius: 12px; border: 2px dashed var(--primary);
+      background: transparent; color: var(--primary); font-weight: 800; font-family: inherit; font-size: 1rem;
+    }
+    .ghost-btn { background: transparent; border: 0; color: var(--primary); font-weight: 800; cursor: pointer; font-family: inherit; font-size: 1rem; }
+
+    /* ---------- QUIZ INFO ---------- */
+    #quiz-info {
+      display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
+      gap: .5rem; text-align: center; margin: .25rem 0 .75rem;
+      font-weight: 800; color: var(--muted);
+    }
+    #timer-clock { font-family: 'Orbitron', monospace; font-size: 1.75rem; color: var(--primary); }
+    .streak { justify-self: start; }
+
+    /* ---------- QUESTION DISPLAY ---------- */
+    #question-wrap { text-align: center; margin: .3rem 0; }
+    #message { font-weight: 800; color: var(--muted); min-height: 1.4em; margin-bottom: .3rem; font-size: 1.1rem; }
+
+    /* The comparison arena — two number boxes + symbol slot */
+    .compare-arena {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.2rem;
+      margin: .5rem 0 .75rem;
+      flex-wrap: wrap;
+    }
+    .num-box {
+      background: #fff;
+      border: 3px solid var(--primary);
+      border-radius: 16px;
+      padding: .5rem .9rem;
+      box-shadow: var(--shadow);
+      min-width: 110px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .num-box .type-label {
+      font-size: .72rem;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      margin-bottom: .15rem;
+    }
+    /* Whole number & decimal display */
+    .num-box .num-val {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 800;
+      line-height: 1.1;
+      color: var(--text);
+    }
+    /* Fraction display — stacked like deci-frac-trail */
+    .num-box pre.frac-pre {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
+      font-size: clamp(1.4rem, 3.5vw, 2.2rem);
+      font-weight: 800;
+      line-height: 1.35;
+      margin: 0;
+      color: var(--text);
+      text-align: center;
+      white-space: pre;
+    }
+    /* Mixed number fraction display */
+    .num-box .mixed-display {
+      display: flex;
+      align-items: center;
+      gap: .4rem;
+    }
+    .num-box .mixed-whole {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 800;
+      line-height: 1.1;
+    }
+
+    /* Symbol slot — shows ? before answered, then < > = */
+    .symbol-slot {
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      font-weight: 900;
+      color: var(--primary);
+      min-width: 2.5rem;
+      text-align: center;
+      line-height: 1;
+      transition: transform .2s ease;
+    }
+    .symbol-slot.revealed { animation: popIn .25s ease; }
+    @keyframes popIn { 0%{transform:scale(.4)} 80%{transform:scale(1.15)} 100%{transform:scale(1)} }
+
+    /* Number line visual aid */
+    #number-line-wrap {
+      margin: .4rem auto;
+      max-width: 520px;
+    }
+    .nline-container {
+      position: relative;
+      height: 54px;
+      margin: 0 auto;
+    }
+    .nline-track {
+      position: absolute;
+      top: 50%;
+      left: 0; right: 0;
+      height: 4px;
+      background: #e2e8f0;
+      border-radius: 4px;
+      transform: translateY(-50%);
+    }
+    .nline-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--prog), var(--accent));
+      border-radius: 4px;
+      transition: width .4s ease;
+    }
+    .nline-marker {
+      position: absolute;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      border: 3px solid #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,.2);
+    }
+    .nline-label {
+      position: absolute;
+      font-size: .7rem; font-weight: 800;
+      white-space: nowrap;
+      transform: translateX(-50%);
+    }
+    .nline-caption {
+      font-size: .78rem; font-weight: 800; color: var(--muted); text-align: center; margin-top: 2px;
+    }
+
+    /* ---------- OPTIONS — 3 big buttons < > = ---------- */
+    .options {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: .7rem;
+      margin-top: .6rem;
+      max-width: 480px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .option-btn {
+      cursor: pointer;
+      padding: 1rem .6rem;
+      font-size: clamp(1.8rem, 5vw, 3rem);
+      font-weight: 900;
+      background: #fff;
+      border: 3px solid var(--primary);
+      color: var(--text);
+      border-radius: 14px;
+      transition: transform .08s ease, background .15s ease, color .15s ease;
+      font-family: inherit;
+      line-height: 1;
+    }
+    .option-btn:hover:not([disabled]) { transform: translateY(-3px); background: var(--primary); color: #fff; }
+    .option-btn[disabled] { opacity: .55; cursor: not-allowed; }
+    .option-btn.correct { background: #10b981; color: #fff; border-color: #10b981; }
+    .option-btn.wrong   { background: #ef4444; color: #fff; border-color: #ef4444; }
+    .option-btn .btn-label { font-size: .75rem; display: block; font-weight: 700; margin-top: .1rem; letter-spacing: .3px; }
+
+    /* ---------- RESULT ---------- */
+    #score-big { font-size: clamp(2rem, 6vw, 3rem); margin: .25rem 0; }
+    .badges { display: flex; flex-wrap: wrap; gap: .4rem; margin: .25rem 0 .5rem; }
+    .badge { background: linear-gradient(135deg, var(--primary), var(--accent)); color:#fff; border-radius: 999px; padding: .35rem .7rem; font-weight: 900; letter-spacing: .3px; box-shadow: var(--shadow); }
+    .review-list { margin-top: .6rem; border: 1px dashed var(--primary); border-radius: 12px; padding: .5rem; max-height: 360px; overflow: auto; }
+    .review-item { display: grid; grid-template-columns: 1fr auto; gap: .5rem; border-bottom: 1px solid #eee; padding: .35rem 0; }
+    .review-item:last-child { border-bottom: 0; }
+
+    /* ---------- LEGEND / TYPE CHIPS ---------- */
+    .type-chip {
+      display: inline-flex; align-items: center; gap: .3rem;
+      background: var(--bg); border: 2px solid var(--primary);
+      border-radius: 999px; padding: .2rem .65rem;
+      font-size: .82rem; font-weight: 800; color: var(--primary);
+    }
+
+    /* ---------- FOOTER ---------- */
+    footer { text-align:center; padding:12px; font-size:.95rem; color:var(--muted); }
+    .footer-row { display:flex; gap:.75rem; align-items:center; justify-content:center; flex-wrap:wrap; }
+    .footer-sep { opacity:.3; }
+    .social-link { display:inline-flex; align-items:center; gap:.4rem; color:var(--primary); text-decoration:none; font-weight:800; }
+    .social-link:hover { text-decoration:underline; }
+    .icon { width:18px; height:18px; display:inline-block; }
+
+    /* ---------- UTILS ---------- */
+    .hidden { display: none !important; }
+    .sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); border:0; }
+
+    @media print {
+      header, #setup-screen, #quiz-screen, .no-print { display: none !important; }
+      body { background:#fff; color:#000; }
+      .card { border: 0; box-shadow: none; }
+      .review-list { max-height: none; }
+    }
+  </style>
+</head>
+<body class="theme-jungle">
+
+  <header>
+    <div id="brand" aria-label="Number Nature Trail">
+      <svg class="logo" viewBox="0 0 64 64" aria-hidden="true">
+        <defs>
+          <linearGradient id="leafGrad" x1="0" x2="1" y1="0" y2="1">
+            <stop offset="0" stop-color="#34d399"/>
+            <stop offset="1" stop-color="#059669"/>
+          </linearGradient>
+        </defs>
+        <path d="M54 10C30 10 14 20 8 40c8-4 16-5 24-2-4 1-8 4-12 9 8-2 14-1 20 2 8-10 14-22 14-39z" fill="url(#leafGrad)" stroke="#065f46" stroke-width="2"/>
+        <path d="M12 42c10-8 22-12 36-12" stroke="#064e3b" stroke-width="2" fill="none"/>
+        <!-- Extra: two small comparison arrows to hint the game -->
+        <text x="18" y="52" font-size="11" font-weight="900" fill="#fff" font-family="sans-serif">&lt; &gt;</text>
+      </svg>
+      <h1>Number Nature Trail</h1>
+    </div>
+
+    <div class="row" style="justify-content:center; gap:.4rem;">
+      <label class="sr-only" for="theme">Theme</label>
+      <select id="theme" class="select" title="Pick a theme">
+        <option value="theme-blue">Blue (Classic)</option>
+        <option value="theme-pink">Pink (Classic)</option>
+        <option value="theme-space">Space</option>
+        <option value="theme-jungle" selected>Jungle</option>
+        <option value="theme-ocean">Ocean</option>
+        <option value="theme-candy">Candy</option>
+      </select>
+      <button id="sound-btn" class="icon-btn" aria-pressed="true" title="Toggle sound">🔊</button>
+      <button id="voice-btn" class="icon-btn" aria-pressed="false" title="Read questions aloud">🗣️</button>
+      <button id="contrast-btn" class="icon-btn" aria-pressed="false" title="High contrast mode">🌓</button>
+    </div>
+
+    <div class="header-actions">
+      <button id="help-btn" class="icon-btn" title="Help / Shortcuts">❓</button>
+    </div>
+
+    <div id="header-progress"><span></span></div>
+  </header>
+
+  <main>
+    <!-- ========== SETUP ========== -->
+    <section id="setup-screen" class="card" aria-label="Setup">
+      <h2 style="margin:.2rem 0">Choose Your Trail 🚀</h2>
+      <p style="margin:.1rem 0 .5rem; color:var(--muted); font-weight:700;">Compare two numbers — pick <strong>&lt;</strong>, <strong>&gt;</strong>, or <strong>=</strong></p>
+
+      <div class="row" style="margin-top:.25rem; gap:.5rem;">
+        <strong>Number Types:</strong>
+        <label><input type="checkbox" id="use-whole" checked> <span class="type-chip">🔢 Whole</span></label>
+        <label><input type="checkbox" id="use-decimal" checked> <span class="type-chip">🔣 Decimal</span></label>
+        <label><input type="checkbox" id="use-simple-frac" checked> <span class="type-chip">½ Simple Fraction</span></label>
+        <label><input type="checkbox" id="use-complex-frac" checked> <span class="type-chip">⅞ Complex Fraction</span></label>
+      </div>
+
+      <div class="row" style="margin-top:.5rem; gap:.75rem; align-items:flex-start;">
+        <div>
+          <strong>Whole number range:</strong><br>
+          <div class="row" style="gap:.4rem; margin-top:.3rem;">
+            <label>Min: <input type="number" id="whole-min" min="0" max="99" value="1" style="width:80px"></label>
+            <label>Max: <input type="number" id="whole-max" min="1" max="999" value="20" style="width:80px"></label>
+          </div>
+        </div>
+        <div>
+          <strong>Decimal places:</strong><br>
+          <div class="row" style="gap:.4rem; margin-top:.3rem;">
+            <select id="dec-places" class="select">
+              <option value="1">1 dp (e.g. 3.5)</option>
+              <option value="2" selected>2 dp (e.g. 3.75)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="row" style="margin-top:.5rem; gap:.75rem; align-items:flex-start;">
+        <div>
+          <strong>Simple fraction denom:</strong> 2–5<br>
+          <span style="font-size:.82rem; color:var(--muted);">(e.g. ½, ¾, 2/5)</span>
+        </div>
+        <div>
+          <strong>Complex fraction denom:</strong> 6–20<br>
+          <span style="font-size:.82rem; color:var(--muted);">(e.g. 5/8, 7/12, 11/16)</span>
+        </div>
+      </div>
+
+      <div class="row" style="margin-top:.5rem;">
+        <label><input type="checkbox" id="allow-equal" checked> <strong>Include equal pairs</strong></label>
+        <label><input type="checkbox" id="show-numline" checked> <strong>Show number line aid</strong></label>
+        <label><input type="checkbox" id="shuffle-opts" checked> <strong>Shuffle (&lt; &gt; =) order</strong></label>
+      </div>
+
+      <div class="row" style="margin-top:.4rem;">
+        <label for="qty-num"><strong>Questions:</strong></label>
+        <input type="number" id="qty-num" min="5" max="50" value="15" style="width:120px">
+      </div>
+
+      <div class="row" style="margin-top:.5rem;">
+        <strong>Mode:</strong>
+        <button type="button" id="btn-practice" class="mode-btn" aria-pressed="true">😌 Practice</button>
+        <button type="button" id="btn-test" class="mode-btn" aria-pressed="false" style="opacity:.7">⏱️ Test (Timed)</button>
+
+        <div id="timed-controls" class="row hidden" style="align-items:flex-start;">
+          <div class="row" style="gap:.35rem;">
+            <label><input type="radio" name="tbtype" value="per-question" checked> Per question</label>
+            <label><input type="radio" name="tbtype" value="total"> Total time</label>
+          </div>
+          <div id="perq-wrap" class="row">
+            <label for="per-q-secs">Seconds per Q:</label>
+            <input id="per-q-secs" type="number" min="5" max="60" value="12" style="width:100px">
+          </div>
+          <div id="total-wrap" class="row hidden">
+            <label for="total-secs">Total seconds:</label>
+            <input id="total-secs" type="number" min="30" max="1800" value="180" style="width:120px">
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="row" style="justify-content:space-between;">
+        <div class="grow">
+          <div id="stats" style="font-weight:800; color:var(--muted);"></div>
+        </div>
+        <button class="main-btn" id="start-btn" style="min-width:180px">START TRAIL 🏁</button>
+      </div>
+    </section>
+
+    <!-- ========== QUIZ ========== -->
+    <section id="quiz-screen" class="card hidden" aria-label="Quiz" aria-live="polite">
+      <div id="quiz-info">
+        <div class="streak" id="streak">Streak: 0 🔥</div>
+        <div id="timer-clock" aria-live="assertive"></div>
+        <div id="q-progress" style="justify-self:end;">Question 1/15</div>
+      </div>
+
+      <div id="question-wrap">
+        <div id="message"></div>
+
+        <!-- The two numbers + gap for symbol -->
+        <div class="compare-arena" id="compare-arena">
+          <div class="num-box" id="left-box">
+            <div class="type-label" id="left-label">Whole</div>
+            <div class="num-val" id="left-val">5</div>
+          </div>
+
+          <div class="symbol-slot" id="symbol-slot">?</div>
+
+          <div class="num-box" id="right-box">
+            <div class="type-label" id="right-label">Fraction</div>
+            <div class="num-val" id="right-val">3</div>
+          </div>
+        </div>
+
+        <div id="number-line-wrap"></div>
+      </div>
+
+      <!-- 3 option buttons: <, >, = -->
+      <div class="options" id="options" role="group" aria-label="Choose comparison symbol">
+        <button class="option-btn" data-sym="lt" aria-label="Less than">
+          &lt;
+          <span class="btn-label">Less than</span>
+        </button>
+        <button class="option-btn" data-sym="eq" aria-label="Equal to">
+          =
+          <span class="btn-label">Equal</span>
+        </button>
+        <button class="option-btn" data-sym="gt" aria-label="Greater than">
+          &gt;
+          <span class="btn-label">Greater than</span>
+        </button>
+      </div>
+
+      <div class="row" style="margin-top:.6rem; justify-content:space-between;">
+        <button class="ghost-btn no-print" id="read-btn">🔊 Read again (R)</button>
+        <div class="row">
+          <button class="secondary-btn no-print" id="skip-btn">Skip ↷</button>
+          <button class="main-btn no-print" id="next-btn" disabled>Next ➜</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== RESULT ========== -->
+    <section id="result-screen" class="card hidden" aria-label="Results">
+      <h2>Trail Complete! 🎉</h2>
+      <div id="appraise" style="font-size:1.1rem; font-weight:800; color:var(--muted);"></div>
+      <div id="score-big">0 / 0</div>
+      <div style="font-weight:800; color:var(--muted);">Time taken: <span id="time-taken">00:00</span></div>
+      <div class="badges" id="badges"></div>
+
+      <div class="row" style="gap:.5rem; margin:.25rem 0 .5rem;">
+        <button class="main-btn no-print" id="play-again">Play Again 🔄</button>
+        <button class="secondary-btn no-print" id="print-btn">🖨️ Print / Save PDF</button>
+      </div>
+
+      <div id="summary-title" style="font-weight:900; margin-top:.35rem;">Questions Summary</div>
+      <div id="review-list" class="review-list"></div>
+    </section>
+  </main>
+
+  <footer class="no-print">
+    <div class="footer-row">
+      <span>Kid Zone © 2026</span>
+      <span class="footer-sep">•</span>
+      <a class="social-link" href="https://www.linkedin.com/in/kashyapmakadia/" target="_blank" rel="noopener">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path fill="currentColor" d="M4.98 3.5C4.98 4.88 3.86 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM0 8h5v16H0V8zm7.5 0h4.8v2.2h.07c.67-1.26 2.32-2.6 4.78-2.6 5.11 0 6.05 3.36 6.05 7.73V24h-5v-7.9c0-1.88-.03-4.3-2.62-4.3-2.62 0-3.02 2.05-3.02 4.16V24h-5V8z"/>
+        </svg>
+        <span>Kashyap Makadia</span>
+      </a>
+      <span class="footer-sep">•</span>
+      <a class="social-link" href="https://github.com/KashyapMak/kids-zone" target="_blank" rel="noopener">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path fill="currentColor" d="M12 .5A11.5 11.5 0 0 0 .5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.8-.26.8-.58 0-.29-.01-1.06-.02-2.08-3.2.7-3.88-1.54-3.88-1.54-.52-1.33-1.27-1.68-1.27-1.68-1.04-.71.08-.69.08-.69 1.15.08 1.76 1.18 1.76 1.18 1.02 1.75 2.68 1.25 3.33.96.1-.75.4-1.25.72-1.54-2.56-.29-5.26-1.28-5.26-5.68 0-1.25.45-2.27 1.18-3.07-.12-.29-.51-1.47.11-3.06 0 0 .97-.31 3.17 1.17a11.02 11.02 0 0 1 5.78 0c2.2-1.48 3.17-1.17 3.17-1.17.62 1.59.24 2.77.12 3.06.74.8 1.18 1.82 1.18 3.07 0 4.41-2.7 5.39-5.28 5.67.41.35.77 1.05.77 2.12 0 1.53-.01 2.76-.01 3.14 0 .31.21.68.8.57A11.51 11.51 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5z"/>
+        </svg>
+        <span>GitHub Repo</span>
+      </a>
+    </div>
+  </footer>
+
+  <script>
+    /* =============================================
+       CONFIG & STATE
+       ============================================= */
+    const cfg = {
+      mode: 'practice',
+      timeboxType: 'per-question',
+      perQSeconds: 12,
+      totalSeconds: 180,
+      total: 15,
+      useWhole: true,
+      useDecimal: true,
+      useSimpleFrac: true,
+      useComplexFrac: true,
+      allowEqual: true,
+      showNumline: true,
+      shuffleOpts: true,
+      wholeMin: 1,
+      wholeMax: 20,
+      decPlaces: 2,
+    };
+
+    let score = 0, current = 0, questions = [], history = [];
+    let isMuted = false, speakQ = false;
+    let timerObj = null, timeLeft = 0, streak = 0, awaitingAnswer = true;
+    let startTimeMs = 0, endTimeMs = 0, totalTimerObj = null;
+
+    const $ = sel => document.querySelector(sel);
+    const randInt = (a, b) => Math.floor(Math.random() * (b - a + 1)) + a;
+    const clamp = (v, mn, mx) => Math.max(mn, Math.min(mx, v));
+
+    /* =============================================
+       HELPERS
+       ============================================= */
+    function fmtTime(s) {
+      const m = Math.floor(s / 60), sec = Math.max(0, Math.floor(s % 60));
+      return `${String(m).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
+    }
+
+    function beep(type = 'ok') {
+      if (isMuted) return;
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const o = ctx.createOscillator(), g = ctx.createGain();
+        o.connect(g); g.connect(ctx.destination);
+        o.type = 'sine';
+        o.frequency.setValueAtTime(type === 'ok' ? 880 : (type === 'tick' ? 660 : 220), ctx.currentTime);
+        g.gain.value = 0.0001;
+        g.gain.exponentialRampToValueAtTime(0.2, ctx.currentTime + 0.01);
+        o.start();
+        g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.15);
+        o.stop(ctx.currentTime + 0.16);
+      } catch {}
+    }
+
+    function say(text) {
+      if (!speakQ || !('speechSynthesis' in window)) return;
+      try {
+        const u = new SpeechSynthesisUtterance(
+          text.replace('−', ' minus ').replace('<', ' less than ').replace('>', ' greater than ').replace('/', ' over ')
+        );
+        u.rate = 0.95; u.pitch = 1.1;
+        speechSynthesis.cancel(); speechSynthesis.speak(u);
+      } catch {}
+    }
+
+    /* Fraction math */
+    const gcd = (a, b) => b ? gcd(b, a % b) : Math.abs(a);
+    function simplifyFrac(n, d) {
+      const g = gcd(Math.abs(n), Math.abs(d)) || 1;
+      let sn = n / g, sd = d / g;
+      if (sd < 0) { sn = -sn; sd = -sd; }
+      return { n: sn, d: sd };
+    }
+    function fracToDecimal(f) { return f.n / f.d; }
+
+    /* Build stacked fraction text (same style as deci-frac-trail) */
+    function buildFracLines(n, d) {
+      const ns = String(n), ds = String(d);
+      const w = Math.max(ns.length, ds.length);
+      const pad = s => ' '.repeat(Math.floor((w - s.length) / 2)) + s + ' '.repeat(Math.ceil((w - s.length) / 2));
+      return [pad(ns), '─'.repeat(w), pad(ds)].join('\n');
+    }
+
+    /* =============================================
+       NUMBER GENERATION
+       ============================================= */
+    function makeWhole() {
+      const v = randInt(cfg.wholeMin, cfg.wholeMax);
+      return { kind: 'whole', value: v, display: String(v), label: 'Whole Number' };
+    }
+
+    function makeDecimal() {
+      const m = 10 ** cfg.decPlaces;
+      const maxW = cfg.wholeMax;
+      const raw = randInt(0, maxW * m - 1);
+      const v = raw / m;
+      return { kind: 'decimal', value: v, display: v.toFixed(cfg.decPlaces), label: 'Decimal' };
+    }
+
+    function makeSimpleFrac() {
+      const d = randInt(2, 5);
+      const n = randInt(1, d * 2); // allow improper fractions too
+      const f = simplifyFrac(n, d);
+      return {
+        kind: 'simple-frac',
+        value: fracToDecimal(f),
+        n: f.n, d: f.d,
+        display: `${f.n}/${f.d}`,
+        label: 'Simple Fraction'
+      };
+    }
+
+    function makeComplexFrac() {
+      const d = randInt(6, 20);
+      const n = randInt(1, d * 2);
+      const f = simplifyFrac(n, d);
+      // Re-check denominator is still "complex" after simplification
+      return {
+        kind: 'complex-frac',
+        value: fracToDecimal(f),
+        n: f.n, d: f.d,
+        display: `${f.n}/${f.d}`,
+        label: 'Complex Fraction'
+      };
+    }
+
+    function pickRandomNumber() {
+      const pool = [];
+      if (cfg.useWhole)       pool.push('whole');
+      if (cfg.useDecimal)     pool.push('decimal');
+      if (cfg.useSimpleFrac)  pool.push('simple-frac');
+      if (cfg.useComplexFrac) pool.push('complex-frac');
+      if (!pool.length) pool.push('whole');
+      const kind = pool[randInt(0, pool.length - 1)];
+      if (kind === 'whole')        return makeWhole();
+      if (kind === 'decimal')      return makeDecimal();
+      if (kind === 'simple-frac')  return makeSimpleFrac();
+      return makeComplexFrac();
+    }
+
+    function generateOnePair() {
+      let left = pickRandomNumber();
+      let right = pickRandomNumber();
+
+      // If equal pairs disabled, regenerate right until not equal
+      let tries = 0;
+      while (!cfg.allowEqual && Math.abs(left.value - right.value) < 1e-9 && tries++ < 50) {
+        right = pickRandomNumber();
+      }
+
+      // Determine correct answer
+      let correctSym;
+      const diff = left.value - right.value;
+      if (Math.abs(diff) < 1e-9) correctSym = 'eq';
+      else if (diff < 0)          correctSym = 'lt';
+      else                        correctSym = 'gt';
+
+      // Build option list — always [lt, eq, gt] unless shuffled
+      let opts = ['lt', 'eq', 'gt'];
+      if (cfg.shuffleOpts) opts = shuffle([...opts]);
+
+      return { left, right, correctSym, opts };
+    }
+
+    function generateQuestions() {
+      questions = []; history = []; current = 0; score = 0; streak = 0;
+      for (let i = 0; i < cfg.total; i++) {
+        questions.push(generateOnePair());
+      }
+    }
+
+    function shuffle(arr) {
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    /* =============================================
+       RENDER
+       ============================================= */
+    function symToChar(sym) {
+      if (sym === 'lt') return '<';
+      if (sym === 'gt') return '>';
+      return '=';
+    }
+
+    function symToWords(sym) {
+      if (sym === 'lt') return 'less than';
+      if (sym === 'gt') return 'greater than';
+      return 'equal to';
+    }
+
+    function renderNumberBox(boxEl, labelEl, valEl, num) {
+      labelEl.textContent = num.label;
+      // Clear
+      valEl.innerHTML = '';
+      valEl.className = '';
+
+      if (num.kind === 'whole' || num.kind === 'decimal') {
+        valEl.className = 'num-val';
+        valEl.textContent = num.display;
+      } else {
+        // Fraction — use stacked pre display like deci-frac-trail
+        valEl.className = '';
+        const pre = document.createElement('pre');
+        pre.className = 'frac-pre';
+        pre.textContent = buildFracLines(num.n, num.d);
+        valEl.appendChild(pre);
+      }
+    }
+
+    function renderNumline(left, right) {
+      const wrap = $('#number-line-wrap');
+      wrap.innerHTML = '';
+      if (!cfg.showNumline) return;
+
+      // Determine domain
+      const vals = [left.value, right.value];
+      const minV = Math.min(...vals);
+      const maxV = Math.max(...vals);
+      const range = maxV - minV;
+      const padding = Math.max(range * 0.3, 0.5);
+      const domMin = minV - padding;
+      const domMax = maxV + padding;
+      const domRange = domMax - domMin;
+
+      function pct(v) { return ((v - domMin) / domRange * 100).toFixed(1) + '%'; }
+
+      const colors = ['#059669', '#f59e0b'];
+
+      const wrap2 = document.createElement('div');
+      const cap = document.createElement('div');
+      cap.className = 'nline-caption';
+      cap.textContent = 'Number line — where do they fall?';
+      wrap.appendChild(cap);
+
+      const cont = document.createElement('div');
+      cont.className = 'nline-container';
+
+      const track = document.createElement('div');
+      track.className = 'nline-track';
+      cont.appendChild(track);
+
+      [left, right].forEach((num, i) => {
+        const marker = document.createElement('div');
+        marker.className = 'nline-marker';
+        marker.style.left = pct(num.value);
+        marker.style.background = colors[i];
+
+        const label = document.createElement('div');
+        label.className = 'nline-label';
+        label.style.left = pct(num.value);
+        label.style.top = (i === 0) ? '-18px' : '28px';
+        label.style.color = colors[i];
+        label.textContent = num.display;
+
+        cont.appendChild(marker);
+        cont.appendChild(label);
+      });
+
+      wrap.appendChild(cont);
+    }
+
+    function renderQuestion() {
+      if (current >= cfg.total) { endQuiz(); return; }
+      const q = questions[current];
+
+      // Render number boxes
+      renderNumberBox(
+        $('#left-box'), $('#left-label'), $('#left-val'), q.left
+      );
+      renderNumberBox(
+        $('#right-box'), $('#right-label'), $('#right-val'), q.right
+      );
+
+      // Reset symbol slot
+      const slot = $('#symbol-slot');
+      slot.textContent = '?';
+      slot.className = 'symbol-slot';
+
+      // Render numline
+      renderNumline(q.left, q.right);
+
+      // Render option buttons
+      const optCont = $('#options');
+      optCont.innerHTML = '';
+      q.opts.forEach(sym => {
+        const b = document.createElement('button');
+        b.className = 'option-btn';
+        b.dataset.sym = sym;
+        b.setAttribute('aria-label', symToWords(sym));
+        b.innerHTML = `${symToChar(sym)}<span class="btn-label">${symToWords(sym)}</span>`;
+        b.addEventListener('click', () => checkAnswer(sym, false, b));
+        optCont.appendChild(b);
+      });
+
+      setMessage('');
+      $('#next-btn').disabled = true;
+      awaitingAnswer = true;
+      updateProgress();
+
+      // Timer
+      clearInterval(timerObj);
+      if (cfg.mode === 'test' && cfg.timeboxType === 'per-question') {
+        timeLeft = cfg.perQSeconds;
+        $('#timer-clock').textContent = `00:${String(timeLeft).padStart(2, '0')}`;
+        timerObj = setInterval(() => {
+          timeLeft--;
+          if (timeLeft <= 3) beep('tick');
+          $('#timer-clock').textContent = `00:${Math.max(0, timeLeft).toString().padStart(2, '0')}`;
+          if (timeLeft <= 0) { clearInterval(timerObj); checkAnswer(null, true); }
+        }, 1000);
+      } else if (cfg.mode === 'practice') {
+        $('#timer-clock').textContent = '';
+      }
+
+      // Read aloud
+      say(`Is ${q.left.display} less than, equal to, or greater than ${q.right.display}?`);
+    }
+
+    function checkAnswer(sym, isTimeout = false, btnEl = null) {
+      if (!awaitingAnswer) return;
+      awaitingAnswer = false;
+      clearInterval(timerObj);
+
+      const q = questions[current];
+      const correct = sym === q.correctSym;
+
+      // Reveal symbol in slot
+      const slot = $('#symbol-slot');
+      slot.textContent = symToChar(q.correctSym);
+      slot.classList.add('revealed');
+
+      // Record history
+      history.push({
+        left: q.left.display,
+        right: q.right.display,
+        leftLabel: q.left.label,
+        rightLabel: q.right.label,
+        ans: q.correctSym,
+        user: sym,
+        timeout: isTimeout
+      });
+
+      const allBtns = [...document.querySelectorAll('.option-btn')];
+      allBtns.forEach(b => b.disabled = true);
+
+      // Highlight correct button always
+      allBtns.forEach(b => {
+        if (b.dataset.sym === q.correctSym) b.classList.add('correct');
+      });
+
+      if (cfg.mode === 'practice') {
+        if (correct) {
+          if (btnEl) btnEl.classList.add('correct');
+          score++; streak++;
+          setMessage(praise(), 'ok');
+          beep('ok');
+          setTimeout(() => { current++; renderQuestion(); }, 700);
+        } else {
+          streak = 0;
+          if (btnEl) btnEl.classList.add('wrong');
+          setMessage(isTimeout ? '⏰ Time\'s up — try again!' : `Oops! The answer is ${symToChar(q.correctSym)} 😊`, 'warn');
+          beep('bad');
+          // Re-enable all non-wrong buttons after brief pause
+          setTimeout(() => {
+            allBtns.forEach(b => {
+              b.disabled = false;
+              b.classList.remove('correct', 'wrong');
+            });
+            awaitingAnswer = true;
+          }, 900);
+        }
+      } else {
+        // Test mode
+        if (correct) { score++; streak++; setMessage(praise(), 'ok'); beep('ok'); }
+        else { streak = 0; if (btnEl) btnEl.classList.add('wrong'); setMessage(isTimeout ? '⏰ Out of time!' : `It\'s ${symToChar(q.correctSym)} — keep going!`, 'warn'); beep('bad'); }
+        $('#next-btn').disabled = false;
+      }
+      updateProgress();
+    }
+
+    function setMessage(text, type = 'info') {
+      const el = $('#message');
+      el.style.color = type === 'ok' ? 'var(--ok)' : (type === 'warn' ? 'var(--danger)' : 'var(--muted)');
+      el.textContent = text;
+    }
+
+    function praise() {
+      const msgs = ['Brilliant!', 'Nice job!', 'You rock!', 'Fantastic!', 'Great work!', 'Super!', 'Math Hero!', 'Amazing!', 'Yes! Keep it up!', 'Perfect! 🎯'];
+      return msgs[randInt(0, msgs.length - 1)];
+    }
+
+    function updateProgress() {
+      $('#q-progress').textContent = `Question ${Math.min(current + 1, cfg.total)}/${cfg.total}`;
+      $('#streak').textContent = `Streak: ${streak} 🔥`;
+      $('#header-progress > span').style.width = `${(current / cfg.total) * 100}%`;
+    }
+
+    function endQuiz(forcedByTimer = false) {
+      if (totalTimerObj) { clearInterval(totalTimerObj); totalTimerObj = null; }
+      endTimeMs = Date.now();
+
+      $('#quiz-screen').classList.add('hidden');
+      $('#result-screen').classList.remove('hidden');
+
+      const pct = Math.round((score / cfg.total) * 100);
+      $('#score-big').textContent = `${score} / ${cfg.total}  (${pct}%)`;
+
+      const totalTakenSec = Math.max(0, Math.round((endTimeMs - startTimeMs) / 1000));
+      $('#time-taken').textContent = fmtTime(totalTakenSec);
+
+      let msg = 'Great effort! Keep practicing and you\'ll nail it!';
+      if (forcedByTimer) msg = 'Time\'s up! Awesome try — practice again and beat the clock! ⏰';
+      else if (pct === 100) msg = 'Perfect score! You\'re a Number Nature Trail Champion! 🏆';
+      else if (pct >= 80)  msg = 'Awesome! You\'re almost there! 🌟';
+      else if (pct >= 60)  msg = 'Good job! Practice a bit more! 💪';
+      $('#appraise').textContent = msg;
+
+      const badges = [];
+      if (pct === 100) badges.push('🏆 Flawless!');
+      if (cfg.mode === 'test') badges.push(cfg.timeboxType === 'per-question' ? '⏱️ Per‑Q Master' : '⏱️ Total‑Time Master');
+      if (streak >= 5) badges.push(`🔥 Streak ${streak}`);
+      const types = [cfg.useWhole, cfg.useDecimal, cfg.useSimpleFrac, cfg.useComplexFrac].filter(Boolean).length;
+      if (types >= 4) badges.push('🔀 All Types!');
+      if (cfg.allowEqual && history.some(h => h.ans === 'eq')) badges.push('⚖️ Found Equals!');
+      $('#badges').innerHTML = badges.map(b => `<span class="badge">${b}</span>`).join('');
+
+      if (pct >= 80) confetti({ particleCount: 160, spread: 70, origin: { y: 0.6 } });
+
+      const list = $('#review-list');
+      list.innerHTML = history.map(h => {
+        const ok = h.user === h.ans && !h.timeout;
+        const userChar = h.user ? symToChar(h.user) : '—';
+        const ansChar  = symToChar(h.ans);
+        return `<div class="review-item">
+          <div>
+            <strong>${h.left}</strong> <span style="color:var(--muted);font-size:.8rem;">[${h.leftLabel}]</span>
+            &nbsp;<b style="color:var(--primary)">${ansChar}</b>&nbsp;
+            <strong>${h.right}</strong> <span style="color:var(--muted);font-size:.8rem;">[${h.rightLabel}]</span>
+          </div>
+          <div style="font-weight:900; color:${ok ? '#16a34a' : '#ef4444'}">
+            ${ok ? '✅' : '❌'} ${h.timeout ? '⏰' : ''} ${!ok && userChar !== '—' ? `(You: ${userChar})` : ''}
+          </div>
+        </div>`;
+      }).join('');
+    }
+
+    /* =============================================
+       THEME & UI
+       ============================================= */
+    function setTheme(t) {
+      document.body.className = t;
+    }
+
+    function setMode(m) {
+      cfg.mode = m;
+      if (m === 'practice') {
+        $('#btn-practice').style.opacity = 1;
+        $('#btn-test').style.opacity = 0.7;
+        $('#timed-controls').classList.add('hidden');
+      } else {
+        $('#btn-practice').style.opacity = 0.7;
+        $('#btn-test').style.opacity = 1;
+        $('#timed-controls').classList.remove('hidden');
+      }
+    }
+
+    function setTimeboxType(t) {
+      cfg.timeboxType = t;
+      $('#perq-wrap').classList.toggle('hidden', t !== 'per-question');
+      $('#total-wrap').classList.toggle('hidden', t !== 'total');
+    }
+
+    /* =============================================
+       EVENT LISTENERS
+       ============================================= */
+    $('#theme').addEventListener('change', e => setTheme(e.target.value));
+
+    isMuted = false;
+    $('#sound-btn').addEventListener('click', e => {
+      isMuted = !isMuted;
+      e.currentTarget.setAttribute('aria-pressed', String(!isMuted));
+      e.currentTarget.textContent = isMuted ? '🔇' : '🔊';
+      if (!isMuted) beep('ok');
+    });
+
+    $('#voice-btn').addEventListener('click', e => {
+      speakQ = !speakQ;
+      e.currentTarget.setAttribute('aria-pressed', String(speakQ));
+      e.currentTarget.textContent = speakQ ? '🗣️' : '🤫';
+      if (speakQ) say('Voice is on. I will read the question.');
+    });
+
+    $('#read-btn').addEventListener('click', () => {
+      const q = questions[current];
+      if (q) say(`Is ${q.left.display} less than, equal to, or greater than ${q.right.display}?`);
+    });
+
+    $('#contrast-btn').addEventListener('click', e => {
+      const on = !document.body.classList.contains('high-contrast');
+      document.body.classList.toggle('high-contrast', on);
+      e.currentTarget.setAttribute('aria-pressed', String(on));
+    });
+
+    $('#btn-practice').addEventListener('click', () => setMode('practice'));
+    $('#btn-test').addEventListener('click', () => setMode('test'));
+
+    document.querySelectorAll('input[name="tbtype"]').forEach(r => {
+      r.addEventListener('change', e => setTimeboxType(e.target.value));
+    });
+
+    $('#start-btn').addEventListener('click', () => {
+      // Read config from UI
+      cfg.useWhole       = $('#use-whole').checked;
+      cfg.useDecimal     = $('#use-decimal').checked;
+      cfg.useSimpleFrac  = $('#use-simple-frac').checked;
+      cfg.useComplexFrac = $('#use-complex-frac').checked;
+
+      // Ensure at least one type checked
+      if (!cfg.useWhole && !cfg.useDecimal && !cfg.useSimpleFrac && !cfg.useComplexFrac) {
+        alert('Please select at least one number type!');
+        return;
+      }
+
+      cfg.allowEqual   = $('#allow-equal').checked;
+      cfg.showNumline  = $('#show-numline').checked;
+      cfg.shuffleOpts  = $('#shuffle-opts').checked;
+      cfg.total        = clamp(Number($('#qty-num').value) || 15, 5, 50);
+      cfg.wholeMin     = clamp(Number($('#whole-min').value) || 1, 0, 99);
+      cfg.wholeMax     = clamp(Number($('#whole-max').value) || 20, cfg.wholeMin + 1, 999);
+      cfg.decPlaces    = Number($('#dec-places').value) || 2;
+      cfg.perQSeconds  = clamp(Number($('#per-q-secs').value) || 12, 5, 60);
+      cfg.totalSeconds = clamp(Number($('#total-secs').value) || 180, 30, 1800);
+
+      generateQuestions();
+
+      $('#setup-screen').classList.add('hidden');
+      $('#quiz-screen').classList.remove('hidden');
+      startTimeMs = Date.now();
+
+      if (cfg.mode === 'test' && cfg.timeboxType === 'total') {
+        let left = cfg.totalSeconds;
+        $('#timer-clock').textContent = fmtTime(left);
+        totalTimerObj = setInterval(() => {
+          left--;
+          if (left <= 3) beep('tick');
+          $('#timer-clock').textContent = fmtTime(left);
+          if (left <= 0) { clearInterval(totalTimerObj); endQuiz(true); }
+        }, 1000);
+      } else {
+        $('#timer-clock').textContent = '';
+      }
+
+      renderQuestion();
+      updateProgress();
+      setMessage(
+        cfg.mode === 'practice'
+          ? 'Try answering — you can retry if you miss!'
+          : (cfg.timeboxType === 'per-question' ? 'Answer within the time ⏱️ (per question)' : 'Beat the global timer ⏱️ (total)')
+      );
+    });
+
+    $('#next-btn').addEventListener('click', () => { current++; renderQuestion(); });
+
+    $('#skip-btn').addEventListener('click', () => {
+      const q = questions[current];
+      if (q) {
+        history.push({ left: q.left.display, right: q.right.display, leftLabel: q.left.label, rightLabel: q.right.label, ans: q.correctSym, user: null, timeout: false });
+        streak = 0;
+      }
+      current++;
+      renderQuestion();
+    });
+
+    $('#play-again').addEventListener('click', () => location.reload());
+    $('#print-btn').addEventListener('click', () => window.print());
+
+    $('#help-btn').addEventListener('click', () => {
+      alert(
+`Number Nature Trail — Shortcuts & Guide
+
+Shortcuts:
+• 1 → Less than (<)
+• 2 → Equal (=)
+• 3 → Greater than (>)
+• N or Enter → Next (Test mode)
+• S → Skip
+• R → Read question aloud
+
+Number Types:
+• Whole Number: e.g. 5, 12, 20
+• Decimal: e.g. 3.75, 0.50
+• Simple Fraction: denominator 2–5 (e.g. ½, ¾)
+• Complex Fraction: denominator 6–20 (e.g. 7/12, 11/16)
+
+Modes:
+• Practice: no timer, retry allowed
+• Test: per-question timer OR total countdown`
+      );
+    });
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', e => {
+      const k = e.key.toLowerCase();
+      if (k === 'r') $('#read-btn').click();
+      if (k === '1') { const b = document.querySelector('.option-btn[data-sym="lt"]'); if (b && !b.disabled) b.click(); }
+      if (k === '2') { const b = document.querySelector('.option-btn[data-sym="eq"]'); if (b && !b.disabled) b.click(); }
+      if (k === '3') { const b = document.querySelector('.option-btn[data-sym="gt"]'); if (b && !b.disabled) b.click(); }
+      if (k === 'n' || e.key === 'Enter') { if (!$('#next-btn').disabled) $('#next-btn').click(); }
+      if (k === 's') $('#skip-btn').click();
+    });
+
+    // Defaults
+    setTheme('theme-jungle');
+    setMode('practice');
+    setTimeboxType('per-question');
+  </script>
+</body>
+</html>
