@@ -1,11 +1,11 @@
 # 🌈 Kids Zone
 
-**Kids Zone** is a growing collection of **safe, fun, and educational web tools for children**.  
-All activities are **offline‑friendly** and **distraction‑free**, built with **HTML, CSS, and JavaScript**—no frameworks, no tracking, no accounts.
+**Kids Zone** is a growing collection of **safe, fun, and educational web tools for children**.
+All activities are **offline‑friendly** and **distraction‑free**, built with **HTML, CSS, and JavaScript** — no frameworks, no tracking, no accounts.
 
 Our mission: **help kids learn through play**.
 
-Open **[`Play mode`](https://kashyapmak.github.io/kids-zone)**
+👉 Play online: https://kashyapmak.github.io/kids-zone
 
 ---
 
@@ -14,18 +14,49 @@ Open **[`Play mode`](https://kashyapmak.github.io/kids-zone)**
 ### 🧮 Times Table Trail
 A kid‑friendly multiplication practice game covering tables **1–30** with custom ranges, **Practice** & **Test (Timed)** modes (per‑question or total‑time), smart distractors, visual arrays, audio feedback, streaks, badges, and a printable summary.
 
-- **Folder:** `time-table/`  
-- **Run:** open [`times-table-trail.html`](https://kashyapmak.github.io/kids-zone/time-table/times-table-trail.html)  
+- **Folder:** `time-table/`
+- **Run:** https://kashyapmak.github.io/kids-zone/time-table/times-table-trail.html
 - **Docs:** `time-table/README.md`
 
 ---
 
 ### ➕➖ Add & Sub Trail
-An addition & subtraction practice game for **1–4 digit** numbers with **Addition**, **Subtraction**, or **Mixed** modes. Includes **No negatives**, **No carry**, **No borrow** toggles, **Practice** & **Test (Timed)** modes, optional **Number line**, audio feedback, streaks/badges, and printable results.
+An addition & subtraction practice game for **1–4 digit** numbers with **Addition**, **Subtraction**, or **Mixed** modes.
 
-- **Folder:** `add-sub/`  
-- **Run:** open [`add-sub-trail.html`](https://kashyapmak.github.io/kids-zone/add-sub/add-sub-trail.html)  
+Includes **No negatives**, **No carry**, **No borrow** toggles, **Practice** & **Test (Timed)** modes, optional **Number line**, audio feedback, streaks/badges, and printable results.
+
+- **Folder:** `add-sub/`
+- **Run:** https://kashyapmak.github.io/kids-zone/add-sub/add-sub-trail.html
 - **Docs:** `add-sub/README.md`
+
+---
+
+### ➗➕ Deci‑Frac Trail
+A decimal and fraction **addition & subtraction** game designed to mirror **on‑paper column methods**.
+
+Supports **Decimals**, **Fractions**, or **Mixed** mode with a **vertical layout**, including **stacked fraction display** for conceptual clarity.
+
+Example (fractions):
+```
+  2     4
+ --- + ---
+  5     5
+```
+
+**Key features:**
+- Vertical column format for decimals
+- Stacked fractions for fraction operations
+- Practice & Test (Timed) modes
+- Per‑question or total‑time timers
+- Configurable decimal places and fraction denominators
+- Fraction simplification & proper‑result options
+- Visual aids (100‑grid, fraction bars)
+- Audio feedback, read‑aloud, streaks, badges
+- Printable summary & local progress tracking
+
+- **Folder:** `deci-frac/`
+- **Run:** https://kashyapmak.github.io/kids-zone/deci-frac/deci-frac-trail.html
+- **Docs:** `deci-frac/README.md`
 
 ---
 
@@ -45,33 +76,34 @@ An addition & subtraction practice game for **1–4 digit** numbers with **Addit
 Kids Zone apps:
 
 - Do **not** collect personal data
-- Make **no** analytics/advertising calls
+- Make **no** analytics or advertising calls
 - Store progress **locally** in the browser only
 - Run fully **offline** (optional CDN fonts/effects if online)
-- Provide a **Reset Progress** action to clear saved data
+- Provide a **Reset Progress** option to clear saved data
 
 ---
 
 ## 🚀 Roadmap
 
-- ➕ Addition & subtraction (done ✅) — ongoing refinements
 - ➗ Division practice
 - 🔢 Number sense & place value
 - 🧠 Logic & pattern games
 - 🧩 Early‑learner mini puzzles
-- 🌍 Multi‑language UI
-- 👩‍🏫 Teacher/Parent modes
-- 📄 Printable worksheets & packs
+- 👩‍🏫 Teacher / Parent modes
+- 📄 Printable worksheets & learning packs
 
-All future tools will remain: **Simple. Safe. Fun. Educational.**
+All future tools will remain:
+
+> **Simple. Safe. Fun. Educational.**
 
 ---
 
 ## 🛠️ Technology
 
-- HTML5, CSS3, Vanilla JavaScript  
-- Optional CDN assets for fonts/effects  
-- No frameworks, no build system
+- HTML5, CSS3, Vanilla JavaScript
+- Optional CDN assets for fonts/effects
+- No frameworks
+- No build system
 
 ---
 
@@ -87,19 +119,23 @@ All future tools will remain: **Simple. Safe. Fun. Educational.**
 
 Contributions and ideas are welcome!
 
-- New kid‑friendly tools
+- New kid‑friendly learning tools
 - UI/UX & accessibility improvements
 - Learning logic & difficulty refinements
 
-Please keep contributions **simple**, **kid‑safe**, and (ideally) **framework‑free**.
+Please keep contributions:
+- **Simple**
+- **Kid‑safe**
+- **Framework‑free** where possible
 
 ---
 
 ## 📄 License
 
-**MIT License** — free to use, modify, and share.
+**MIT License** — free to use, modify, and share.  
+Attribution appreciated:
 
-Attribution appreciated: _“Kids Zone by Kashyap Makadia.”_
+> _“Kids Zone by Kashyap Makadia.”_
 
 ---
 
@@ -108,13 +144,18 @@ Attribution appreciated: _“Kids Zone by Kashyap Makadia.”_
 ```text
 kids-zone/
 │
-├── add-sub/
-│   ├── add-sub-trail.html
-│   └── README.md
-│
 ├── time-table/
 │   ├── times-table-trail.html
 │   └── README.md
 │
+├── add-sub/
+│   ├── add-sub-trail.html
+│   └── README.md
+│
+├── deci-frac/
+│   ├── deci-frac-trail.html
+│   └── README.md
+│
 ├── LICENSE
 └── README.md   ← (this file)
+```

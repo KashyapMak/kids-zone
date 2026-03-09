@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Deci‑Frac Trail — Kids Zone</title>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700&family=Fredoka:wght@400;600;700&family=Orbitron:wght@700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <style>
+    :root{--primary:#059669;--bg:#ecfdf5;--text:#052e1c;--muted:#475569;--prog:#10b981;--accent:#f59e0b;--card:#ffffff;--danger:#ef4444;--ok:#16a34a;--shadow:0 10px 25px rgba(0,0,0,.08);--radius:20px}
+    body{margin:0;background:var(--bg);color:var(--text);font-family:'Baloo 2','Fredoka','Comic Sans MS',system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+    header{background:var(--card);position:sticky;top:0;z-index:10;border-bottom:4px solid rgba(0,0,0,.05);box-shadow:var(--shadow);display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:.5rem;padding:.5rem 1rem}
+    #brand{display:flex;align-items:center;gap:.6rem;font-weight:800}
+    #brand .logo{width:28px;height:28px}
+    #brand h1{font-size:1.25rem;margin:0}
+    .icon-btn{background:transparent;border:2px solid var(--primary);color:var(--primary);border-radius:999px;padding:.35rem .6rem;cursor:pointer;font-size:1rem;font-weight:700}
+    main{display:grid;place-items:center;padding:20px}
+    .card{width:min(960px,96vw);background:var(--card);border:3px solid var(--primary);border-radius:var(--radius);box-shadow:var(--shadow);padding:1.25rem}
+    .row{display:flex;flex-wrap:wrap;gap:.75rem;align-items:center}
+    .divider{height:2px;background:linear-gradient(90deg,transparent,var(--primary),transparent);margin:.75rem 0 1rem}
+    .main-btn,.mode-btn{cursor:pointer;padding:.75rem 1.1rem;border-radius:14px;border:0;background:var(--primary);color:#fff;font-weight:800;box-shadow:0 6px 0 rgba(0,0,0,.1)}
+    #header-progress{grid-column:1/-1;height:6px;background:#e2e8f0;border-radius:999px;overflow:hidden;margin-top:.5rem}
+    #header-progress>span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--prog),var(--accent));transition:width .35s}
+    #quiz-info{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:.5rem;text-align:center;margin:.25rem 0 .75rem;font-weight:800;color:var(--muted)}
+    #timer-clock{font-family:'Orbitron',monospace;font-size:1.75rem;color:var(--primary)}
+    #question-wrap{text-align:center;margin:.3rem 0}
+    #question-text{display:inline-block;text-align:right;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace;background:#fff;border:3px solid var(--primary);border-radius:14px;padding:.5rem .75rem;box-shadow:var(--shadow);font-size:clamp(1.8rem,4.8vw,3rem);line-height:1.25;white-space:pre;min-width:10ch}
+    #helper-visual{margin:.5rem auto 0;max-width:600px}
+    .frac-bar{height:26px;background:#e2e8f0;border-radius:6px;position:relative;overflow:hidden}
+    .frac-fill{height:100%;background:var(--accent)}
+    .grid100{display:grid;grid-template-columns:repeat(10,1fr);gap:2px;background:#cbd5e1;padding:2px;border-radius:8px}
+    .grid100 span{display:block;width:100%;padding-top:100%;background:#fff;border-radius:3px}
+    .grid100 span.on{background:#fde68a}
+    .options{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:.6rem;margin-top:.7rem}
+    .option-btn{cursor:pointer;padding:.9rem .6rem;font-size:1.2rem;font-weight:800;background:#fff;border:3px solid var(--primary);color:var(--text);border-radius:14px}
+    .option-btn.correct{background:#10b981;color:#fff;border-color:#10b981}
+    .option-btn.wrong{background:#ef4444;color:#fff;border-color:#ef4444}
+    #score-big{font-size:clamp(2rem,6vw,3rem);margin:.25rem 0}
+    .badges{display:flex;flex-wrap:wrap;gap:.4rem;margin:.25rem 0 .5rem}
+    .badge{background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff;border-radius:999px;padding:.35rem .7rem;font-weight:900}
+    .review-list{margin-top:.6rem;border:1px dashed var(--primary);border-radius:12px;padding:.5rem;max-height:360px;overflow:auto}
+    .review-item{display:grid;grid-template-columns:1fr auto;gap:.5rem;border-bottom:1px solid #eee;padding:.35rem 0}
+    .review-item:last-child{border-bottom:0}
+	.select, select, input[type="number"] {
+      font-family: inherit; font-weight: 700; color: var(--text);
+      border-radius: 12px; border: 2px solid var(--primary);
+      background: #fff; padding: .55rem .7rem;
+      outline: none;
+    }
+     /* ---------- FOOTER ---------- */
+    footer { text-align:center; padding:12px; font-size:.95rem; color:var(--muted) }
+    .footer-row { display:flex; gap:.75rem; align-items:center; justify-content:center; flex-wrap:wrap; }
+    .footer-sep { opacity:.3; }
+    .social-link { display:inline-flex; align-items:center; gap:.4rem; color:var(--primary); text-decoration:none; font-weight:800; }
+    .social-link:hover { text-decoration:underline; }
+    .icon { width:18px; height:18px; display:inline-block; }
+    /* ---------- UTILS ---------- */
+    .hidden { display: none !important; }
+    .sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); border:0; }
+
+    /* Print: show result neatly */
+    @media print {
+      header, #setup-screen, #quiz-screen, .no-print { display: none !important; }
+      body { background:#fff; color:#000; }
+      .card { border: 0; box-shadow: none; }
+      .review-list { max-height: none; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div id="brand" aria-label="Deci‑Frac Trail">
+      <svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="leafGrad" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#34d399"/><stop offset="1" stop-color="#059669"/></linearGradient></defs><path d="M54 10C30 10 14 20 8 40c8-4 16-5 24-2-4 1-8 4-12 9 8-2 14-1 20 2 8-10 14-22 14-39z" fill="url(#leafGrad)" stroke="#065f46" stroke-width="2"/><path d="M12 42c10-8 22-12 36-12" stroke="#064e3b" stroke-width="2" fill="none"/></svg>
+      <h1>Deci‑Frac Trail</h1>
+    </div>
+    <div class="row" style="justify-content:center;gap:.4rem">
+      <button id="sound-btn" class="icon-btn" aria-pressed="true" title="Toggle sound">🔊</button>
+      <button id="voice-btn" class="icon-btn" aria-pressed="false" title="Read questions aloud">🗣️</button>
+      <button id="contrast-btn" class="icon-btn" aria-pressed="false" title="High contrast mode">🌓</button>
+    </div>
+    <div class="header-actions"><button id="help-btn" class="icon-btn" title="Help / Shortcuts">❓</button></div>
+    <div id="header-progress"><span></span></div>
+  </header>
+  <main>
+    <section id="setup-screen" class="card" aria-label="Setup">
+      <h2 style="margin:.2rem 0">Choose Your Trail 🚀</h2>
+      <div class="row" style="margin-top:.25rem"><strong>Type:</strong>
+        <label><input type="radio" name="type" value="decimal" checked> Decimals</label>
+        <label><input type="radio" name="type" value="fraction"> Fractions</label>
+        <label><input type="radio" name="type" value="mixed"> Mixed</label>
+      </div>
+      <div id="dec-opts" class="row" style="margin-top:.25rem"><strong>Decimals:</strong>
+        <label>Whole digits:<select id="whole-dig"><option>1</option><option selected>2</option><option>3</option></select></label>
+        <label>Decimal places:<select id="dec-places"><option>1</option><option selected>2</option><option>3</option></select></label>
+      </div>
+      <div id="frac-opts" class="row" style="margin-top:.25rem;align-items:flex-end;display:none"><strong>Fractions:</strong>
+        <label>Denominator: <select id="den-min"><option>2</option><option selected>3</option><option>4</option></select> to <select id="den-max"><option>8</option><option selected>12</option><option>16</option></select></label>
+        <label><input type="checkbox" id="like-den" checked> Like denominators</label>
+        <label><input type="checkbox" id="simplify" checked> Simplify result</label>
+        <label><input type="checkbox" id="proper-only"> Proper results (≤ 1)</label>
+      </div>
+      <div class="row" style="margin-top:.25rem"><strong>Operations:</strong>
+        <label><input type="radio" name="ops" value="add" checked> Addition (+)</label>
+        <label><input type="radio" name="ops" value="sub"> Subtraction (−)</label>
+        <label><input type="radio" name="ops" value="mix"> Mixed (+ / −)</label>
+      </div>
+      <div class="row" style="margin-top:.25rem"><label><input type="checkbox" id="no-negative" checked> <strong>No negative answers</strong></label></div>
+      <div class="row" style="margin-top:.25rem"><label for="qty-num"><strong>Questions:</strong></label><input type="number" id="qty-num" min="5" max="50" value="15" style="width:120px"></div>
+      <div class="row" style="margin-top:.4rem"><label><input type="checkbox" id="show-aid" checked> <strong>Show visual aid</strong></label><label><input type="checkbox" id="shuffle-options" checked> <strong>Shuffle options</strong></label></div>
+      <div class="row" style="margin-top:.5rem"><strong>Mode:</strong>
+        <button type="button" id="btn-practice" class="mode-btn" aria-pressed="true">😌 Practice</button>
+        <button type="button" id="btn-test" class="mode-btn" aria-pressed="false" style="opacity:.7">⏱️ Test (Timed)</button>
+        <div id="timed-controls" class="row" style="align-items:flex-start;display:none">
+          <div class="row" style="gap:.35rem"><label><input type="radio" name="tbtype" value="per-question" checked> Per question</label><label><input type="radio" name="tbtype" value="total"> Total time</label></div>
+          <div id="perq-wrap" class="row"><label for="per-q-secs">Seconds per Q:</label><input id="per-q-secs" type="number" min="5" max="60" value="12" style="width:100px"></div>
+          <div id="total-wrap" class="row" style="display:none"><label for="total-secs">Total seconds:</label><input id="total-secs" type="number" min="30" max="1800" value="240" style="width:120px"></div>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="row" style="justify-content:space-between"><div class="grow"><div id="stats" style="font-weight:800;color:var(--muted)"></div></div><button class="main-btn" id="start-btn" style="min-width:180px">START TRAIL 🏁</button></div>
+    </section>
+    <section id="quiz-screen" class="card" aria-label="Quiz" aria-live="polite" style="display:none">
+      <div id="quiz-info"><div class="streak" id="streak">Streak: 0 🔥</div><div id="timer-clock" aria-live="assertive"></div><div id="q-progress" style="justify-self:end">Question 1/15</div></div>
+      <div id="question-wrap"><div id="message" style="font-weight:800;color:var(--muted);min-height:1.2em"></div>
+        <pre id="question-text" aria-label="Question">   0.00
++  0.00
+------</pre>
+        <div id="helper-visual"></div>
+      </div>
+      <div id="options" class="options"></div>
+      <div class="row" style="margin-top:.6rem;justify-content:space-between"><button class="icon-btn" id="read-btn">🔊 Read again (R)</button><div class="row"><button class="icon-btn" id="skip-btn">Skip ↷</button><button class="main-btn" id="next-btn">Next ➜</button></div></div>
+    </section>
+    <section id="result-screen" class="card" aria-label="Results" style="display:none">
+      <h2>Trail Complete! 🎉</h2>
+      <div id="appraise" style="font-size:1.1rem;font-weight:800;color:var(--muted)"></div>
+      <div id="score-big">0 / 0</div>
+      <div style="font-weight:800;color:var(--muted)">Time taken: <span id="time-taken">00:00</span></div>
+      <div class="badges" id="badges"></div>
+      <div class="row" style="gap:.5rem;margin:.25rem 0 .5rem"><button class="main-btn" id="play-again">Play Again 🔄</button><button class="icon-btn" id="print-btn">🖨️ Print / Save PDF</button></div>
+      <div id="summary-title" style="font-weight:900;margin-top:.35rem">Questions Summary</div>
+      <div id="review-list" class="review-list"></div>
+    </section>
+  </main>
+  <footer class="no-print">
+    <div class="footer-row">
+      <span>Kid Zone © 2026</span>
+      <span class="footer-sep">•</span>
+      <a class="social-link" href="https://www.linkedin.com/in/kashyapmakadia/" target="_blank" rel="noopener">
+        <!-- LinkedIn icon (inline SVG) -->
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path fill="currentColor" d="M4.98 3.5C4.98 4.88 3.86 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM0 8h5v16H0V8zm7.5 0h4.8v2.2h.07c.67-1.26 2.32-2.6 4.78-2.6 5.11 0 6.05 3.36 6.05 7.73V24h-5v-7.9c0-1.88-.03-4.3-2.62-4.3-2.62 0-3.02 2.05-3.02 4.16V24h-5V8z"/>
+        </svg>
+        <span>Kashyap Makadia</span>
+      </a>
+      <span class="footer-sep">•</span>
+      <a class="social-link" href="https://github.com/KashyapMak/kids-zone" target="_blank" rel="noopener">
+        <!-- GitHub icon (inline SVG) -->
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path fill="currentColor" d="M12 .5A11.5 11.5 0 0 0 .5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.8-.26.8-.58 0-.29-.01-1.06-.02-2.08-3.2.7-3.88-1.54-3.88-1.54-.52-1.33-1.27-1.68-1.27-1.68-1.04-.71.08-.69.08-.69 1.15.08 1.76 1.18 1.76 1.18 1.02 1.75 2.68 1.25 3.33.96.1-.75.4-1.25.72-1.54-2.56-.29-5.26-1.28-5.26-5.68 0-1.25.45-2.27 1.18-3.07-.12-.29-.51-1.47.11-3.06 0 0 .97-.31 3.17 1.17a11.02 11.02 0 0 1 5.78 0c2.2-1.48 3.17-1.17 3.17-1.17.62 1.59.24 2.77.12 3.06.74.8 1.18 1.82 1.18 3.07 0 4.41-2.7 5.39-5.28 5.67.41.35.77 1.05.77 2.12 0 1.53-.01 2.76-.01 3.14 0 .31.21.68.8.57A11.51 11.51 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5z"/>
+        </svg>
+        <span>GitHub Repo</span>
+      </a>
+    </div>
+  </footer>
+  <script>
+    const cfg={type:'decimal',opMode:'add',total:15,mode:'practice',timeboxType:'per-question',perQSeconds:12,totalSeconds:240,shuffleOptions:true,showAid:true,wholeDigits:2,decPlaces:2,denMin:3,denMax:12,likeDen:true,simplify:true,properOnly:false,noNegative:true};
+    let score=0,current=0,questions=[],history=[],isMuted=false,speakQ=false,timerObj=null,timeLeft=0,streak=0,awaitingAnswer=true,startTimeMs=0,endTimeMs=0,totalTimerObj=null;
+    const $=sel=>document.querySelector(sel);
+    const randInt=(a,b)=>Math.floor(Math.random()*(b-a+1))+a;const clamp=(v,min,max)=>Math.max(min,Math.min(max,v));
+    function fmtTime(s){const m=Math.floor(s/60),sec=Math.max(0,Math.floor(s%60));return `${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`}
+    function beep(type='ok'){if(isMuted)return;try{const ctx=new (window.AudioContext||window.webkitAudioContext)();const o=ctx.createOscillator(),g=ctx.createGain();o.connect(g);g.connect(ctx.destination);o.type='sine';o.frequency.setValueAtTime(type==='ok'?880:(type==='tick'?660:220),ctx.currentTime);g.gain.value=0.0001;g.gain.exponentialRampToValueAtTime(0.2,ctx.currentTime+0.01);o.start();g.gain.exponentialRampToValueAtTime(0.0001,ctx.currentTime+0.15);o.stop(ctx.currentTime+0.16);}catch{}}
+    function say(t){if(!speakQ||!('speechSynthesis'in window))return;try{const u=new SpeechSynthesisUtterance(t.replace('−',' minus ').replace('+',' plus ').replace('/',' over '));u.rate=0.95;u.pitch=1.1;speechSynthesis.cancel();speechSynthesis.speak(u);}catch{}}
+    const gcd=(a,b)=>b?gcd(b,a%b):Math.abs(a);const lcm=(a,b)=>Math.abs(a*b)/gcd(a,b);
+    function simplifyFrac(n,d){const g=gcd(n,d)||1;n/=g;d/=g;if(d<0){n=-n;d=-d}return {n,d}}
+    function addFrac(a,b){const L=lcm(a.d,b.d);return simplifyFrac(a.n*(L/a.d)+b.n*(L/b.d),L)}
+    function subFrac(a,b){const L=lcm(a.d,b.d);return simplifyFrac(a.n*(L/a.d)-b.n*(L/b.d),L)}
+    function cmpFrac(a,b){return a.n*b.d-b.n*a.d}
+    function fracToString(fr,simpl=true){const f=simpl?simplifyFrac(fr.n,fr.d):fr;return `${f.n}/${f.d}`}
+    function genDecimalNumber(wholeDigits,dp){const maxWhole=10**wholeDigits-1;const minWhole=(wholeDigits===1)?0:10**(wholeDigits-1);const whole=randInt(minWhole,maxWhole);const frac=randInt(0,10**dp-1);return Number(`${whole}.${String(frac).padStart(dp,'0')}`)}
+    function roundDP(x,dp){const m=10**dp;return Math.round(x*m)/m}
+    function generateDecimalPair(op){let a=genDecimalNumber(cfg.wholeDigits,cfg.decPlaces),b=genDecimalNumber(cfg.wholeDigits,cfg.decPlaces);a=roundDP(a,cfg.decPlaces);b=roundDP(b,cfg.decPlaces);if(op==='sub'&&cfg.noNegative&&a<b){const t=a;a=b;b=t}const ans=roundDP(op==='add'?a+b:a-b,cfg.decPlaces);return {kind:'decimal',a,b,op,ans}}
+    function randomDen(){return randInt(cfg.denMin,cfg.denMax)}function randomNum(d){return randInt(1,d-1)}
+    function generateFractionPair(op){let d1=randomDen(),d2=cfg.likeDen?d1:randomDen();let a={n:randomNum(d1),d:d1},b={n:randomNum(d2),d:d2};if(op==='sub'&&cfg.noNegative&&cmpFrac(a,b)<0){const t=a;a=b;b=t}if(cfg.properOnly){let tries=0;while(tries++<120){const res=op==='add'?addFrac(a,b):subFrac(a,b);if(res.n>=0&&res.n<res.d)break;d2=cfg.likeDen?d1:randomDen();b={n:randomNum(d2),d:d2};if(op==='sub'&&cfg.noNegative&&cmpFrac(a,b)<0){const t=a;a=b;b=t}}}
+      const ans=(op==='add')?addFrac(a,b):subFrac(a,b);return {kind:'fraction',a,b,op,ans}}
+    function generateOne(){const type=(cfg.type==='mixed')?(Math.random()<0.5?'decimal':'fraction'):cfg.type;const op=(cfg.opMode==='mix')?(Math.random()<0.5?'add':'sub'):cfg.opMode;return (type==='decimal')?generateDecimalPair(op):generateFractionPair(op)}
+    function smartOptionsDecimal(correct,a,b,op){const step=10**(-cfg.decPlaces);const cand=new Set([correct]);[correct+step,correct-step,correct+2*step,correct-2*step,correct+1,correct-1,correct+(op==='add'?a:-a),correct+(op==='add'?b:-b)].forEach(v=>cand.add(roundDP(v,cfg.decPlaces)));while(cand.size<4)cand.add(roundDP(correct+(randInt(-9,9))*step,cfg.decPlaces));return Array.from(cand).slice(0,4)}
+    function smartOptionsFraction(correct,a,b,op){const answers=new Map();const addAns=fr=>{const s=fracToString(fr,cfg.simplify);if(!answers.has(s))answers.set(s,simplifyFrac(fr.n,fr.d))};addAns(correct);addAns(simplifyFrac(a.n+b.n,a.d+b.d));addAns(simplifyFrac(op==='add'?a.n+b.n:a.n-b.n,a.d));addAns(simplifyFrac(correct.n+1,correct.d));addAns(simplifyFrac(correct.n-1,correct.d));addAns(simplifyFrac(correct.n,correct.d+1));if(correct.d>2)addAns(simplifyFrac(correct.n,correct.d-1));let tries=0;while(answers.size<4&&tries++<20){const nu=correct.n+randInt(-2,2);const de=Math.max(2,correct.d+randInt(-2,2));addAns(simplifyFrac(nu,de))}return Array.from(answers.keys()).slice(0,4)}
+    function generateQuestions(){questions=[];history=[];current=0;score=0;streak=0;for(let i=0;i<cfg.total;i++){const q=generateOne();if(q.kind==='decimal'){let opts=smartOptionsDecimal(q.ans,q.a,q.b,q.op);if(cfg.shuffleOptions)opts=shuffle(opts);questions.push({kind:'decimal',a:q.a,b:q.b,op:q.op,ans:q.ans,opts})}else{let opts=smartOptionsFraction(q.ans,q.a,q.b,q.op);if(cfg.shuffleOptions)opts=shuffle(opts);questions.push({kind:'fraction',a:q.a,b:q.b,op:q.op,ans:q.ans,opts})}}}
+    function padLeft(str,total){str=String(str);if(str.length>=total)return str;return ' '.repeat(total-str.length)+str}
+    function decToFixedStr(n,dp){return n.toFixed(dp)}
+    function fracStr(fr){return fracToString(fr,cfg.simplify)}
+    function buildVerticalBlock(lines){return lines.join('\n')}
+    function buildStackedFractionLines(A_num,A_den,B_num,B_den,opSym){const n1=String(A_num),d1=String(A_den),n2=String(B_num),d2=String(B_den);const w1=Math.max(n1.length,d1.length),w2=Math.max(n2.length,d2.length);const line1=padLeft(n1,w1)+'   '+padLeft(n2,w2);const line2='-'.repeat(w1)+' '+opSym+' '+'-'.repeat(w2);const line3=padLeft(d1,w1)+'   '+padLeft(d2,w2);return [line1,line2,line3]}
+    function updateProgress(){$('#q-progress').textContent=`Question ${Math.min(current+1,cfg.total)}/${cfg.total}`;$('#streak').textContent=`Streak: ${streak} 🔥`;$('#header-progress > span').style.width=`${(current/cfg.total)*100}%`}
+    function renderAidDecimal(q){const box=$('#helper-visual');box.innerHTML='';if(!cfg.showAid)return;const maxVal=Math.max(q.a,q.b,Math.abs(q.ans));if(cfg.decPlaces<=2&&maxVal<=10){const grid=document.createElement('div');grid.className='grid100';const filled=Math.round((q.a+(q.op==='add'?q.b:-q.b))*10);for(let i=0;i<100;i++){const cell=document.createElement('span');if(i<Math.max(0,Math.min(100,filled)))cell.classList.add('on');grid.appendChild(cell)}const cap=document.createElement('div');cap.style.fontWeight='800';cap.style.margin='6px 0 2px';cap.style.color='var(--muted)';cap.textContent='Approximate visualization (hundred chart)';box.appendChild(cap);box.appendChild(grid)}}
+    function renderAidFraction(q){const box=$('#helper-visual');box.innerHTML='';if(!cfg.showAid)return;function addBar(fr,label){const wrap=document.createElement('div');wrap.style.margin='6px 0';const lab=document.createElement('div');lab.style.fontWeight='800';lab.style.color='var(--muted)';lab.textContent=label+` (${fr.n}/${fr.d})`;const bar=document.createElement('div');bar.className='frac-bar';const fill=document.createElement('div');fill.className='frac-fill';fill.style.width=`${Math.max(0,Math.min(100,fr.n/fr.d*100))}%`;bar.appendChild(fill);wrap.appendChild(lab);wrap.appendChild(bar);box.appendChild(wrap)}addBar(q.a,'Top');addBar(q.b,q.op==='add'?'Bottom (add)':'Bottom (subtract)')}
+    function renderOptionsDecimal(q){const cont=$('#options');cont.innerHTML='';q.opts.forEach((val,idx)=>{const b=document.createElement('button');b.className='option-btn';b.textContent=Number(val).toFixed(cfg.decPlaces);b.addEventListener('click',()=>checkAnswer(b.textContent,false,b));cont.appendChild(b)});$('#next-btn').disabled=true}
+    function renderOptionsFraction(q){const cont=$('#options');cont.innerHTML='';q.opts.forEach((txt,idx)=>{const b=document.createElement('button');b.className='option-btn';b.textContent=txt;b.addEventListener('click',()=>checkAnswer(txt,false,b));cont.appendChild(b)});$('#next-btn').disabled=true}
+    function renderQuestion(){if(current>=cfg.total)return endQuiz();const q=questions[current];const opSym=(q.op==='add'?'+':'−');if(q.kind==='decimal'){const A=decToFixedStr(q.a,cfg.decPlaces),B=decToFixedStr(q.b,cfg.decPlaces);const width=Math.max(A.length,B.length)+2;const top=padLeft(A,width);const bot=opSym+' '+padLeft(B,width-2);const dashes='-'.repeat(Math.max(width,6));$('#question-text').textContent=buildVerticalBlock([top,bot,dashes]);renderAidDecimal(q);renderOptionsDecimal(q);say(`${A} ${q.op==='add'?'plus':'minus'} ${B}. What is the answer?`)}else{const lines=buildStackedFractionLines(q.a.n,q.a.d,q.b.n,q.b.d,opSym);$('#question-text').textContent=buildVerticalBlock(lines);renderAidFraction(q);renderOptionsFraction(q);say(`${q.a.n} over ${q.a.d} ${q.op==='add'?'plus':'minus'} ${q.b.n} over ${q.b.d}. What is the answer?`) }updateProgress();awaitingAnswer=true;clearInterval(timerObj);if(cfg.mode==='test'&&cfg.timeboxType==='per-question'){timeLeft=cfg.perQSeconds;$('#timer-clock').textContent=`00:${timeLeft.toString().padStart(2,'0')}`;timerObj=setInterval(()=>{timeLeft--;if(timeLeft<=3)beep('tick');$('#timer-clock').textContent=`00:${Math.max(0,timeLeft).toString().padStart(2,'0')}`;if(timeLeft<=0){clearInterval(timerObj);checkAnswer(null,true)}},1000)}else if(cfg.mode==='practice'){$('#timer-clock').textContent=''}}
+    function fractionEqual(strA,frB){const parts=String(strA).split('/');if(parts.length!==2)return false;const n=Number(parts[0]),d=Number(parts[1]);if(!Number.isFinite(n)||!Number.isFinite(d)||d===0)return false;const A=simplifyFrac(n,d),B=simplifyFrac(frB.n,frB.d);return A.n===B.n&&A.d===B.d}
+    function checkAnswer(val,isTimeout=false,btnEl=null){if(!awaitingAnswer)return;awaitingAnswer=false;clearInterval(timerObj);const q=questions[current];let correct=false,displayAns='',chosenDisplay='';if(q.kind==='decimal'){displayAns=q.ans.toFixed(cfg.decPlaces);chosenDisplay=(val===null)?'—':String(val);correct=(val!==null)&&(String(val)===displayAns)}else{displayAns=fracStr(q.ans);chosenDisplay=(val===null)?'—':String(val);correct=(val!==null)&&fractionEqual(val,q.ans)}const eqStr=(q.kind==='decimal')?`${q.a.toFixed(cfg.decPlaces)} ${q.op==='add'?'+':'−'} ${q.b.toFixed(cfg.decPlaces)}`:`${q.a.n}/${q.a.d} ${q.op==='add'?'+':'−'} ${q.b.n}/${q.b.d}`;history.push({q:eqStr,ans:displayAns,user:(val===null?null:chosenDisplay),timeout:isTimeout});if(cfg.mode==='practice'){const opts=[...document.querySelectorAll('.option-btn')];opts.forEach(b=>b.disabled=true);if(correct){if(btnEl)btnEl.classList.add('correct');score++;streak++;setMessage(praise(),'ok');beep('ok');setTimeout(()=>{current++;renderQuestion()},650)}else{streak=0;if(btnEl)btnEl.classList.add('wrong');setMessage(isTimeout?'⏰ Time’s up — try another!':'Oops! Try again 😊','warn');beep('bad');setTimeout(()=>{opts.forEach(b=>{if(!b.classList.contains('wrong'))b.disabled=false});awaitingAnswer=true},350)}}else{const opts=[...document.querySelectorAll('.option-btn')];opts.forEach(b=>b.disabled=true);if(correct){score++;streak++;if(btnEl)btnEl.classList.add('correct');setMessage(praise(),'ok');beep('ok')}else{streak=0;if(btnEl)btnEl.classList.add('wrong');setMessage(isTimeout?'⏰ Out of time!':'Not this one — keep going!','warn');beep('bad')}$('#next-btn').disabled=false}updateProgress()}
+    function setMessage(text,type='info'){const el=$('#message');el.style.color=(type==='ok')?'var(--ok)':(type==='warn'?'var(--danger)':'var(--muted)');el.textContent=text}
+    function praise(){const msgs=['Brilliant!','Nice job!','You rock!','Fantastic!','Great work!','Super!','Math Hero!','Amazing!','Yes! Keep it up!'];return msgs[randInt(0,msgs.length-1)]}
+    function endQuiz(forcedByTimer=false){if(totalTimerObj){clearInterval(totalTimerObj);totalTimerObj=null}endTimeMs=Date.now();$('#quiz-screen').style.display='none';$('#result-screen').style.display='block';const pct=Math.round((score/cfg.total)*100);$('#score-big').textContent=`${score} / ${cfg.total}  (${pct}%)`;const totalTakenSec=Math.max(0,Math.round((endTimeMs-startTimeMs)/1000));$('#time-taken').textContent=fmtTime(totalTakenSec);let msg='Great effort! Keep practicing and you’ll nail it!';if(forcedByTimer)msg='Time’s up! Awesome try — practice again and you’ll beat the clock! ⏰';else if(pct===100)msg='Perfect score! You’re a Trail Champion! 🏆';else if(pct>=80)msg='Awesome! You’re almost there! 🌟';else if(pct>=60)msg='Good job! Practice a bit more! 💪';$('#appraise').textContent=msg;const badges=[];if(pct===100)badges.push('🏆 Flawless!');if(cfg.mode==='test')badges.push(cfg.timeboxType==='per-question'?'⏱️ Per‑Q Master':'⏱️ Total‑Time Master');if(streak>=5)badges.push(`🔥 Streak ${streak}`);if(cfg.type==='mixed'||cfg.opMode==='mix')badges.push('🔀 Mixed Mode');$('#badges').innerHTML=badges.map(b=>`<span class="badge">${b}</span>`).join('');if(pct>=80){confetti({particleCount:160,spread:70,origin:{y:0.6}})}const list=$('#review-list');list.innerHTML=history.map(h=>{const ok=(h.user!==null&&String(h.user)===String(h.ans));const u=(h.user===null)?'—':h.user;return `<div class="review-item"><div><strong>${h.q}</strong> = <b>${h.ans}</b></div><div style="font-weight:900;color:${ok?'#16a34a':'#ef4444'}">${ok?'✅':'❌'} ${h.timeout?'⏰':''} ${!ok&&u!=='—'?`(You: ${u})`:''}</div></div>`}).join('')}
+    function shuffle(arr){for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]]}return arr}
+
+    // Events
+    $('#btn-practice').addEventListener('click',()=>{cfg.mode='practice';$('#btn-practice').style.opacity=1;$('#btn-test').style.opacity=.7;$('#timed-controls').style.display='none'});
+    $('#btn-test').addEventListener('click',()=>{cfg.mode='test';$('#btn-practice').style.opacity=.7;$('#btn-test').style.opacity=1;$('#timed-controls').style.display='flex'});
+    document.querySelectorAll('input[name="tbtype"]').forEach(r=>r.addEventListener('change',e=>{cfg.timeboxType=e.target.value;const perQ=(cfg.timeboxType==='per-question');$('#perq-wrap').style.display=perQ?'flex':'none';$('#total-wrap').style.display=perQ?'none':'flex'}));
+    document.querySelectorAll('input[name="type"]').forEach(r=>r.addEventListener('change',e=>{cfg.type=e.target.value;$('#dec-opts').style.display=(cfg.type==='fraction')?'none':'flex';$('#frac-opts').style.display=(cfg.type==='decimal')?'none':'flex'}));
+    $('#start-btn').addEventListener('click',()=>{cfg.opMode=document.querySelector('input[name="ops"]:checked').value;cfg.total=clamp(Number($('#qty-num').value)||15,5,50);cfg.wholeDigits=Number($('#whole-dig').value);cfg.decPlaces=Number($('#dec-places').value);cfg.denMin=clamp(Number($('#den-min')?.value||3),2,98);cfg.denMax=clamp(Number($('#den-max')?.value||12),cfg.denMin+1,100);cfg.likeDen=$('#like-den')?$('#like-den').checked:true;cfg.simplify=$('#simplify')?$('#simplify').checked:true;cfg.properOnly=$('#proper-only')?$('#proper-only').checked:false;cfg.noNegative=$('#no-negative').checked;cfg.perQSeconds=clamp(Number($('#per-q-secs').value)||12,5,60);cfg.totalSeconds=clamp(Number($('#total-secs').value)||240,30,1800);cfg.showAid=$('#show-aid').checked;cfg.shuffleOptions=$('#shuffle-options').checked;generateQuestions();$('#setup-screen').style.display='none';$('#quiz-screen').style.display='block';startTimeMs=Date.now();if(cfg.mode==='test'&&cfg.timeboxType==='total'){let left=cfg.totalSeconds;$('#timer-clock').textContent=fmtTime(left);totalTimerObj=setInterval(()=>{left--;if(left<=3)beep('tick');$('#timer-clock').textContent=fmtTime(left);if(left<=0){clearInterval(totalTimerObj);endQuiz(true)}},1000)}else{$('#timer-clock').textContent=''}renderQuestion();updateProgress();$('#message').textContent=(cfg.mode==='practice')?'Try answering — you can retry if you miss!':(cfg.timeboxType==='per-question'?'Answer within the time ⏱️ (per question)':'Beat the global timer ⏱️ (total)')});
+    $('#next-btn').addEventListener('click',()=>{current++;renderQuestion()});
+    $('#skip-btn').addEventListener('click',()=>{const q=questions[current];if(q){const eqStr=(q.kind==='decimal')?`${q.a.toFixed(cfg.decPlaces)} ${q.op==='add'?'+':'−'} ${q.b.toFixed(cfg.decPlaces)}`:`${q.a.n}/${q.a.d} ${q.op==='add'?'+':'−'} ${q.b.n}/${q.b.d}`;const ansStr=(q.kind==='decimal')?q.ans.toFixed(cfg.decPlaces):fracStr(q.ans);history.push({q:eqStr,ans:ansStr,user:null,timeout:false});streak=0}current++;renderQuestion()});
+    $('#play-again').addEventListener('click',()=>location.reload());
+    $('#print-btn').addEventListener('click',()=>window.print());
+    document.addEventListener('keydown',e=>{const k=e.key.toLowerCase();if(k==='r'){$('#read-btn').click()}if(['1','2','3','4','5','6'].includes(k)){const idx=Number(k)-1;const btn=document.querySelectorAll('.option-btn')[idx];if(btn)btn.click()}if(k==='n'||e.key==='Enter'){if(!$('#next-btn').disabled)$('#next-btn').click()}if(k==='s')$('#skip-btn').click()});
+    function setMessage(t,type='info'){const el=$('#message');el.style.color=(type==='ok')?'var(--ok)':(type==='warn'?'var(--danger)':'var(--muted)');el.textContent=t}
+  </script>
+</body>
+</html>
