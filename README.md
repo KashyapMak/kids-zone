@@ -5,7 +5,7 @@ All activities are **offline‑friendly** and **distraction‑free**, built with
 
 Our mission: **help kids learn through play**.
 
-👉 Play online: https://kashyapmak.github.io/kids-zone
+👉 Play online: [Kids-zone](https://kashyapmak.github.io/kids-zone) 
 
 ---
 
@@ -15,7 +15,7 @@ Our mission: **help kids learn through play**.
 A kid‑friendly multiplication practice game covering tables **1–30** with custom ranges, **Practice** & **Test (Timed)** modes (per‑question or total‑time), smart distractors, visual arrays, audio feedback, streaks, badges, and a printable summary.
 
 - **Folder:** `time-table/`
-- **Run:** https://kashyapmak.github.io/kids-zone/time-table/times-table-trail.html
+- **Run:** [time-table/times-table-trail.html](https://kashyapmak.github.io/kids-zone/time-table/times-table-trail.html) 
 - **Docs:** `time-table/README.md`
 
 ---
@@ -26,7 +26,7 @@ An addition & subtraction practice game for **1–4 digit** numbers with **Addit
 Includes **No negatives**, **No carry**, **No borrow** toggles, **Practice** & **Test (Timed)** modes, optional **Number line**, audio feedback, streaks/badges, and printable results.
 
 - **Folder:** `add-sub/`
-- **Run:** https://kashyapmak.github.io/kids-zone/add-sub/add-sub-trail.html
+- **Run:** [add-sub/add-sub-trail.html](https://kashyapmak.github.io/kids-zone/add-sub/add-sub-trail.html) 
 - **Docs:** `add-sub/README.md`
 
 ---
@@ -55,7 +55,7 @@ Example (fractions):
 - Printable summary & local progress tracking
 
 - **Folder:** `deci-frac/`
-- **Run:** https://kashyapmak.github.io/kids-zone/deci-frac/deci-frac-trail.html
+- **Run:** [adeci-frac/deci-frac-trail.html](https://kashyapmak.github.io/kids-zone/deci-frac/deci-frac-trail.html) 
 - **Docs:** `deci-frac/README.md`
 
 ---
