@@ -11,7 +11,7 @@ Our mission: **help kids learn through play**.
 - [➗➕ Deci‑Frac Trail](https://kashyapmak.github.io/kids-zone/deci-frac/deci-frac-trail.html) 
 - [📐 Perimeter Trail](https://kashyapmak.github.io/kids-zone/perimeter/perimeter-trail.html)   
 - [⚖️ Number Nature Trail - Comparision](https://kashyapmak.github.io/kids-zone/compare-number/number-compare-trail.html)
-- [🔢 Number Order Trail](https://kashyapmak.github.io/kids-zone/number-order-trail/number-order-trail.html)
+- [🔢 Number Order Trail](https://kashyapmak.github.io/kids-zone/order-number/number-order-trail.html)
 
 ---
 
@@ -122,7 +122,7 @@ A number **ordering** game where learners arrange **3–5 shuffled cards** into 
 - Printable summary
 
 - **Folder:** `order-number/`
-- **Run:** [order-number/number-order-trail.html](https://kashyapmak.github.io/kids-zone/number-order-trail/number-order-trail.html)
+- **Run:** [order-number/number-order-trail.html](https://kashyapmak.github.io/kids-zone/order-number/number-order-trail.html)
 - **Docs:** `order-number/README.md`
 
 ---
