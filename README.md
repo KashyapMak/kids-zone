@@ -61,7 +61,7 @@ Example (fractions):
 ---
 
 ### 📐 Perimeter Trail
-Perimeter practice for **Squares, Rectangles, Equilateral Triangles, Regular Pentagons** — canvas drawn, with side labels (cm) and **formula hints**. Equilateral triangle is rendered at **75%** of auto‑fit scale for balanced visuals.
+Perimeter practice for **Squares, Rectangles, Equilateral Triangles, Regular Pentagons** — canvas drawn, with side labels (cm) and **formula hints**.
 
 - **Folder:** `perimeter/`
 - **Run:** [perimeter/perimeter-trail.html](https://kashyapmak.github.io/kids-zone/perimeter/perimeter-trail.html)   
