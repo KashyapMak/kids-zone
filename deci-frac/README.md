@@ -196,7 +196,7 @@ See the repository `LICENSE` file.
 
 ---
 
-## 🗂️ Suggested Folder Layout
+## 🗂️ Folder Layout
 
 ```text
 kids-zone/

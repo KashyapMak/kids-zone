@@ -55,8 +55,17 @@ Example (fractions):
 - Printable summary & local progress tracking
 
 - **Folder:** `deci-frac/`
-- **Run:** [adeci-frac/deci-frac-trail.html](https://kashyapmak.github.io/kids-zone/deci-frac/deci-frac-trail.html) 
+- **Run:** [deci-frac/deci-frac-trail.html](https://kashyapmak.github.io/kids-zone/deci-frac/deci-frac-trail.html) 
 - **Docs:** `deci-frac/README.md`
+
+---
+
+### 📐 Perimeter Trail
+Perimeter practice for **Squares, Rectangles, Equilateral Triangles, Regular Pentagons** — canvas drawn, with side labels (cm) and **formula hints**. Equilateral triangle is rendered at **75%** of auto‑fit scale for balanced visuals.
+
+- **Folder:** `perimeter/`
+- **Run:** [perimeter/perimeter-trail.html](https://kashyapmak.github.io/kids-zone/perimeter/perimeter-trail.html)   
+- **Docs:** `perimeter/README.md`
 
 ---
 
@@ -154,6 +163,10 @@ kids-zone/
 │
 ├── deci-frac/
 │   ├── deci-frac-trail.html
+│   └── README.md
+│
+├── perimeter/
+│   ├── perimeter-trail.html
 │   └── README.md
 │
 ├── LICENSE
