@@ -6,6 +6,12 @@ All activities are **offline‑friendly** and **distraction‑free**, built with
 Our mission: **help kids learn through play**.
 
 👉 Play online: [Kids-zone](https://kashyapmak.github.io/kids-zone) 
+- [🧮 Times Table Trail](https://kashyapmak.github.io/kids-zone/time-table/times-table-trail.html) 
+- [➕➖ Add & Sub Trail](https://kashyapmak.github.io/kids-zone/add-sub/add-sub-trail.html) 
+- [➗➕ Deci‑Frac Trail](https://kashyapmak.github.io/kids-zone/deci-frac/deci-frac-trail.html) 
+- [📐 Perimeter Trail](https://kashyapmak.github.io/kids-zone/perimeter/perimeter-trail.html)   
+- [⚖️ Number Nature Trail - Comparision](https://kashyapmak.github.io/kids-zone/compare-number/number-compare-trail.html)
+- [🔢 Number Order Trail](https://kashyapmak.github.io/kids-zone/number-order-trail/number-order-trail.html)
 
 ---
 
