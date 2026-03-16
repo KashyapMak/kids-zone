@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Memory Trail — Kids Zone</title>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700&family=Fredoka:wght@400;600;700&family=Orbitron:wght@700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <style>
+    :root{
+      --primary:#059669; --bg:#ecfdf5; --text:#052e1c; --muted:#475569; --prog:#10b981; --accent:#f59e0b;
+      --card:#ffffff; --danger:#ef4444; --ok:#16a34a; --shadow:0 10px 25px rgba(0,0,0,.08); --radius:20px;
+    }
+    /* Themes override CSS variables on body */
+    body.theme-jungle{ --primary:#059669; --bg:#ecfdf5; --text:#052e1c; --muted:#475569; --prog:#10b981; --accent:#f59e0b; --card:#ffffff; }
+    body.theme-ocean{ --primary:#0369a1; --bg:#e0f2fe; --text:#082f49; --muted:#475569; --prog:#0ea5e9; --accent:#22d3ee; --card:#ffffff; }
+    body.theme-space{ --primary:#7c3aed; --bg:#0f172a; --text:#e2e8f0; --muted:#94a3b8; --prog:#22c55e; --accent:#f59e0b; --card:#111827; }
+    body.theme-candy{ --primary:#db2777; --bg:#fff1f2; --text:#4a044e; --muted:#6b7280; --prog:#f43f5e; --accent:#fb923c; --card:#ffffff; }
+    body.theme-mono { --primary:#1f2937; --bg:#f3f4f6; --text:#111827; --muted:#4b5563; --prog:#111827; --accent:#6b7280; --card:#ffffff; }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;background:var(--bg);color:var(--text);
+      font-family:'Baloo 2','Fredoka','Comic Sans MS',system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+
+    header{background:var(--card);position:sticky;top:0;z-index:10;border-bottom:4px solid rgba(0,0,0,.05);box-shadow:var(--shadow);
+      display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:.5rem;padding:.5rem 1rem}
+    #brand{display:flex;align-items:center;gap:.6rem;font-weight:800}
+    #brand .logo{width:28px;height:28px}
+    #brand h1{font-size:1.25rem;margin:0}
+
+    .icon-btn{background:transparent;border:2px solid var(--primary);color:var(--primary);border-radius:999px;
+      padding:.35rem .6rem;cursor:pointer;font-size:1rem;font-weight:700}
+    .icon-btn[aria-pressed="true"]{background:var(--primary);color:#fff}
+
+    main{display:grid;place-items:center;padding:20px}
+    .card-wrap{width:min(980px,96vw);background:var(--card);border:3px solid var(--primary);border-radius:var(--radius);
+      box-shadow:var(--shadow);padding:1.25rem}
+    .row{display:flex;flex-wrap:wrap;gap:.75rem;align-items:center}
+    .grow{flex:1}
+    .select,select,input[type="number"]{font-family:inherit;font-weight:700;color:var(--text);border-radius:12px;border:2px solid var(--primary);
+      background:#fff;padding:.55rem .7rem;outline:none}
+    .main-btn,.mode-btn{cursor:pointer;padding:.75rem 1.1rem;border-radius:14px;border:0;background:var(--primary);color:#fff;font-weight:800;box-shadow:0 6px 0 rgba(0,0,0,.1)}
+    .secondary-btn{cursor:pointer;padding:.6rem 1rem;border-radius:12px;border:2px dashed var(--primary);background:transparent;color:var(--primary);font-weight:800}
+    .ghost-btn{background:transparent;border:0;color:var(--primary);font-weight:800;cursor:pointer}
+    .divider{height:2px;background:linear-gradient(90deg,transparent,var(--primary),transparent);margin:.75rem 0 1rem}
+
+    #header-progress{grid-column:1/-1;height:6px;background:#e2e8f0;border-radius:999px;overflow:hidden;margin-top:.5rem}
+    #header-progress>span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--prog),var(--accent));transition:width .35s}
+
+    #quiz-info{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:.5rem;text-align:center;margin:.25rem 0 .75rem;font-weight:800;color:var(--muted)}
+    #timer-clock{font-family:'Orbitron',monospace;font-size:1.5rem;color:var(--primary)}
+
+    /* Board */
+    #board{display:grid;gap:.6rem;justify-content:center;margin-top:.6rem}
+    /* dynamic cols via CSS var */
+    #board{grid-template-columns:repeat(var(--cols), minmax(70px, 1fr))}
+
+    .tile{position:relative;aspect-ratio: 3 / 4; min-width:70px; cursor:pointer; perspective:800px}
+    .tile-inner{position:absolute;inset:0;transition:transform .35s;transform-style:preserve-3d}
+    .tile.flipped .tile-inner{transform:rotateY(180deg)}
+    .face{position:absolute;inset:0;border-radius:14px;display:grid;place-items:center;font-size:2.2rem;font-weight:900}
+    .front{background:#fff;border:3px solid var(--primary);backface-visibility:hidden;color:var(--primary)}
+    .back{background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff;border:3px solid var(--primary);transform:rotateY(180deg);backface-visibility:hidden}
+
+    .stats{display:flex;gap:1rem;flex-wrap:wrap;justify-content:space-between;margin-top:.5rem;color:var(--muted);font-weight:800}
+
+    /* High contrast mode */
+    body.high-contrast{ --bg:#000; --text:#fff; --card:#111; --muted:#ddd; --primary:#ffd60a; --accent:#00e5ff; --prog:#ffd60a; }
+    body.high-contrast .front{ background:#000; border-color:#ffd60a; color:#ffd60a; }
+    body.high-contrast .back{ background:linear-gradient(135deg,#ffd60a,#00e5ff); border-color:#ffd60a; color:#000; }
+    body.high-contrast header{ border-bottom-color:#333 }
+
+    /* Results */
+    #score-big{font-size:clamp(2rem,6vw,3rem);margin:.25rem 0}
+    .badges{display:flex;flex-wrap:wrap;gap:.4rem;margin:.25rem 0 .5rem}
+    .badge{background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff;border-radius:999px;padding:.35rem .7rem;font-weight:900}
+
+    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0}
+    @media (max-width:520px){ #board{grid-template-columns:repeat(var(--cols), minmax(54px, 1fr))} .face{font-size:1.8rem} }
+    @media print{header,#setup-screen,#game-screen,.no-print{display:none!important} body{background:#fff;color:#000}.card-wrap{border:0;box-shadow:none}}
+  </style>
+</head>
+<body class="theme-jungle">
+  <header>
+    <div id="brand" aria-label="Memory Trail">
+      <svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="leafG" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#34d399"/><stop offset="1" stop-color="#059669"/></linearGradient></defs><path d="M54 10C30 10 14 20 8 40c8-4 16-5 24-2-4 1-8 4-12 9 8-2 14-1 20 2 8-10 14-22 14-39z" fill="url(#leafG)" stroke="#065f46" stroke-width="2"/><path d="M12 42c10-8 22-12 36-12" stroke="#064e3b" stroke-width="2" fill="none"/></svg>
+      <h1>Memory Trail</h1>
+    </div>
+    <div class="row" style="justify-content:center;gap:.4rem">
+	<select id="theme-select-header" class="select" aria-label="Theme">
+        <option value="jungle" selected>Jungle</option>
+        <option value="ocean">Ocean</option>
+        <option value="space">Space</option>
+        <option value="candy">Candy</option>
+        <option value="mono">Mono</option>
+      </select>     
+	 <button id="sound-btn" class="icon-btn" aria-pressed="true" title="Toggle sound">🔊</button>
+      <button id="contrast-btn" class="icon-btn" aria-pressed="false" title="High contrast mode">🌓</button>
+      <label class="sr-only" for="theme-select-header">Theme</label>
+     
+      <button id="help-btn" class="icon-btn" title="Help / Shortcuts">❓</button>
+    </div>
+    <div class="header-actions"></div>
+    <div id="header-progress"><span></span></div>
+  </header>
+
+  <main>
+    <!-- SETUP -->
+    <section id="setup-screen" class="card-wrap" aria-label="Setup">
+      <h2 style="margin:.2rem 0">Choose Your Trail 🚀</h2>
+
+      <div class="row" style="margin-top:.25rem">
+        <strong>Remember:</strong>
+        <label><input type="radio" name="set" value="numbers" checked> Numbers</label>
+        <label><input type="radio" name="set" value="symbols"> Symbols</label>
+        <label><input type="radio" name="set" value="mixed"> Mixed</label>
+      </div>
+
+      <div class="row" style="margin-top:.25rem">
+        <strong>Difficulty:</strong>
+        <label><input type="radio" name="diff" value="easy" checked> Easy</label>
+        <label><input type="radio" name="diff" value="medium"> Medium</label>
+        <label><input type="radio" name="diff" value="hard"> Hard</label>
+      </div>
+
+      <div class="row" style="margin-top:.25rem">
+        <label for="time-secs"><strong>Total time (seconds):</strong></label>
+        <input type="number" id="time-secs" min="30" max="900" value="120" style="width:120px">
+      </div>
+
+      <div class="row" style="margin-top:.25rem">
+        <label><input type="checkbox" id="shuffle-cards" checked> <strong>Shuffle tiles each level</strong></label>
+        <label><input type="checkbox" id="show-peek"> <strong>1‑second peek at new level</strong></label>
+      </div>
+
+      <div class="row" style="margin-top:.5rem;justify-content:space-between">
+        <div class="grow"><div id="stats" style="font-weight:800;color:var(--muted)"></div></div>
+        <button class="secondary-btn" id="reset-progress" title="Reset saved best/last scores">🧹 Reset Progress</button>
+        <button class="main-btn" id="start-btn" style="min-width:180px">START TRAIL 🏁</button>
+      </div>
+    </section>
+
+    <!-- GAME -->
+    <section id="game-screen" class="card-wrap" aria-label="Game" style="display:none">
+      <div id="quiz-info">
+        <div id="level-info">Level 1/5</div>
+        <div id="timer-clock" aria-live="assertive">02:00</div>
+        <div id="pairs-info" style="justify-self:end">Pairs 0/0</div>
+      </div>
+
+      <div id="message" style="font-weight:800;color:var(--muted);min-height:1.2em"></div>
+
+      <div id="board" style="--cols:4"></div>
+
+      <div class="stats">
+        <div id="score-box">Score: 0</div>
+        <div id="streak-box">Streak: 0 🔥</div>
+        <div id="found-box">Found: 0</div>
+      </div>
+
+      <div class="row" style="margin-top:.6rem;justify-content:space-between">
+        <button class="ghost-btn no-print" id="peek-btn">👀 Peek</button>
+        <div class="row">
+          <button class="secondary-btn no-print" id="quit-btn">Quit ↷</button>
+          <button class="main-btn no-print" id="next-btn" disabled>Next Level ➜</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- RESULTS -->
+    <section id="result-screen" class="card-wrap" aria-label="Results" style="display:none">
+      <h2>Trail Complete! 🎉</h2>
+      <div id="appraise" style="font-size:1.1rem;font-weight:800;color:var(--muted)"></div>
+      <div id="score-big">0</div>
+      <div style="font-weight:800;color:var(--muted)">Time left: <span id="time-left">00:00</span></div>
+      <div class="badges" id="badges"></div>
+
+      <div class="row" style="gap:.5rem;margin:.25rem 0 .5rem">
+        <button class="main-btn no-print" id="play-again">Play Again 🔄</button>
+        <button class="secondary-btn no-print" id="print-btn">🖨️ Print / Save PDF</button>
+      </div>
+
+      <div id="summary-title" style="font-weight:900;margin-top:.35rem">Level Summary</div>
+      <div id="review-list" class="review-list" style="border:1px dashed var(--primary);border-radius:12px;padding:.5rem;max-height:360px;overflow:auto"></div>
+    </section>
+  </main>
+
+  <footer class="no-print" style="text-align:center;padding:12px;font-size:.95rem;color:var(--muted)">
+    <div class="footer-row" style="display:flex;gap:.75rem;align-items:center;justify-content:center;flex-wrap:wrap">
+      <span>Memory Trail © 2026</span>
+      <span>•</span>
+      <a href="https://www.linkedin.com/in/kashyapmakadia/" target="_blank" rel="noopener noreferrer" style="color:var(--primary);font-weight:800;text-decoration:none">LinkedIn</a>
+      <span>•</span>
+      <a href="https://github.com/KashyapMak/kids-zone" target="_blank" rel="noopener noreferrer" style="color:var(--primary);font-weight:800;text-decoration:none">GitHub</a>
+    </div>
+  </footer>
+
+  <script>
+    // ====== Config & State ======
+    const cfg = {
+      set: 'numbers',
+      diff: 'easy',
+      totalSecs: 120,
+      maxLevels: 5,
+      // level card counts (must be even): 8, 12, 16, 20, 24
+      levelCards: [8,12,16,20,24],
+      peekOnStart: false,
+      shuffleEach: true,
+      theme: 'jungle'
+    };
+
+    const symbolBank = [
+      '★','♥','♦','♣','♠','●','▲','■','◆','☀','☂','☁','✿','♫','☯','☘','🍀','🍎','🍊','🍉','🍇','🍓','🍒','⚽','🏀','🏈','🏐','⚾','🎲'
+    ];
+
+    let isMuted=false, streak=0, score=0, level=1, timeLeft=cfg.totalSecs, timer=null;
+    let pairsTotal=0, pairsFound=0, firstPick=null, lockBoard=false, boardData=[];
+    let histories=[]; // per-level summary
+
+    const $ = s => document.querySelector(s);
+
+    // ====== Helpers ======
+    const ri=(a,b)=>Math.floor(Math.random()*(b-a+1))+a;
+    const shuffle=arr=>{ for(let i=arr.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]] } return arr };
+    const fmt=t=>{ const m=Math.floor(t/60), s=Math.max(0,Math.floor(t%60)); return `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}` };
+
+    function beep(type='ok'){
+      if(isMuted) return; try{
+        const ctx = new (window.AudioContext||window.webkitAudioContext)();
+        const o = ctx.createOscillator(), g = ctx.createGain();
+        o.connect(g); g.connect(ctx.destination);
+        o.type='sine';
+        o.frequency.setValueAtTime(type==='ok'? 880 : (type==='tick'? 660 : 220), ctx.currentTime);
+        g.gain.value=0.0001; g.gain.exponentialRampToValueAtTime(0.15, ctx.currentTime+0.01);
+        o.start(); g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime+0.18); o.stop(ctx.currentTime+0.2);
+      }catch{}
+    }
+
+    function updateStatsText(){
+      const key = `mem_${cfg.set}_${cfg.diff}`;
+      const data = JSON.parse(localStorage.getItem(key)||'{}');
+      const t = [
+        `Set: ${cfg.set} | Diff: ${cfg.diff.toUpperCase()}`,
+        data.best ? `Best: ${data.best.score} (lv ${data.best.level})` : `Best: —`,
+        data.last ? `Last: ${data.last.score} (lv ${data.last.level})` : `Last: —`
+      ].join('  •  ');
+      $('#stats').textContent = t;
+    }
+
+    function saveResult(final=false){
+      const key = `mem_${cfg.set}_${cfg.diff}`;
+      const data = JSON.parse(localStorage.getItem(key)||'{}');
+      const best = (data.best && data.best.score>=score) ? data.best : {score, level, date:Date.now()};
+      const last = {score, level, date:Date.now()};
+      localStorage.setItem(key, JSON.stringify({best,last}));
+    }
+
+    // ====== Setup controls ======
+    $('#sound-btn').addEventListener('click', e=>{ isMuted=!isMuted; e.currentTarget.setAttribute('aria-pressed', String(!isMuted)); e.currentTarget.textContent = isMuted? '🔇' : '🔊'; if(!isMuted) beep('ok'); });
+
+    $('#contrast-btn').addEventListener('click', e=>{
+      const on = !document.body.classList.contains('high-contrast');
+      document.body.classList.toggle('high-contrast', on);
+      e.currentTarget.setAttribute('aria-pressed', String(on));
+    });
+
+    $('#help-btn').addEventListener('click', ()=>{
+      alert(`How to play:\n• Choose Numbers / Symbols / Mixed, a difficulty, and total time.\n• Tiles are face-down. Flip two. If they match, they stay open and you score. If not, they flip back.\n• Clear each level to progress. There are 5 levels, starting at 8 tiles.\n• The global timer ticks down across all levels.\n\nShortcuts:\n• Click tiles to flip\n• Sound (🔊), High contrast (🌓) toggles in header.`);
+    });
+
+    document.querySelectorAll('input[name="set"]').forEach(r=> r.addEventListener('change', ()=> cfg.set = document.querySelector('input[name="set"]:checked').value ));
+    document.querySelectorAll('input[name="diff"]').forEach(r=> r.addEventListener('change', ()=> cfg.diff = document.querySelector('input[name="diff"]:checked').value ));
+
+    // Theme selection
+    $('#theme-select-header').addEventListener('change', e=>{
+      cfg.theme = e.target.value;
+      applyTheme();
+    });
+
+    function applyTheme(){
+      document.body.classList.remove('theme-jungle','theme-ocean','theme-space','theme-candy','theme-mono');
+      document.body.classList.add(`theme-${cfg.theme}`);
+    }
+
+    $('#reset-progress').addEventListener('click', ()=>{ const keys = Object.keys(localStorage).filter(k=>k.startsWith('mem_')); keys.forEach(k=>localStorage.removeItem(k)); updateStatsText(); alert('Progress reset!'); });
+
+    $('#start-btn').addEventListener('click', startGame);
+    $('#quit-btn').addEventListener('click', endGameEarly);
+    $('#next-btn').addEventListener('click', ()=>{ level++; startLevel(); });
+    $('#peek-btn').addEventListener('click', peekAll);
+    $('#print-btn').addEventListener('click', ()=> window.print());
+    $('#play-again').addEventListener('click', ()=> location.reload());
+
+    function readSetup(){
+      cfg.set = document.querySelector('input[name="set"]:checked').value;
+      cfg.diff = document.querySelector('input[name="diff"]:checked').value;
+      cfg.theme = $('#theme-select-header').value;
+      cfg.totalSecs = Math.max(30, Math.min(900, Number($('#time-secs').value)||120));
+      cfg.peekOnStart = $('#show-peek').checked;
+      cfg.shuffleEach = $('#shuffle-cards').checked;
+      // difficulty knobs
+      if(cfg.diff==='easy'){ flipBackDelay=850; mismatchPenalty=0; scorePerMatch=10; }
+      else if(cfg.diff==='medium'){ flipBackDelay=700; mismatchPenalty=2; scorePerMatch=12; }
+      else { flipBackDelay=550; mismatchPenalty=5; scorePerMatch=15; }
+    }
+
+    let flipBackDelay=850, mismatchPenalty=0, scorePerMatch=10;
+
+    function startGame(){
+      readSetup();
+      applyTheme();
+      // init
+      level=1; score=0; streak=0; timeLeft = cfg.totalSecs; pairsFound=0; histories=[]; firstPick=null; lockBoard=false;
+      $('#setup-screen').style.display='none';
+      $('#game-screen').style.display='block';
+      updateStatsText();
+      startTimer();
+      startLevel();
+    }
+
+    function endGameEarly(){ endGame(true); }
+
+    function startTimer(){ clearInterval(timer); $('#timer-clock').textContent = fmt(timeLeft); timer = setInterval(()=>{
+      timeLeft--; if(timeLeft<=3) beep('tick'); $('#timer-clock').textContent = fmt(timeLeft);
+      if(timeLeft<=0){ clearInterval(timer); endGame(true); }
+    }, 1000); }
+
+    function buildDeck(count){
+      const pairs = count/2;
+      let items=[];
+      const poolNumbers = Array.from({length: 50}, (_,i)=> String(i+1));
+      const poolSymbols = symbolBank.slice();
+      function pickPool(){ if(cfg.set==='numbers') return poolNumbers; if(cfg.set==='symbols') return poolSymbols; return poolNumbers.concat(poolSymbols); }
+      const pool = pickPool().slice();
+      if(pool.length < pairs){
+        while(pool.length<pairs) pool.push(...pickPool());
+      }
+      shuffle(pool);
+      const chosen = pool.slice(0, pairs);
+      chosen.forEach(val=>{ items.push({val, id:cryptoRandomId()}); items.push({val, id:cryptoRandomId()}); });
+      return shuffle(items);
+    }
+
+    function cryptoRandomId(){ return Math.random().toString(36).slice(2,10) + Math.random().toString(36).slice(2,6); }
+
+    function startLevel(){
+      if(level>cfg.maxLevels){ endGame(false); return; }
+      const total = cfg.levelCards[Math.min(level-1, cfg.levelCards.length-1)];
+      boardData = buildDeck(total);
+      pairsTotal = total/2; pairsFound=0; firstPick=null; lockBoard=false;
+      $('#level-info').textContent = `Level ${level}/${cfg.maxLevels}`;
+      $('#pairs-info').textContent = `Pairs 0/${pairsTotal}`;
+      $('#score-box').textContent = `Score: ${score}`;
+      $('#streak-box').textContent = `Streak: ${streak} 🔥`;
+      $('#found-box').textContent = `Found: 0`;
+
+      const cols = Math.ceil(Math.sqrt(total));
+      const board = $('#board'); board.style.setProperty('--cols', cols);
+      board.innerHTML='';
+      boardData.forEach((t,idx)=>{
+        const tile = document.createElement('div'); tile.className='tile'; tile.dataset.index=idx;
+        tile.innerHTML = `
+          <div class="tile-inner">
+            <div class="face front">?</div>
+            <div class="face back">${t.val}</div>
+          </div>`;
+        tile.addEventListener('click', ()=> onFlip(tile, t));
+        board.appendChild(tile);
+      });
+
+      if(cfg.peekOnStart){ peekAll(true); setTimeout(()=> hideAll(), 1000); } else { hideAll(); }
+      setMessage('Find all matching pairs!');
+      $('#next-btn').disabled = true;
+      updateHeaderProgress();
+    }
+
+    function hideAll(){ document.querySelectorAll('.tile').forEach(tile=> tile.classList.remove('flipped')); }
+
+    function setMessage(text, type='info'){ const el=$('#message'); el.style.color=(type==='ok')?'var(--ok)':(type==='warn'?'var(--danger)':'var(--muted)'); el.textContent=text; }
+
+    function onFlip(tile, t){
+      if(lockBoard) return; if(tile.classList.contains('flipped')) return; tile.classList.add('flipped');
+      if(!firstPick){ firstPick = {tile, t}; return; }
+      lockBoard = true;
+      const match = (firstPick.t.val === t.val && firstPick.tile !== tile);
+      if(match){
+        tile.style.pointerEvents='none'; firstPick.tile.style.pointerEvents='none';
+        pairsFound++; streak++; score += scorePerMatch + Math.max(0, (streak-1));
+        setMessage('Great! It\'s a match!', 'ok'); beep('ok');
+        $('#streak-box').textContent = `Streak: ${streak} 🔥`;
+        $('#score-box').textContent = `Score: ${score}`;
+        $('#pairs-info').textContent = `Pairs ${pairsFound}/${pairsTotal}`;
+        $('#found-box').textContent = `Found: ${pairsFound}`;
+        histories.push({level, event:`Match: ${t.val}`, time: cfg.totalSecs - timeLeft});
+        firstPick=null; lockBoard=false;
+        if(pairsFound===pairsTotal){ onLevelComplete(); }
+      } else {
+        streak=0; setMessage('Try again!', 'warn'); beep('bad');
+        const a = firstPick.tile, b = tile;
+        histories.push({level, event:`Miss: ${firstPick.t.val} ≠ ${t.val}`, time: cfg.totalSecs - timeLeft});
+        firstPick=null;
+        setTimeout(()=>{ a.classList.remove('flipped'); b.classList.remove('flipped'); lockBoard=false; }, flipBackDelay);
+        if(mismatchPenalty>0){ timeLeft=Math.max(0,timeLeft-mismatchPenalty); $('#timer-clock').textContent=fmt(timeLeft); }
+        $('#streak-box').textContent = `Streak: ${streak} 🔥`;
+      }
+    }
+
+    function onLevelComplete(){
+      setMessage('Level cleared! 🎯','ok');
+      confetti({ particleCount: 120, spread: 65, origin: { y: 0.7 } });
+      if(level < cfg.maxLevels && timeLeft>0){ $('#next-btn').disabled=false; }
+      else { endGame(false); }
+    }
+
+    function endGame(forced){
+      clearInterval(timer);
+      saveResult(true);
+      $('#game-screen').style.display='none'; $('#result-screen').style.display='block';
+      const appraise = forced ? 'Timer up — awesome try! ⏰' : 'Trail complete — fantastic!';
+      $('#appraise').textContent = appraise;
+      $('#score-big').textContent = `${score} pts`;
+      $('#time-left').textContent = fmt(timeLeft);
+
+      const badges=[]; if(!forced) badges.push('🏆 Finisher'); if(score>= (cfg.maxLevels*scorePerMatch*0.8)) badges.push('🌟 High Scorer'); if(cfg.diff==='hard') badges.push('🔥 Hard Mode');
+      $('#badges').innerHTML = badges.map(b=>`<span class="badge">${b}</span>`).join('');
+
+      const list = $('#review-list');
+      if(histories.length===0){ list.textContent='No events captured.'; }
+      else {
+        list.innerHTML = histories.map(h=>`<div style="border-bottom:1px solid #eee;padding:.25rem 0">
+          <strong>T${fmt(h.time)}</strong> • L${h.level} • ${h.event}
+        </div>`).join('');
+      }
+    }
+
+    function peekAll(fromStart=false){
+      document.querySelectorAll('.tile').forEach(tile=> tile.classList.add('flipped'));
+      if(!fromStart) setTimeout(()=> hideAll(), 1000);
+    }
+
+    function updateHeaderProgress(){
+      const pct = ((level-1)/cfg.maxLevels)*100;
+      document.querySelector('#header-progress > span').style.width = `${pct}%`;
+    }
+
+    // defaults
+    document.getElementById("theme-select-header").value = cfg.theme;
+    applyTheme();
+    updateStatsText();
+  </script>
+</body>
+</html>

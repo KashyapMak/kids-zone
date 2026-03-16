@@ -12,6 +12,7 @@ Our mission: **help kids learn through play**.
 - [📐 Perimeter Trail](https://kashyapmak.github.io/kids-zone/perimeter/perimeter-trail.html)   
 - [⚖️ Number Nature Trail - Comparision](https://kashyapmak.github.io/kids-zone/compare-number/number-compare-trail.html)
 - [🔢 Number Order Trail](https://kashyapmak.github.io/kids-zone/order-number/number-order-trail.html)
+- [🔢 Memory Trail](https://kashyapmak.github.io/kids-zone/memory/memory-trail.html)
 
 ---
 
@@ -127,6 +128,28 @@ A number **ordering** game where learners arrange **3–5 shuffled cards** into 
 
 ---
 
+
+### 🧠 Memory Trail
+A memory‑matching game where kids flip tiles to find pairs of **numbers**, **symbols**, or **mixed items** — all under a **global countdown**.
+
+**Key features:**
+- Sets: Numbers / Symbols / Mixed  
+- Difficulty modes: Easy, Medium, Hard  
+  - Flip‑back delay, time penalty, and score tuned per mode  
+- Up to **5 levels**, starting at **8 tiles**, then 12, 16, 20, 24  
+- **Global timer** (120s default, fully adjustable)  
+- Optional **1‑second peek** at each level start  
+- **Theme selector in header:** Jungle, Ocean, Space, Candy, Mono  
+- **High contrast mode** for accessibility  
+- Sound toggle, streak scoring, badges, printable summary  
+- Fully offline, single‑file game
+
+- **Folder:** `memory/`  
+- **Run:** [memory/memory-trail.html](https://kashyapmak.github.io/kids-zone/memory/memory-trail.html)
+- **Docs:** `memory/README.md`
+
+---
+
 ## 🎯 Design Principles
 
 - ✅ **Offline‑first**
@@ -233,6 +256,10 @@ kids-zone/
 │
 ├── order-number/
 │   ├── number-order-trail.html
+│   └── README.md
+│
+├── memory/
+│   ├── memory-trail.html
 │   └── README.md
 │
 ├── LICENSE
