@@ -13,6 +13,7 @@ Our mission: **help kids learn through play**.
 - [⚖️ Number Nature Trail - Comparision](https://kashyapmak.github.io/kids-zone/compare-number/number-compare-trail.html)
 - [🔢 Number Order Trail](https://kashyapmak.github.io/kids-zone/order-number/number-order-trail.html)
 - [🔢 Memory Trail](https://kashyapmak.github.io/kids-zone/memory/memory-trail.html)
+- [🏗️ Equation Architect](https://kashyapmak.github.io/kids-zone/equation-architect/equation-architect.html)
 
 ---
 
@@ -28,72 +29,34 @@ A kid‑friendly multiplication practice game covering tables **1–30** with cu
 ---
 
 ### ➕➖ Add & Sub Trail
-An addition & subtraction practice game for **1–4 digit** numbers with **Addition**, **Subtraction**, or **Mixed** modes.
-
-Includes **No negatives**, **No carry**, **No borrow** toggles, **Practice** & **Test (Timed)** modes, optional **Number line**, audio feedback, streaks/badges, and printable results.
+A flexible addition and subtraction practice game with custom difficulty, 1–4-digit numbers, and configurable “No negatives / No carry / No borrow” options.
 
 - **Folder:** `add-sub/`
-- **Run:** [add-sub/add-sub-trail.html](https://kashyapmak.github.io/kids-zone/add-sub/add-sub-trail.html) 
+- **Run:** [add-sub/add-sub-trail.html](https://kashyapmak.github.io/kids-zone/add-sub/add-sub-trail.html)
 - **Docs:** `add-sub/README.md`
 
 ---
 
 ### ➗➕ Deci‑Frac Trail
-A decimal and fraction **addition & subtraction** game designed to mirror **on‑paper column methods**.
-
-Supports **Decimals**, **Fractions**, or **Mixed** mode with a **vertical layout**, including **stacked fraction display** for conceptual clarity.
-
-Example (fractions):
-```
-  2     4
- --- + ---
-  5     5
-```
-
-**Key features:**
-- Vertical column format for decimals
-- Stacked fractions for fraction operations
-- Practice & Test (Timed) modes
-- Per‑question or total‑time timers
-- Configurable decimal places and fraction denominators
-- Fraction simplification & proper‑result options
-- Visual aids (100‑grid, fraction bars)
-- Audio feedback, read‑aloud, streaks, badges
-- Printable summary & local progress tracking
+A decimal/fraction addition and subtraction game with vertical layout, stacked fraction visuals, and practice/test modes.
 
 - **Folder:** `deci-frac/`
-- **Run:** [deci-frac/deci-frac-trail.html](https://kashyapmak.github.io/kids-zone/deci-frac/deci-frac-trail.html) 
+- **Run:** [deci-frac/deci-frac-trail.html](https://kashyapmak.github.io/kids-zone/deci-frac/deci-frac-trail.html)
 - **Docs:** `deci-frac/README.md`
 
 ---
 
 ### 📐 Perimeter Trail
-Perimeter practice for **Squares, Rectangles, Equilateral Triangles, Regular Pentagons** — canvas drawn, with side labels (cm) and **formula hints**.
+A geometry perimeter practice app with interactive shapes, side labels, and formula hints for square, rectangle, triangle, and pentagon.
 
 - **Folder:** `perimeter/`
-- **Run:** [perimeter/perimeter-trail.html](https://kashyapmak.github.io/kids-zone/perimeter/perimeter-trail.html)   
+- **Run:** [perimeter/perimeter-trail.html](https://kashyapmak.github.io/kids-zone/perimeter/perimeter-trail.html)
 - **Docs:** `perimeter/README.md`
 
 ---
 
 ### ⚖️ Number Nature Trail
-A number **comparison** game where learners pick the correct symbol — **`<`**, **`>`**, or **`=`** — between two numbers drawn from any mix of four types: **whole numbers**, **decimals**, **simple fractions** (denom 2–5), and **complex fractions** (denom 6–20).
-
-Fractions are displayed **stacked** for clarity:
-```
-  3
- ───
-  4
-```
-
-**Key features:**
-- Compare any mix of whole numbers, decimals, simple & complex fractions
-- Stacked fraction display (same style as Deci‑Frac Trail)
-- Optional **number line visual aid** plots both values in real time
-- Toggle **equal pairs** on/off
-- Practice & Test (Timed) modes with per‑question or total‑time timers
-- Keyboard shortcuts (`1` `<`, `2` `=`, `3` `>`), audio feedback, read‑aloud, streaks, badges
-- Printable summary
+A comparison game with whole numbers, decimals, and fractions (stacked display), where learners choose `<`, `=`, or `>`.
 
 - **Folder:** `compare-number/`
 - **Run:** [compare-number/number-compare-trail.html](https://kashyapmak.github.io/kids-zone/compare-number/number-compare-trail.html)
@@ -102,25 +65,7 @@ Fractions are displayed **stacked** for clarity:
 ---
 
 ### 🔢 Number Order Trail
-A number **ordering** game where learners arrange **3–5 shuffled cards** into the correct **ascending** or **descending** order. Cards can be any mix of **whole numbers**, **decimals**, **simple fractions**, and **complex fractions**.
-
-```
-⬆️  Ascending — Smallest → Largest
-
-[ 1/3 ]  [ 0.75 ]  [ 5 ]  [ 7/12 ]   →   drag into slots   →   #1  #2  #3  #4
-```
-
-**Key features:**
-- Order any mix of whole numbers, decimals, simple & complex fractions
-- **Drag‑and‑drop** on desktop; **tap‑to‑select then tap‑to‑place** on mobile
-- Card **swapping** — drag one slot card onto another to swap instantly
-- **3, 4, or 5 cards** per question (easy / medium / hard)
-- **Ascending ⬆️, Descending ⬇️, or Mixed 🔀** direction
-- Slots flash green ✅ or red ❌ per position on submission
-- Correct order revealed automatically on wrong answers
-- Practice & Test (Timed) modes with per‑question or total‑time timers
-- Keyboard shortcuts (`C` check, `X` clear, `S` skip), audio feedback, read‑aloud, streaks, badges
-- Printable summary
+A number ordering game where learners place 3–5 cards in ascending/descending order, with mixed number types and a responsive drag-and-drop UI.
 
 - **Folder:** `order-number/`
 - **Run:** [order-number/number-order-trail.html](https://kashyapmak.github.io/kids-zone/order-number/number-order-trail.html)
@@ -130,23 +75,19 @@ A number **ordering** game where learners arrange **3–5 shuffled cards** into 
 
 
 ### 🧠 Memory Trail
-A memory‑matching game where kids flip tiles to find pairs of **numbers**, **symbols**, or **mixed items** — all under a **global countdown**.
+A memory matching game with numbers, symbols, and mixed sets, plus adjustable difficulty, themes, and a global timer.
 
-**Key features:**
-- Sets: Numbers / Symbols / Mixed  
-- Difficulty modes: Easy, Medium, Hard  
-  - Flip‑back delay, time penalty, and score tuned per mode  
-- Up to **5 levels**, starting at **8 tiles**, then 12, 16, 20, 24  
-- **Global timer** (120s default, fully adjustable)  
-- Optional **1‑second peek** at each level start  
-- **Theme selector in header:** Jungle, Ocean, Space, Candy, Mono  
-- **High contrast mode** for accessibility  
-- Sound toggle, streak scoring, badges, printable summary  
-- Fully offline, single‑file game
-
-- **Folder:** `memory/`  
+- **Folder:** `memory/`
 - **Run:** [memory/memory-trail.html](https://kashyapmak.github.io/kids-zone/memory/memory-trail.html)
 - **Docs:** `memory/README.md`
+
+---
+### 🏗️ Equation Architect
+A puzzle game to build valid equations with number/operator tiles, featuring guaranteed solvable problems and helpful guidance.
+
+- **Folder:** `equation-architect/`
+- **Run:** [equation-architect/equation-architect.html](https://kashyapmak.github.io/kids-zone/equation-architect/equation-architect.html)
+- **Docs:** `equation-architect/README.md`
 
 ---
 
@@ -234,32 +175,8 @@ Attribution appreciated:
 ```text
 kids-zone/
 │
-├── time-table/
-│   ├── times-table-trail.html
-│   └── README.md
-│
-├── add-sub/
-│   ├── add-sub-trail.html
-│   └── README.md
-│
-├── deci-frac/
-│   ├── deci-frac-trail.html
-│   └── README.md
-│
-├── perimeter/
-│   ├── perimeter-trail.html
-│   └── README.md
-│
-├── compare-number/
-│   ├── number-nature-trail.html
-│   └── README.md
-│
-├── order-number/
-│   ├── number-order-trail.html
-│   └── README.md
-│
-├── memory/
-│   ├── memory-trail.html
+├── <game folder>/
+│   ├── <game>.html
 │   └── README.md
 │
 ├── LICENSE

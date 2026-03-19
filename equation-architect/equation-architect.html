@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Equation Architect | Kids Zone</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Outfit:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            --primary: #059669; --bg: #f0fdf4; --text: #064e3b; --muted: #dcfce7;
+            --prog: #10b981; --accent: #f59e0b; --card: #ffffff; --danger: #ef4444; --ok: #3b82f6;
+            --font-main: 'Fredoka', sans-serif; --font-head: 'Outfit', sans-serif;
+        }
+        .theme-ocean { --primary: #0ea5e9; --bg: #f0f9ff; --text: #0c4a6e; --muted: #e0f2fe; --prog: #0ea5e9; --accent: #f472b6; }
+        .theme-space { --primary: #8b5cf6; --bg: #1e1b4b; --text: #e0e7ff; --muted: #312e81; --prog: #6366f1; --accent: #2dd4bf; --card: #1e1b4b; }
+        .theme-candy { --primary: #f472b6; --bg: #fff1f2; --text: #831843; --muted: #ffe4e6; --prog: #fb7185; --accent: #fbbf24; }
+        .theme-mono { --primary: #262626; --bg: #ffffff; --text: #000000; --muted: #f5f5f5; --prog: #525252; --accent: #737373; --card: #fafafa; }
+        body.high-contrast { --primary: #000000; --bg: #ffffff; --text: #000000; --muted: #eeeeee; --accent: #ffff00; --danger: #ff0000; --ok: #0000ff; }
+        
+        * { box-sizing: border-box; transition: background 0.2s; }
+        body { margin: 0; font-family: var(--font-main); background: var(--bg); color: var(--text); overflow-x: hidden; display: flex; flex-direction: column; min-height: 100vh; }
+        
+        /* Header Branding per Screenshot */
+        header { position: sticky; top: 0; background: var(--card); padding: 10px 24px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05); z-index: 100; border-bottom: 2px solid var(--muted); }
+        .header-left { display: flex; align-items: center; gap: 10px; }
+        .brand { font-family: var(--font-head); font-weight: 700; font-size: 1.2rem; color: var(--text); display: flex; align-items: center; gap: 8px; }
+        .brand svg { width: 24px; height: 24px; fill: var(--primary); }
+        .controls { display: flex; gap: 12px; align-items: center; }
+        
+        .btn-kz { cursor: pointer; border: 2px solid var(--muted); border-radius: 50%; width: 36px; height: 36px; background: var(--card); color: var(--text); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; }
+        .btn-kz:hover { background: var(--muted); }
+        select.btn-kz { border-radius: 12px; width: auto; padding: 0 10px; font-weight: 600; font-family: var(--font-main); }
+
+        .progress-container { position: absolute; bottom: -4px; left: 0; width: 100%; height: 4px; background: rgba(0,0,0,0.05); }
+        #progress-bar { height: 100%; width: 0%; background: var(--prog); transition: width 0.4s; }
+
+        main { flex: 1; max-width: 900px; width: 100%; margin: 40px auto; padding: 0 20px; }
+        section { display: none; background: var(--card); padding: 30px; border-radius: 20px; border: 3px solid var(--primary); box-shadow: 0 15px 0 var(--muted); text-align: center; }
+        section.active { display: block; animation: slideUp 0.4s ease-out; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Game UI */
+        .game-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .meta-pill { background: var(--muted); padding: 6px 15px; border-radius: 20px; font-weight: 700; font-size: 0.9rem; color: var(--primary); }
+        
+        .target-container { background: var(--card); border: 2px dashed var(--primary); border-radius: 15px; padding: 20px; margin-bottom: 20px; position: relative; }
+        .target-label { font-size: 0.8rem; letter-spacing: 1px; font-weight: 700; opacity: 0.7; margin-bottom: 10px; text-transform: uppercase; }
+        .target-val { font-size: 4.5rem; font-weight: 700; color: var(--primary); font-family: var(--font-head); line-height: 1; }
+
+        .workspace-strip { background: var(--bg); border-radius: 12px; padding: 20px; margin: 20px 0; min-height: 80px; display: flex; align-items: center; justify-content: center; position: relative; gap: 10px; cursor: pointer; }
+        .eq-text { font-size: 2.2rem; font-weight: 600; color: var(--text); letter-spacing: 2px; }
+        .result-preview { position: absolute; right: 10px; background: var(--card); border: 2px solid var(--primary); padding: 8px 12px; border-radius: 10px; font-weight: 800; font-size: 1.2rem; box-shadow: 3px 3px 0 var(--primary); }
+        .result-preview.wrong { border-color: var(--danger); color: var(--danger); box-shadow: 3px 3px 0 var(--danger); }
+
+        .block-pool { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin-bottom: 20px; }
+        .block { width: 65px; height: 65px; background: var(--card); border: 3px solid var(--muted); border-radius: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; font-weight: 700; color: var(--text); box-shadow: 0 4px 0 var(--muted); user-select: none; }
+        .block:active { transform: translateY(2px); box-shadow: 0 2px 0 var(--muted); }
+        .block.op { border-color: var(--ok); color: var(--ok); box-shadow: 0 4px 0 var(--ok); }
+        .block.used { opacity: 0.2; pointer-events: none; filter: grayscale(1); }
+
+        /* Action Buttons per Screenshot */
+        .action-row { display: flex; justify-content: center; gap: 12px; margin-top: 30px; flex-wrap: wrap; }
+        .btn-act { padding: 12px 24px; border-radius: 12px; border: none; font-weight: 700; font-size: 1rem; cursor: pointer; display: flex; align-items: center; gap: 8px; color: white; transition: 0.2s; }
+        .btn-act.clear { background: var(--danger); }
+        .btn-act.check { background: var(--primary); }
+        .btn-act.hint { background: var(--ok); }
+        .btn-act.skip { background: transparent; color: var(--primary); border: 2px dashed var(--primary); }
+        .btn-act:hover { filter: brightness(1.1); }
+
+        /* Summary List */
+        .summary-list { text-align: left; background: var(--bg); border-radius: 15px; margin: 20px 0; border: 1px solid var(--muted); overflow: hidden; }
+        .summary-row { display: flex; align-items: center; padding: 12px 20px; border-bottom: 1px solid var(--muted); }
+        .summary-row:last-child { border-bottom: none; }
+        .summary-content { flex: 1; font-size: 0.95rem; }
+        .summary-status { font-size: 1.5rem; }
+
+        footer { padding: 20px; text-align: center; font-size: 0.85rem; opacity: 0.8; }
+        footer a { color: var(--primary); text-decoration: none; font-weight: 600; }
+
+        /* Printing logic: Only result-screen is available in print */
+        @media print {
+            body { background: white; }
+            header, footer, section:not(#result-screen), .action-row, .btn-act, .btn-kz, .progress-container { display: none !important; }
+            section#result-screen { display: block !important; border: none !important; box-shadow: none !important; margin: 0; padding: 0; }
+            .summary-list { background: white; border: 1px solid #ccc; }
+        }
+    </style>
+</head>
+<body class="theme-jungle">
+
+<header class="no-print">
+    <div class="header-left">
+        <div class="brand">
+            <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+            Equation Architect
+        </div>
+    </div>
+    <div class="controls">
+        <select class="btn-kz" onchange="changeTheme(this.value)">
+            <option value="theme-jungle">Jungle</option>
+            <option value="theme-ocean">Ocean</option>
+            <option value="theme-space">Space</option>
+            <option value="theme-candy">Candy</option>
+            <option value="theme-mono">Mono</option>
+        </select>
+        <button class="btn-kz" onclick="toggleSound()">🔊</button>
+        <button class="btn-kz" onclick="toggleContrast()">🌓</button>
+        <button class="btn-kz" onclick="showHelp()">❓</button>
+    </div>
+    <div class="progress-container"><div id="progress-bar"></div></div>
+</header>
+
+<main>
+    <section id="setup-screen" class="active">
+        <h1 style="margin-top:0">Start Your Trail 🚀</h1>
+        <div style="background:var(--bg); padding:20px; border-radius:15px; margin-bottom:25px; border:2px solid var(--muted)">
+            <label style="font-weight:700; display:block; margin-bottom:10px">Choose Difficulty:</label>
+            <select id="diff-select" style="padding:10px 20px; border-radius:10px; border:2px solid var(--primary); font-family:inherit; font-size:1rem; font-weight:700">
+                <option value="easy" selected>Apprentice (Ages 6-8)</option> <option value="medium">Builder (Ages 9-10)</option>
+                <option value="hard">Master (Ages 11-12)</option>
+            </select>
+        </div>
+        <div style="margin-bottom:30px; display:flex; justify-content:center; gap:20px; font-weight:700">
+            <div class="meta-pill">Best: <span id="best-stat">0/5</span></div>
+            <div class="meta-pill">Last: <span id="last-stat">0/5</span></div>
+        </div>
+        <button class="btn-act check" style="margin:0 auto; padding:15px 40px; font-size:1.2rem" onclick="startGame()">START TRAIL 🏁</button>
+        <br>
+        <button onclick="resetProgress()" style="margin-top:20px; background:none; border:none; color:var(--danger); cursor:pointer; font-size:0.8rem; font-weight:600; text-decoration:underline">Reset Progress</button>
+    </section>
+
+    <section id="game-screen">
+        <div class="game-meta">
+            <div class="meta-pill">Level <span id="cur-lvl">1</span>/5</div>
+            <div style="font-weight:700; color:var(--primary)" id="timer-txt">⏱️ 00s</div>
+            <div class="meta-pill">Streak: <span id="cur-strk">0</span></div>
+        </div>
+        
+        <div class="target-container">
+            <div class="target-label">Target Result</div>
+            <div class="target-val" id="target-val">--</div>
+        </div>
+
+        <div class="workspace-strip" onclick="undoLast()">
+            <div class="eq-text" id="eq-display">Tap blocks...</div>
+            <div class="result-preview" id="live-calc">?</div>
+        </div>
+
+        <div class="block-pool" id="num-pool"></div>
+        <div class="block-pool" id="op-pool"></div>
+
+        <div class="action-row">
+            <button class="btn-act clear" onclick="clearEq()">🗑️ Clear</button>
+            <button class="btn-act check" onclick="checkSol()">✅ Check Blueprint</button>
+            <button class="btn-act hint" onclick="revealSol()">💡 Hint</button>
+            <button class="btn-act skip" onclick="skipLevel()">Skip ~</button>
+        </div>
+    </section>
+
+    <section id="result-screen">
+        <h1 style="margin-top:0">Trail Complete! 🎉</h1>
+        <div class="target-val" id="final-stats" style="font-size:3rem; margin-bottom:10px">0 / 5</div>
+        <p id="time-summary" style="font-weight:700; opacity:0.8"></p>
+        
+        <h3 style="text-align:left; margin-bottom:10px">Questions Summary:</h3>
+        <div class="summary-list" id="history-log"></div>
+
+        <div class="action-row no-print">
+            <button class="btn-act check" onclick="location.reload()">Play Again 🔄</button>
+            <button class="btn-act hint" onclick="window.print()">Print / Save PDF 🖨️</button>
+        </div>
+    </section>
+</main>
+
+<footer>
+    Kid Zone © 2026 • 
+    <a href="https://linkedin.com/in/kashyapmakadia" target="_blank">Kashyap Makadia</a> • 
+    <a href="https://github.com/kashyapmak" target="_blank">GitHub Repo</a>
+</footer>
+
+<script>
+    const cfg = { lvlMax: 5, diff: {
+        easy: { nums: 3, range: [10, 25], ops: ['+', '-'] },
+        medium: { nums: 4, range: [20, 60], ops: ['+', '-', '*'] },
+        hard: { nums: 4, range: [30, 100], ops: ['+', '-', '*', '/'] }
+    }};
+    
+    let state = { level: 1, streak: 0, score: 0, timer: 0, target: 0, nums: [], userEq: [], usedIdx: [], solutionStr: '', history: [], interval: null };
+
+    function startGame() {
+        state.diff = document.getElementById('diff-select').value;
+        state.level = 1; state.score = 0; state.streak = 0; state.history = []; state.timer = 0;
+        switchScreen('game-screen');
+        initLvl();
+        if(state.interval) clearInterval(state.interval);
+        state.interval = setInterval(() => { state.timer++; document.getElementById('timer-txt').innerText = `⏱️ ${state.timer.toString().padStart(2, '0')}s`; }, 1000);
+    }
+
+    function initLvl() {
+        const d = cfg.diff[state.diff];
+        let found = false;
+        while (!found) {
+            state.target = Math.floor(Math.random() * (d.range[1] - d.range[0])) + d.range[0];
+            state.nums = Array.from({length: d.nums}, () => Math.floor(Math.random() * 8) + 2);
+            state.solutionStr = findLinearSol(state.nums, state.target, d.ops);
+            if (state.solutionStr) found = true;
+        }
+        state.userEq = []; state.usedIdx = [];
+        renderPools();
+        document.getElementById('target-val').innerText = state.target;
+        document.getElementById('cur-lvl').innerText = state.level;
+        document.getElementById('progress-bar').style.width = `${((state.level-1)/cfg.lvlMax)*100}%`;
+        updateUI();
+    }
+
+    function updateUI() {
+        const eqStr = state.userEq.map(e => e.v).join(' ');
+        document.getElementById('eq-display').innerText = eqStr || 'Tap blocks...';
+        const calc = document.getElementById('live-calc');
+        try {
+            if (!eqStr) throw "Empty";
+            const res = evaluateLinear(state.userEq.map(e => e.v));
+            calc.innerText = (res !== undefined && !isNaN(res)) ? Number(res.toFixed(1)) : '?';
+            calc.className = 'result-preview ' + (Math.abs(res - state.target) < 0.1 ? '' : 'wrong');
+        } catch { calc.innerText = '?'; calc.className = 'result-preview'; }
+        document.querySelectorAll('#num-pool .block').forEach((b, i) => {
+            b.className = state.usedIdx.includes(i) ? 'block used' : 'block';
+        });
+    }
+
+    function evaluateLinear(arr) {
+        if (arr.length === 0) return 0;
+        let res = parseFloat(arr[0]);
+        for (let i = 1; i < arr.length; i += 2) {
+            const op = arr[i];
+            const nextVal = parseFloat(arr[i+1]);
+            if (op === '+') res += nextVal;
+            if (op === '-') res -= nextVal;
+            if (op === '*') res *= nextVal;
+            if (op === '/') res /= nextVal;
+        }
+        return res;
+    }
+
+    function checkSol() {
+        if(state.usedIdx.length < state.nums.length) return alert("You must use all numbers!");
+        processLevel(false);
+    }
+
+    function skipLevel() { processLevel(true); }
+
+    function processLevel(isSkipped) {
+        const eqStr = state.userEq.map(e => e.v).join(' ') || "(Skipped)";
+        const resVal = parseFloat(document.getElementById('live-calc').innerText) || 0;
+        const isCorrect = !isSkipped && Math.abs(resVal - state.target) < 0.1;
+
+        state.history.push({
+            q: `${state.nums.join(', ')} → Target ${state.target}`,
+            ans: eqStr + (isSkipped ? "" : " = " + resVal),
+            isCorrect: isCorrect,
+            hint: state.solutionStr
+        });
+
+        if(isCorrect) {
+            confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+            state.score++; state.streak++;
+        } else { state.streak = 0; }
+        
+        document.getElementById('cur-strk').innerText = state.streak;
+        if(state.level < cfg.lvlMax) { state.level++; initLvl(); } else showResults();
+    }
+
+    function showResults() {
+        clearInterval(state.interval);
+        switchScreen('result-screen');
+        const pct = Math.round((state.score/cfg.lvlMax)*100);
+        document.getElementById('final-stats').innerText = `${state.score} / ${cfg.lvlMax} (${pct}%)`;
+        document.getElementById('time-summary').innerText = `Completed in ${state.timer} seconds.`;
+        
+        const log = document.getElementById('history-log');
+        log.innerHTML = '';
+        state.history.forEach((h, i) => {
+            log.innerHTML += `
+                <div class="summary-row">
+                    <div class="summary-content">
+                        <strong>Lvl ${i+1}: ${h.q}</strong><br>
+                        <span>Your Equation: ${h.ans}</span><br>
+                        ${!h.isCorrect ? `<small style="color:var(--primary)">Correct: ${h.hint}</small>` : ''}
+                    </div>
+                    <div class="summary-status">${h.isCorrect ? '✅' : '❌'}</div>
+                </div>`;
+        });
+        
+        localStorage.setItem('ea_best', Math.max(state.score, localStorage.getItem('ea_best')||0));
+        localStorage.setItem('ea_last', state.score);
+        document.getElementById('progress-bar').style.width = '100%';
+    }
+
+    function findLinearSol(ns, t, os) {
+        const permutations = (arr) => {
+            if (arr.length <= 1) return [arr];
+            let res = [];
+            for (let i = 0; i < arr.length; i++) {
+                let rest = permutations([...arr.slice(0, i), ...arr.slice(i + 1)]);
+                for (let r of rest) res.push([arr[i], ...r]);
+            }
+            return res;
+        };
+        const numsPerms = permutations(ns);
+        for (let p of numsPerms) {
+            const opCombs = (n) => {
+                if (n === 0) return [[]];
+                let res = [];
+                for (let o of os) {
+                    for (let c of opCombs(n - 1)) res.push([o, ...c]);
+                }
+                return res;
+            };
+            for (let ops of opCombs(p.length - 1)) {
+                let val = p[0], str = p[0].toString();
+                for (let i = 0; i < ops.length; i++) {
+                    const o = ops[i], next = p[i+1];
+                    if (o === '+') val += next;
+                    else if (o === '-') val -= next;
+                    else if (o === '*') val *= next;
+                    else if (o === '/') { if(next === 0) { val = NaN; break; } val /= next; }
+                    str += ` ${o} ${next}`;
+                }
+                if (Math.abs(val - t) < 0.1) return str;
+            }
+        }
+        return null;
+    }
+
+    function renderPools() {
+        const np = document.getElementById('num-pool'), op = document.getElementById('op-pool');
+        np.innerHTML = ''; op.innerHTML = '';
+        state.nums.forEach((n, i) => {
+            const b = document.createElement('div'); b.className = 'block'; b.innerText = n;
+            b.onclick = () => { if(!state.usedIdx.includes(i)) { state.userEq.push({v: n, i}); state.usedIdx.push(i); updateUI(); } };
+            np.appendChild(b);
+        });
+        cfg.diff[state.diff].ops.forEach(o => {
+            const b = document.createElement('div'); b.className = 'block op'; b.innerText = o;
+            b.onclick = () => { if(state.userEq.length % 2 !== 0) { state.userEq.push({v: o, i: -1}); updateUI(); } };
+            op.appendChild(b);
+        });
+    }
+
+    function undoLast() { const l = state.userEq.pop(); if(l && l.i !== -1) state.usedIdx = state.usedIdx.filter(x => x !== l.i); updateUI(); }
+    function clearEq() { state.userEq = []; state.usedIdx = []; updateUI(); }
+    function switchScreen(id) { document.querySelectorAll('section').forEach(s => s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
+    function changeTheme(t) { document.body.className = t; }
+    function toggleContrast() { document.body.classList.toggle('high-contrast'); }
+    function toggleSound() {}
+    function revealSol() { alert("Architect's Solution: " + state.solutionStr); }
+    function showHelp() { alert("Goal: Reach the target result using ALL number blocks. Calculations are strictly Left-to-Right. Brackets are not allowed."); }
+    function resetProgress() { localStorage.clear(); location.reload(); }
+    
+    window.onload = () => { 
+        document.getElementById('best-stat').innerText = `${localStorage.getItem('ea_best')||0}/5`; 
+        document.getElementById('last-stat').innerText = `${localStorage.getItem('ea_last')||0}/5`; 
+    };
+</script>
+</body>
+</html>
