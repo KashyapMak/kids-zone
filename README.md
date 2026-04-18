@@ -14,6 +14,7 @@ Our mission: **help kids learn through play**.
 - [🔢 Number Order Trail](https://kashyapmak.github.io/kids-zone/order-number/number-order-trail.html)
 - [🔢 Memory Trail](https://kashyapmak.github.io/kids-zone/memory/memory-trail.html)
 - [🏗️ Equation Architect](https://kashyapmak.github.io/kids-zone/equation-architect/equation-architect.html)
+- [🧩 KLOTSKI Trail](https://kashyapmak.github.io/kids-zone/klotski/klotski-trail.html)
 
 ---
 
@@ -88,6 +89,15 @@ A puzzle game to build valid equations with number/operator tiles, featuring gua
 - **Folder:** `equation-architect/`
 - **Run:** [equation-architect/equation-architect.html](https://kashyapmak.github.io/kids-zone/equation-architect/equation-architect.html)
 - **Docs:** `equation-architect/README.md`
+
+---
+
+### 🧩 KLOTSKI Trail
+KLOTSKI Trail is a single‑file, kid‑friendly **sliding tile puzzle** inspired by the classic wooden Klotski board game.  
+
+- **Folder:** `klotski/`
+- **Run:** [klotski/klotski-trail.html](https://kashyapmak.github.io/kids-zone/klotski/klotski-trail.html)
+- **Docs:** `klotski/README.md`
 
 ---
 
