@@ -15,6 +15,7 @@ Our mission: **help kids learn through play**.
 - [🔢 Memory Trail](https://kashyapmak.github.io/kids-zone/memory/memory-trail.html)
 - [🏗️ Equation Architect](https://kashyapmak.github.io/kids-zone/equation-architect/equation-architect.html)
 - [🧩 KLOTSKI Trail](https://kashyapmak.github.io/kids-zone/klotski/klotski-trail.html)
+- [🧮 Abacus Trail](https://kashyapmak.github.io/kids-zone/abacus/abacus-trail.html)
 
 ---
 
