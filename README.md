@@ -101,6 +101,15 @@ KLOTSKI Trail is a single‑file, kid‑friendly **sliding tile puzzle** inspire
 
 ---
 
+### 🧮 Abacus Trail
+An interactive visual tool to master the vertical abacus, allowing kids to explore place value and arithmetic through animated bead movements.
+
+- **Folder:** `abacus/`
+- **Run:** [abacus/abacus-trail.html](https://kashyapmak.github.io/kids-zone/abacus/abacus-trail.html)
+- **Docs:** `abacus/README.md`
+
+---
+
 ## 🎯 Design Principles
 
 - ✅ **Offline‑first**
