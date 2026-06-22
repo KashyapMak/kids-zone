@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Magic Sort</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      --tw: 62px;
+      --th: 232px;
+      --nh: 18px
+    }
+
+    * {
+      box-sizing: border-box
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: #fff;
+      font-family: ui-rounded, "Comic Sans MS", system-ui, sans-serif;
+      background: radial-gradient(circle at 15% 15%, #f0f5, transparent 30%), radial-gradient(circle at 85% 20%, #0ff4, transparent 28%), linear-gradient(145deg, #7e22ce, #4c1d95 45%, #1e1b4b);
+      overflow-x: hidden
+    }
+
+    .screen {
+      display: none
+    }
+
+    .screen.active {
+      display: flex
+    }
+
+    .hidden {
+      display: none !important
+    }
+
+    .top {
+      height: 62px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 14px;
+      background: #ffffff18;
+      border-bottom: 1px solid #ffffff30;
+      backdrop-filter: blur(14px)
+    }
+
+    .brand {
+      font-size: 30px;
+      font-weight: 1000;
+      display: flex;
+      gap: 10px;
+      align-items: center
+    }
+
+    .icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 16px;
+      border: 1px solid #ffffff35;
+      background: #ffffff1d;
+      color: #fff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      font-size: 20px;
+      cursor: pointer;
+      box-shadow: 0 8px 20px #0003
+    }
+
+    .setup,
+    .result {
+      min-height: calc(100vh - 62px);
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      padding: 24px 16px
+    }
+
+    .hero {
+      text-align: center
+    }
+
+    .hero .e {
+      font-size: 88px;
+      animation: float 3s infinite ease-in-out
+    }
+
+    .hero h1 {
+      font-size: clamp(46px, 10vw, 74px);
+      margin: 5px 0;
+      font-weight: 1000
+    }
+
+    .hero p {
+      color: #fffc;
+      max-width: 540px
+    }
+
+    .panel,
+    .card {
+      width: min(100%, 480px);
+      padding: 22px;
+      border-radius: 30px;
+      background: linear-gradient(135deg, #ffffff2b, #ffffff10);
+      border: 1px solid #ffffff35;
+      box-shadow: 0 24px 58px #0005;
+      backdrop-filter: blur(16px)
+    }
+
+    .label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .16em;
+      font-weight: 900;
+      color: #fffb;
+      margin-bottom: 10px
+    }
+
+    .chips {
+      display: flex;
+      gap: 9px;
+      flex-wrap: wrap;
+      margin-bottom: 18px
+    }
+
+    .chip {
+      flex: 1 1 110px;
+      border: 2px solid #ffffff30;
+      border-radius: 18px;
+      background: #ffffff18;
+      color: #fff;
+      padding: 12px;
+      font-weight: 1000;
+      cursor: pointer
+    }
+
+    .chip.active {
+      background: linear-gradient(135deg, #ff9100, #ff1744, #d500f9);
+      border-color: #fff176
+    }
+
+    .btns {
+      width: min(100%, 480px);
+      display: flex;
+      flex-direction: column;
+      gap: 12px
+    }
+
+    .btn {
+      min-height: 56px;
+      border: 0;
+      border-radius: 20px;
+      padding: 14px 22px;
+      color: #fff;
+      font-size: 18px;
+      font-weight: 1000;
+      cursor: pointer;
+      box-shadow: 0 14px 30px #0005
+    }
+
+    .primary {
+      background: linear-gradient(135deg, #00e676, #00e5ff)
+    }
+
+    .secondary {
+      background: linear-gradient(135deg, #2979ff, #d500f9)
+    }
+
+    .danger {
+      background: linear-gradient(135deg, #ff1744, #c51162)
+    }
+
+    .ghost {
+      background: #ffffff1d;
+      border: 1px solid #ffffff35
+    }
+
+    .game {
+      min-height: calc(100vh - 62px);
+      flex-direction: column;
+      align-items: center;
+      padding: 16px 10px 22px;
+      gap: 14px
+    }
+
+    .status {
+      width: min(100%, 900px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px;
+      border-radius: 24px;
+      background: #ffffff1a;
+      border: 1px solid #ffffff32
+    }
+
+    .lvl {
+      min-width: 110px
+    }
+
+    .cap {
+      display: block;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .15em;
+      color: #ffffffaa;
+      font-weight: 900
+    }
+
+    .title {
+      font-size: 24px;
+      font-weight: 1000
+    }
+
+    .moves {
+      font-size: 12px;
+      color: #fffc;
+      font-weight: 800
+    }
+
+    .timer {
+      flex: 1;
+      max-width: 430px;
+      min-width: 115px
+    }
+
+    .timer-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      font-weight: 900
+    }
+
+    .track {
+      height: 12px;
+      border-radius: 99px;
+      background: #0004;
+      overflow: hidden
+    }
+
+    .fill {
+      height: 100%;
+      width: 100%;
+      background: linear-gradient(90deg, #00e5ff, #2979ff, #d500f9);
+      border-radius: 99px;
+      transition: width 1s linear
+    }
+
+    .fill.low {
+      background: linear-gradient(90deg, #ffea00, #ff6d00)
+    }
+
+    .fill.critical {
+      background: linear-gradient(90deg, #ff1744, #d50000);
+      animation: pulse .55s infinite alternate
+    }
+
+    .tube-grid {
+      width: min(100%, 1040px);
+      display: flex !important;
+      flex-direction: row !important;
+      flex-wrap: wrap !important;
+      align-items: flex-end;
+      justify-content: center;
+      align-content: flex-start;
+      gap: 22px 26px;
+      padding: 28px 10px;
+      min-height: 300px
+    }
+
+    .tube {
+      width: var(--tw);
+      height: calc(var(--th) + var(--nh));
+      border: 0;
+      background: transparent;
+      padding: 0;
+      cursor: pointer;
+      transition: transform .35s cubic-bezier(.34, 1.56, .64, 1), filter .2s
+    }
+
+    .tube.selected {
+      transform: translateY(-28px) rotate(-5deg);
+      filter: drop-shadow(0 0 18px #fff176)
+    }
+
+    .tube.invalid {
+      animation: shake .35s
+    }
+
+    .tube.complete {
+      animation: bounce 1.1s infinite ease-in-out
+    }
+
+    .neck {
+      width: 70%;
+      height: var(--nh);
+      margin: 0 auto;
+      border-left: 3px solid #ffffffa0;
+      border-right: 3px solid #ffffffa0;
+      border-top: 3px solid #ffffffd0;
+      border-radius: 9px 9px 0 0;
+      background: linear-gradient(#ffffff3a, #ffffff08)
+    }
+
+    .body {
+      position: relative;
+      width: 100%;
+      height: var(--th);
+      overflow: hidden;
+      border: 3px solid #ffffff99;
+      border-top: 0;
+      border-radius: 7px 7px 34px 34px;
+      background: linear-gradient(135deg, #ffffff2e, #ffffff08);
+      backdrop-filter: blur(9px);
+      box-shadow: inset 0 0 22px #ffffff22, inset -9px 0 16px #0004, inset 8px 0 14px #ffffff14, 0 16px 30px #0005
+    }
+
+    .complete .body {
+      border-color: #ffea00;
+      box-shadow: inset 0 0 22px #ffea0060, 0 0 30px #ffea0099
+    }
+
+    .stack {
+      position: absolute;
+      inset: auto 0 0 0;
+      height: 100%;
+      display: flex;
+      flex-direction: column-reverse;
+      z-index: 1
+    }
+
+    .liq {
+      height: 25%;
+      flex: 0 0 25%;
+      width: 100%;
+      position: relative;
+      box-shadow: inset 0 7px 10px #ffffff45, inset 0 -9px 12px #0004;
+      animation: liqIn .25s ease both
+    }
+
+    .liq:before {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      height: 8px;
+      background: linear-gradient(#fff9, #fff0)
+    }
+
+    .shine {
+      position: absolute;
+      top: 11px;
+      left: 10px;
+      z-index: 3;
+      width: 7px;
+      height: 62%;
+      border-radius: 99px;
+      background: linear-gradient(#ffffffbd, #ffffff15, #fff0)
+    }
+
+    .shine2 {
+      position: absolute;
+      right: 10px;
+      bottom: 18px;
+      z-index: 3;
+      width: 5px;
+      height: 26%;
+      border-radius: 99px;
+      background: linear-gradient(0deg, #ffffff57, #fff0)
+    }
+
+    .stream {
+      position: fixed;
+      z-index: 90;
+      width: 9px;
+      height: 0;
+      border-radius: 99px;
+      pointer-events: none;
+      transform-origin: top center;
+      box-shadow: 0 0 13px #ffffff8a
+    }
+
+    .hint {
+      text-align: center;
+      color: #ffffffad
+    }
+
+    .card {
+      text-align: center
+    }
+
+    .res-icon {
+      font-size: 86px;
+      animation: pop .55s cubic-bezier(.34, 1.56, .64, 1) both, float 2.8s infinite ease-in-out .55s
+    }
+
+    .modal-bg {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: #0009;
+      z-index: 120;
+      padding: 16px
+    }
+
+    .modal-bg.active {
+      display: flex
+    }
+
+    .modal {
+      width: min(100%, 560px);
+      padding: 24px;
+      border-radius: 28px;
+      background: linear-gradient(135deg, #581c87, #312e81)
+    }
+
+    .modal-head {
+      display: flex;
+      justify-content: space-between
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 20px;
+      transform: translateX(-50%) translateY(18px);
+      z-index: 150;
+      padding: 12px 18px;
+      border-radius: 18px;
+      background: #000b;
+      font-weight: 900;
+      opacity: 0;
+      transition: .22s
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0)
+    }
+
+    .confetti {
+      position: fixed;
+      top: -24px;
+      z-index: 140;
+      border-radius: 3px;
+      animation: fall linear forwards
+    }
+
+    @keyframes float {
+      50% {
+        transform: translateY(-9px)
+      }
+    }
+
+    @keyframes pulse {
+      to {
+        opacity: .55
+      }
+    }
+
+    @keyframes shake {
+      25% {
+        transform: translateX(-7px)
+      }
+
+      50% {
+        transform: translateX(7px)
+      }
+
+      75% {
+        transform: translateX(-5px)
+      }
+    }
+
+    @keyframes bounce {
+      50% {
+        transform: translateY(-6px)
+      }
+    }
+
+    @keyframes liqIn {
+      from {
+        transform: translateY(12px);
+        opacity: .25
+      }
+
+      to {
+        transform: translateY(0);
+        opacity: 1
+      }
+    }
+
+    @keyframes pop {
+      from {
+        transform: scale(.2);
+        opacity: 0
+      }
+
+      to {
+        transform: scale(1);
+        opacity: 1
+      }
+    }
+
+    @keyframes fall {
+      to {
+        transform: translateY(112vh) rotate(820deg);
+        opacity: .75
+      }
+    }
+
+    @media(max-width:700px) {
+      :root {
+        --tw: 52px;
+        --th: 204px
+      }
+
+      .tube-grid {
+        gap: 16px
+      }
+
+      .icon {
+        width: 42px;
+        height: 42px
+      }
+    }
+
+    @media(max-width:430px) {
+      :root {
+        --tw: 46px;
+        --th: 184px
+      }
+
+      .icon {
+        width: 39px;
+        height: 39px
+      }
+
+      .moves {
+        display: none
+      }
+
+      .tube-grid {
+        gap: 14px 13px
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="top"><a class="icon" href="https://github.com/KashyapMak/kids-zone">🏠</a>
+    <div class="brand">🧪 <span>Magic Sort</span></div>
+    <div style="display:flex;gap:8px"><button id="soundToggle" class="icon">🔊</button><button id="helpBtn"
+        class="icon">❓</button></div>
+  </header>
+  <main>
+    <section id="setupScreen" class="screen active setup">
+      <div class="hero">
+        <div class="e">🧪✨</div>
+        <h1>Magic Sort</h1>
+        <p>Sort bright magic potions into glass test tubes. Each tube must end with one colour only!</p>
+      </div>
+      <div class="panel">
+        <div class="label">Difficulty</div>
+        <div id="difficultyGroup" class="chips"><button class="chip active" data-value="easy">😊 Easy</button><button
+            class="chip" data-value="medium">🧐 Medium</button><button class="chip" data-value="hard">🔥 Hard</button>
+        </div>
+        <div class="label">Mode</div>
+        <div id="modeGroup" class="chips" style="margin-bottom:0"><button class="chip active" data-value="practice">🧘
+            Practice</button><button class="chip" data-value="timed">⏰ Timed</button></div>
+      </div>
+      <div class="btns"><button id="startBtn" class="btn primary">▶ Start Game</button><button id="continueBtn"
+          class="btn secondary hidden">🔁 Continue</button><button id="resetBtn" class="btn danger hidden">❌ Reset
+          Progress</button></div>
+    </section>
+    <section id="gameScreen" class="screen game">
+      <div class="status">
+        <div class="lvl"><span class="cap">Level</span><span id="levelLabel" class="title">Level 1</span><br><span
+            id="moveLabel" class="moves">Moves: 0</span></div>
+        <div id="timerWrap" class="timer hidden">
+          <div class="timer-meta"><span>⏰ Time</span><span id="timerText">00:00</span></div>
+          <div class="track">
+            <div id="timerFill" class="fill"></div>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px"><button id="undoBtn" class="icon">↩️</button><button id="restartBtn"
+            class="icon">🔄</button><button id="quitBtn" class="icon">🏁</button></div>
+      </div>
+      <div id="tubesGrid" class="tube-grid"></div>
+      <p class="hint">Tap one tube, then tap another tube to pour.</p>
+    </section>
+    <section id="resultScreen" class="screen result">
+      <div class="card">
+        <div id="resultIcon" class="res-icon">🏆</div>
+        <h2 id="resultTitle">Level Complete!</h2>
+        <p id="resultSubtitle">Amazing sorting skills!</p>
+        <div style="margin:14px 0 20px;font-weight:900">Level <span id="resultLevel">1</span></div>
+        <div class="btns" style="width:100%"><button id="nextLevelBtn" class="btn primary">➡️ Next Level</button><button
+            id="retryBtn" class="btn secondary">🔁 Retry</button><button id="resultRestartBtn" class="btn secondary">🔄
+            Restart</button><button id="homeBtn" class="btn ghost">🏠 Home</button></div>
+      </div>
+    </section>
+  </main>
+  <div id="helpModal" class="modal-bg">
+    <div class="modal">
+      <div class="modal-head">
+        <h2>How to Play 🧪</h2><button id="helpClose" class="icon">✖</button>
+      </div>
+      <ul>
+        <li><b>Goal:</b> make each tube empty or full of one colour.</li>
+        <li>Tap source tube, then target tube.</li>
+        <li>Pour only onto empty tube or matching top colour.</li>
+      </ul>
+    </div>
+  </div>
+  <div id="toast" class="toast"></div>
+  <script>
+    (() => { 'use strict'; const CAP = 4, SAVE = 'kidsZone_magicSort_save_v5', SET = 'kidsZone_magicSort_settings_v5', COLORS = ['#ff1744', '#2979ff', '#00e676', '#ffea00', '#d500f9', '#ff6d00', '#00e5ff', '#76ff03']; const $ = id => document.getElementById(id), screens = { setup: $('setupScreen'), game: $('gameScreen'), result: $('resultScreen') }; const st = { difficulty: 'easy', mode: 'practice', level: 1, tubes: [], initial: [], history: [], selected: null, anim: false, soundOn: true, moves: 0, timeoutLevel: null, timer: { id: null, total: 0, remaining: 0 } }; let actx = null; const clone = o => JSON.parse(JSON.stringify(o)), rnd = (a, b) => Math.floor(Math.random() * (b - a + 1)) + a; function show(k) { Object.values(screens).forEach(s => s.classList.remove('active')); screens[k].classList.add('active') } function toast(m) { const t = $('toast'); t.textContent = m; t.classList.add('show'); clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove('show'), 1800) } function hasSave() { try { return !!localStorage.getItem(SAVE) } catch (e) { return false } } function updateBtns() { const h = hasSave(); $('continueBtn').classList.toggle('hidden', !h); $('resetBtn').classList.toggle('hidden', !h) } function save() { try { localStorage.setItem(SAVE, JSON.stringify({ level: st.level, difficulty: st.difficulty, mode: st.mode })) } catch (e) { } updateBtns() } function load() { try { return JSON.parse(localStorage.getItem(SAVE) || 'null') } catch (e) { return null } } function resetSave() { try { localStorage.removeItem(SAVE) } catch (e) { } updateBtns() } function loadSet() { try { const s = JSON.parse(localStorage.getItem(SET) || '{}'); if (typeof s.soundOn === 'boolean') st.soundOn = s.soundOn } catch (e) { } $('soundToggle').textContent = st.soundOn ? '🔊' : '🔇' } function saveSet() { try { localStorage.setItem(SET, JSON.stringify({ soundOn: st.soundOn })) } catch (e) { } } function audio() { if (!actx) { try { actx = new (window.AudioContext || window.webkitAudioContext)() } catch (e) { actx = null } } if (actx && actx.state === 'suspended') actx.resume() } function tone(f, d = .12, type = 'sine', v = .14) { if (!st.soundOn) return; audio(); if (!actx) return; const o = actx.createOscillator(), g = actx.createGain(); o.type = type; o.frequency.value = f; g.gain.setValueAtTime(.001, actx.currentTime); g.gain.linearRampToValueAtTime(v, actx.currentTime + .01); g.gain.exponentialRampToValueAtTime(.001, actx.currentTime + d); o.connect(g); g.connect(actx.destination); o.start(); o.stop(actx.currentTime + d + .02) } const sfx = { select: () => tone(720, .07, 'triangle', .1), pour: () => { tone(520, .15, 'triangle'); setTimeout(() => tone(390, .16, 'triangle', .12), 80) }, error: () => tone(160, .18, 'sawtooth'), tick: () => tone(900, .05, 'square', .07), fail: () => [420, 320, 230].forEach((f, i) => setTimeout(() => tone(f, .22, 'sawtooth', .13), i * 140)), win: () => [523, 659, 784, 1046, 1318].forEach((f, i) => setTimeout(() => tone(f, .18, 'triangle', .16), i * 105)) }; function cfg() { const n = Math.min(8, Math.max(2, st.level + 1)); let e = 2; if (st.difficulty === 'hard') e = 1; if (st.difficulty === 'easy' && n >= 6) e = 3; return { numColors: n, extraEmpty: e } } function timeFor() { const c = cfg().numColors; let sec = 75 + c * 18 + Math.min(50, st.level * 4); if (st.difficulty === 'medium') sec *= .86; if (st.difficulty === 'hard') sec *= .74; return Math.max(50, Math.round(sec)) } function complete(t) { return t.length === CAP && t.every(x => x === t[0]) } function solved(tubes) { return tubes.every(t => t.length === 0 || complete(t)) } function can(tubes, s, t) { if (s === t) return false; const S = tubes[s], T = tubes[t]; if (!S || !T || !S.length || T.length >= CAP) return false; return !T.length || S[S.length - 1] === T[T.length - 1] } function apply(tubes, s, t) { const S = tubes[s], T = tubes[t], c = S[S.length - 1]; let k = 0; for (let i = S.length - 1; i >= 0 && S[i] === c; i--)k++; const n = Math.min(k, CAP - T.length); for (let i = 0; i < n; i++)T.push(S.pop()); return n } function hasComplete(tubes) { return tubes.some(t => complete(t)) } function hasMixed(tubes) { return tubes.some(t => t.length > 0 && !complete(t)) } function generateLevel(numColors, extraEmpty) { for (let build = 0; build < 60; build++) { const tubes = []; for (let i = 0; i < numColors; i++)tubes.push(Array(CAP).fill(COLORS[i])); for (let i = 0; i < extraEmpty; i++)tubes.push([]); let last = null, done = 0, target = rnd(180, 240); for (let tries = 0; tries < target * 16 && done < target; tries++) { let moves = []; for (let s = 0; s < tubes.length; s++)for (let t = 0; t < tubes.length; t++) { if (!can(tubes, s, t)) continue; const S = tubes[s], T = tubes[t]; if (last && last.s === t && last.t === s && Math.random() < .90) continue; if (complete(S) && T.length === 0 && Math.random() < .82) continue; moves.push({ s, t }) } if (!moves.length) { for (let s = 0; s < tubes.length; s++)for (let t = 0; t < tubes.length; t++)if (can(tubes, s, t)) moves.push({ s, t }) } if (!moves.length) break; const m = moves[rnd(0, moves.length - 1)]; apply(tubes, m.s, m.t); last = m; done++ } if (tubes.some(t => t.length) && !solved(tubes) && !hasComplete(tubes) && hasMixed(tubes)) return tubes } const tubes = Array.from({ length: numColors + extraEmpty }, () => []), layers = []; for (let c = 0; c < numColors; c++)for (let k = 0; k < CAP; k++)layers.push(COLORS[c]); for (let i = layers.length - 1; i > 0; i--) { const j = rnd(0, i);[layers[i], layers[j]] = [layers[j], layers[i]] } let idx = 0; for (const color of layers) { for (let step = 0; step < tubes.length; step++) { const ti = (idx + step) % tubes.length; if (tubes[ti].length < CAP) { tubes[ti].push(color); idx = ti + 1; break } } } for (let a = 0; a < tubes.length; a++)if (complete(tubes[a])) for (let b = 0; b < tubes.length; b++)if (a !== b && tubes[b].length && !complete(tubes[b])) { let ai = rnd(0, CAP - 1), bi = rnd(0, tubes[b].length - 1);[tubes[a][ai], tubes[b][bi]] = [tubes[b][bi], tubes[a][ai]]; break } return tubes } function render() { const g = $('tubesGrid'); g.innerHTML = ''; st.tubes.forEach((tube, i) => { const b = document.createElement('button'); b.className = 'tube'; b.dataset.i = i; b.type = 'button'; b.innerHTML = '<div class="neck"></div><div class="body"><div class="stack"></div><div class="shine"></div><div class="shine2"></div></div>'; const stack = b.querySelector('.stack'); tube.forEach((c, j) => { const l = document.createElement('div'); l.className = 'liq'; l.style.background = `linear-gradient(180deg,${c} 0%,${c} 62%,${c}dd 100%)`; l.style.animationDelay = j * 18 + 'ms'; stack.appendChild(l) }); if (complete(tube)) b.classList.add('complete'); if (st.selected === i) b.classList.add('selected'); b.onclick = () => clickTube(i, b); g.appendChild(b) }); $('moveLabel').textContent = 'Moves: ' + st.moves } const node = i => document.querySelector(`.tube[data-i="${i}"]`); function invalid(n) { n && n.classList.add('invalid'); setTimeout(() => n && n.classList.remove('invalid'), 380) } function stream(a, b, c) { if (!a || !b) return; const A = a.getBoundingClientRect(), B = b.getBoundingClientRect(), sx = A.left + A.width / 2, sy = A.top + 18, tx = B.left + B.width / 2, ty = B.top + 20, dx = tx - sx, dy = ty - sy, len = Math.hypot(dx, dy), ang = Math.atan2(dy, dx) * 180 / Math.PI - 90; const el = document.createElement('div'); el.className = 'stream'; el.style.left = sx + 'px'; el.style.top = sy + 'px'; el.style.background = c; el.style.transform = `rotate(${ang}deg)`; document.body.appendChild(el); requestAnimationFrame(() => { el.style.transition = 'height .22s ease-out,opacity .18s ease .34s'; el.style.height = len + 'px'; el.style.opacity = 0 }); setTimeout(() => el.remove(), 620) } function clickTube(i, n) { if (st.anim) return; audio(); if (st.selected === null) { if (!st.tubes[i].length) { sfx.error(); invalid(n); toast('Pick a tube with colour first'); return } st.selected = i; sfx.select(); render(); return } if (st.selected === i) { st.selected = null; sfx.select(); render(); return } if (!can(st.tubes, st.selected, i)) { sfx.error(); invalid(n); return } pour(st.selected, i) } function pour(s, t) { const c = st.tubes[s][st.tubes[s].length - 1], sn = node(s), tn = node(t); st.history.push({ tubes: clone(st.tubes), moves: st.moves }); st.anim = true; st.selected = null; if (sn) sn.style.transform = 'translateY(-32px) rotate(-15deg)'; stream(sn, tn, c); sfx.pour(); setTimeout(() => { apply(st.tubes, s, t); st.moves++; st.anim = false; render(); if (solved(st.tubes)) setTimeout(win, 280) }, 520) } function startLevel() { stopTimer(); const c = cfg(); st.tubes = generateLevel(c.numColors, c.extraEmpty); st.initial = clone(st.tubes); st.history = []; st.selected = null; st.anim = false; st.moves = 0; st.timeoutLevel = null; $('levelLabel').textContent = 'Level ' + st.level; render(); save(); show('game'); if (st.mode === 'timed') startTimer(timeFor()); else $('timerWrap').classList.add('hidden') } function restart() { stopTimer(); if (!st.initial.length) { startLevel(); return } st.tubes = clone(st.initial); st.history = []; st.selected = null; st.anim = false; st.moves = 0; $('levelLabel').textContent = 'Level ' + st.level; render(); show('game'); if (st.mode === 'timed') startTimer(timeFor()); else $('timerWrap').classList.add('hidden') } function undo() { if (st.anim) return; const h = st.history.pop(); if (!h) { sfx.error(); toast('No moves to undo'); return } st.tubes = clone(h.tubes); st.moves = h.moves; st.selected = null; sfx.select(); render() } function stopTimer() { if (st.timer.id) clearInterval(st.timer.id); st.timer.id = null } function updateTimer() { const r = Math.max(0, st.timer.remaining), pct = st.timer.total ? r / st.timer.total * 100 : 0, f = $('timerFill'); f.style.width = pct + '%'; f.classList.toggle('low', pct < 40 && pct >= 15); f.classList.toggle('critical', pct < 15); $('timerText').textContent = String(Math.floor(r / 60)).padStart(2, '0') + ':' + String(r % 60).padStart(2, '0') } function startTimer(sec) { stopTimer(); st.timer.total = sec; st.timer.remaining = sec; $('timerWrap').classList.remove('hidden'); updateTimer(); st.timer.id = setInterval(() => { st.timer.remaining--; updateTimer(); if (st.timer.remaining > 0 && st.timer.remaining <= 5) sfx.tick(); if (st.timer.remaining <= 0) timeout() }, 1000) } function confetti() { const p = ['#ffea00', '#ff1744', '#00e676', '#2979ff', '#d500f9', '#ff6d00', '#00e5ff']; for (let i = 0; i < 100; i++) { const e = document.createElement('div'); e.className = 'confetti'; e.style.background = p[i % p.length]; e.style.left = Math.random() * 100 + 'vw'; e.style.width = 6 + Math.random() * 9 + 'px'; e.style.height = 9 + Math.random() * 13 + 'px'; e.style.animationDuration = 2.1 + Math.random() * 1.8 + 's'; document.body.appendChild(e); setTimeout(() => e.remove(), 4700) } } function win() { stopTimer(); sfx.win(); confetti(); const completed = st.level; st.level++; save(); setTimeout(() => result(true, completed), 850) } function timeout() { if (st.timeoutLevel === st.level) return; st.timeoutLevel = st.level; stopTimer(); sfx.fail(); result(false, st.level) } function result(ok, lvl) { $('resultIcon').textContent = ok ? '🏆' : '⏰'; $('resultTitle').textContent = ok ? 'Level Complete!' : 'Time Up!'; $('resultSubtitle').textContent = ok ? 'Amazing sorting skills!' : 'Retry a fresh puzzle or restart the same one.'; $('resultLevel').textContent = lvl; $('nextLevelBtn').classList.toggle('hidden', !ok); $('retryBtn').classList.toggle('hidden', ok); $('resultRestartBtn').classList.toggle('hidden', ok); show('result') } function bindGroup(id, fn) { document.querySelectorAll('#' + id + ' .chip').forEach(ch => ch.onclick = () => { document.querySelectorAll('#' + id + ' .chip').forEach(c => c.classList.remove('active')); ch.classList.add('active'); fn(ch.dataset.value); sfx.select() }) } function sync(id, v) { document.querySelectorAll('#' + id + ' .chip').forEach(c => c.classList.toggle('active', c.dataset.value === v)) } function init() { loadSet(); updateBtns(); bindGroup('difficultyGroup', v => st.difficulty = v); bindGroup('modeGroup', v => st.mode = v); $('startBtn').onclick = () => { audio(); st.level = 1; startLevel() }; $('continueBtn').onclick = () => { const sv = load(); if (!sv) { sfx.error(); toast('No saved progress found'); updateBtns(); return } st.level = Math.max(1, +sv.level || 1); st.difficulty = ['easy', 'medium', 'hard'].includes(sv.difficulty) ? sv.difficulty : 'easy'; st.mode = ['practice', 'timed'].includes(sv.mode) ? sv.mode : 'practice'; sync('difficultyGroup', st.difficulty); sync('modeGroup', st.mode); startLevel() }; $('resetBtn').onclick = () => { resetSave(); sfx.select(); toast('Progress reset') }; $('undoBtn').onclick = undo; $('restartBtn').onclick = restart; $('quitBtn').onclick = () => { stopTimer(); updateBtns(); show('setup') }; $('nextLevelBtn').onclick = startLevel; $('retryBtn').onclick = startLevel; $('resultRestartBtn').onclick = restart; $('homeBtn').onclick = () => { stopTimer(); updateBtns(); show('setup') }; $('soundToggle').onclick = () => { st.soundOn = !st.soundOn; $('soundToggle').textContent = st.soundOn ? '🔊' : '🔇'; saveSet(); if (st.soundOn) sfx.select() }; $('helpBtn').onclick = () => $('helpModal').classList.add('active'); $('helpClose').onclick = () => $('helpModal').classList.remove('active'); $('helpModal').onclick = e => { if (e.target.id === 'helpModal') $('helpModal').classList.remove('active') }; document.addEventListener('keydown', e => { if (!screens.game.classList.contains('active')) return; if (e.key.toLowerCase() === 'z') undo(); if (e.key.toLowerCase() === 'r') restart(); if (e.key === 'Escape' && st.selected !== null) { st.selected = null; render() } }) } document.addEventListener('DOMContentLoaded', init) })();</script>
+</body>
+
+</html>

@@ -16,6 +16,7 @@ Our mission: **help kids learn through play**.
 - [🏗️ Equation Architect](https://kashyapmak.github.io/kids-zone/equation-architect/equation-architect.html)
 - [🧩 KLOTSKI Trail](https://kashyapmak.github.io/kids-zone/klotski/klotski-trail.html)
 - [🧮 Abacus Trail](https://kashyapmak.github.io/kids-zone/abacus/abacus-trail.html)
+- [🧪 Magic Sort](https://kashyapmak.github.io/kids-zone/magic-sort/magic-sort.html)
 
 ---
 
@@ -108,6 +109,16 @@ An interactive visual tool to master the vertical abacus, allowing kids to explo
 - **Folder:** `abacus/`
 - **Run:** [abacus/abacus-trail.html](https://kashyapmak.github.io/kids-zone/abacus/abacus-trail.html)
 - **Docs:** `abacus/README.md`
+
+---
+
+### 🧪 Magic Sort
+Sort liquids across glass test tubes until each tube contains only one color.
+
+- **Folder:** `magic-sort/`
+- **Run:** [magic-sort/magic-sort.html](https://kashyapmak.github.io/kids-zone/magic-sort/magic-sort.html)
+- **Docs:** `magic-sort/README.md`
+
 
 ---
 
