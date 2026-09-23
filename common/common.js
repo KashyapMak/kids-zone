@@ -347,7 +347,7 @@
       <div class="kz-header-inner">
         <div class="kz-header-left">
           <a href="${rel}index.html" class="kz-brand" title="Kids Zone Home">
-            <img src="${rel}/kids-zone/common/logo.svg" alt="Kids Zone Logo" class="kz-brand-logo" />
+            <img src="/kids-zone/common/logo.svg" alt="Kids Zone Logo" class="kz-brand-logo" />
             <span class="kz-brand-title">Kids Zone</span>
           </a>
 
@@ -450,7 +450,7 @@
     el.innerHTML = `
       <div class="kz-footer-inner">
         <div class="kz-footer-brand">
-          <img src="${rel}/kids-zone/common/logo.svg" alt="Kids Zone Logo" class="kz-footer-logo" />
+          <img src="/kids-zone/common/logo.svg" alt="Kids Zone Logo" class="kz-footer-logo" />
           <span>Kids Zone</span>
         </div>
         <p class="kz-footer-desc">
