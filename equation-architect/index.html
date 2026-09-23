@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Equation Architect — Arithmetic Puzzle | Kids Zone</title>
+  <link rel="icon" type="image/svg+xml" href="../common/logo.svg" />
+  <link rel="apple-touch-icon" href="../common/logo.svg" />
+
+  <!-- Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <!-- Common Design System & Audio -->
+  <link rel="stylesheet" href="../common/common.css" />
+  <script src="../common/audio.js"></script>
+  <script src="../common/common.js"></script>
+
+  <!-- Game Specific CSS & JS -->
+  <link rel="stylesheet" href="equation-architect.css" />
+  <script src="equation-architect.js" defer></script>
+</head>
+
+<body>
+  <!-- Common Header Auto-Mounted -->
+  <header data-kz-header="equation-architect"></header>
+
+  <main>
+    <!-- Setup Screen -->
+    <section id="setup-screen" class="active">
+      <h1 style="margin-top:0; font-size:1.8rem; font-weight:800;">Start Your Trail 🚀</h1>
+      <div style="background:rgba(0,0,0,0.03); padding:20px; border-radius:15px; margin-bottom:25px; border:2px dashed var(--primary)">
+        <label style="font-weight:800; display:block; margin-bottom:10px">Choose Difficulty:</label>
+        <select id="diff-select" class="kz-select" style="padding:10px 20px; font-size:1rem; font-weight:700">
+          <option value="easy" selected>Apprentice (Ages 6–8)</option>
+          <option value="medium">Builder (Ages 9–10)</option>
+          <option value="hard">Master (Ages 11–12)</option>
+        </select>
+      </div>
+
+      <div style="margin-bottom:30px; display:flex; justify-content:center; gap:20px; font-weight:800">
+        <div class="meta-pill">Best: <span id="best-stat">0/5</span></div>
+        <div class="meta-pill">Last: <span id="last-stat">0/5</span></div>
+      </div>
+
+      <button class="btn-act check" id="start-btn" style="margin:0 auto; padding:15px 40px; font-size:1.2rem">START TRAIL 🏁</button>
+      <br>
+      <button id="reset-btn" style="margin-top:20px; background:none; border:none; color:var(--danger); cursor:pointer; font-size:0.85rem; font-weight:800; text-decoration:underline">Reset Progress</button>
+    </section>
+
+    <!-- Game Screen -->
+    <section id="game-screen">
+      <div class="game-meta">
+        <div class="meta-pill">Level <span id="cur-lvl">1</span>/5</div>
+        <div style="font-weight:800; color:var(--primary)" id="timer-txt">⏱️ 00s</div>
+        <div class="meta-pill">Streak: <span id="cur-strk">0</span> 🔥</div>
+      </div>
+
+      <div class="target-container">
+        <div class="target-label">Target Result</div>
+        <div class="target-val" id="target-val">--</div>
+      </div>
+
+      <div class="workspace-strip" id="workspace-strip" title="Click to undo last block">
+        <div class="eq-text" id="eq-display">Tap blocks...</div>
+        <div class="result-preview" id="live-calc">?</div>
+      </div>
+
+      <div class="block-pool" id="num-pool"></div>
+      <div class="block-pool" id="op-pool"></div>
+
+      <div class="action-row">
+        <button class="btn-act clear" id="clear-btn">🗑️ Clear</button>
+        <button class="btn-act check" id="check-btn">✅ Check Blueprint</button>
+        <button class="btn-act hint" id="hint-btn">💡 Hint</button>
+        <button class="btn-act skip" id="skip-btn">Skip ~</button>
+      </div>
+    </section>
+
+    <!-- Result Screen -->
+    <section id="result-screen">
+      <h1 style="margin-top:0; font-size:1.8rem; font-weight:800;">Trail Complete! 🎉</h1>
+      <div class="target-val" id="final-stats" style="font-size:3rem; margin-bottom:10px">0 / 5</div>
+      <p id="time-summary" style="font-weight:800; opacity:0.8"></p>
+
+      <h3 style="text-align:left; margin-bottom:10px">Questions Summary:</h3>
+      <div class="summary-list" id="history-log"></div>
+
+      <div class="action-row no-print">
+        <button class="btn-act check" id="play-again">Play Again 🔄</button>
+        <button class="btn-act hint" id="print-btn">Print / Save PDF 🖨️</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- Common Footer Auto-Mounted -->
+  <footer data-kz-footer></footer>
+</body>
+</html>

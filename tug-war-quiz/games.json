@@ -1,0 +1,86 @@
+[
+  {
+    "id": "animal-kingdom",
+    "title": "Wildlife & Animal Kingdom",
+    "subject": "Biology & Animals",
+    "ageGroup": "Ages 6-12",
+    "difficulty": "Easy",
+    "questionCount": 16,
+    "quizPath": "quiz/animal-kingdom.json",
+    "icon": "🦁",
+    "color": "#f59e0b",
+    "description": "Fun facts about majestic beasts, ocean wonders, flying champions, and secret creature abilities."
+  },
+  {
+    "id": "math-ninjas",
+    "title": "Math & Number Ninjas",
+    "subject": "Math & Numbers",
+    "ageGroup": "Ages 6-11",
+    "difficulty": "Easy",
+    "questionCount": 16,
+    "quizPath": "quiz/math-ninjas.json",
+    "icon": "🔢",
+    "color": "#10b981",
+    "description": "Quick-fire math puzzles, shapes, fractions, and mental calculations for swift thinkers."
+  },
+  {
+    "id": "science-nature",
+    "title": "Science & Nature Explorers",
+    "subject": "Science & Nature",
+    "ageGroup": "Ages 7-12",
+    "difficulty": "Easy-Medium",
+    "questionCount": 16,
+    "quizPath": "quiz/science-nature.json",
+    "icon": "🌿",
+    "color": "#059669",
+    "description": "Fascinating questions about plants, water cycles, forces, weather, and our living planet."
+  },
+  {
+    "id": "solar-system",
+    "title": "Solar System & Cosmic Quests",
+    "subject": "Space & Astronomy",
+    "ageGroup": "Ages 6-13",
+    "difficulty": "Easy-Medium",
+    "questionCount": 16,
+    "quizPath": "quiz/solar-system.json",
+    "icon": "🚀",
+    "color": "#3b82f6",
+    "description": "Travel across planets, moons, asteroids, and stars in our solar system and beyond."
+  },
+  {
+    "id": "fun-riddles",
+    "title": "Brain Teasers & Fun Riddles",
+    "subject": "Logic & Word Puzzles",
+    "ageGroup": "All Ages (6-99)",
+    "difficulty": "Easy-Medium",
+    "questionCount": 16,
+    "quizPath": "quiz/fun-riddles.json",
+    "icon": "🧩",
+    "color": "#ec4899",
+    "description": "Clever, witty, and amusing riddles that require quick lateral thinking and observation."
+  },
+  {
+    "id": "world-wonders",
+    "title": "World Geography & Wonders",
+    "subject": "Geography & Earth",
+    "ageGroup": "Ages 7-13",
+    "difficulty": "Medium",
+    "questionCount": 16,
+    "quizPath": "quiz/world-wonders.json",
+    "icon": "🌍",
+    "color": "#06b6d4",
+    "description": "Explore countries, capitals, continents, grand monuments, and natural world wonders."
+  },
+  {
+    "id": "history-quest",
+    "title": "History & Inventions Quest",
+    "subject": "History & Inventions",
+    "ageGroup": "Ages 8-14",
+    "difficulty": "Hard",
+    "questionCount": 16,
+    "quizPath": "quiz/history-quest.json",
+    "icon": "🏺",
+    "color": "#8b5cf6",
+    "description": "Challenging historical breakthroughs, ancient civilizations, world explorers, and famous discoveries."
+  }
+]

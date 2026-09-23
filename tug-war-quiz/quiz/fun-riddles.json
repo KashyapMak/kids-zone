@@ -1,0 +1,122 @@
+{
+  "id": "fun-riddles",
+  "title": "Brain Teasers & Fun Riddles",
+  "subject": "Logic & Word Puzzles",
+  "ageGroup": "All Ages (6-99)",
+  "difficulty": "Easy-Medium",
+  "description": "Clever, witty, and amusing riddles that require quick lateral thinking and observation.",
+  "questions": [
+    {
+      "id": 1,
+      "question": "What has keys, but no locks; with space, but no room; and you can enter, but cannot go in?",
+      "options": ["A piano", "A keyboard", "A map", "A mystery clock"],
+      "answerIndex": 1,
+      "fact": "A computer keyboard has keys, a space bar, and an Enter key!"
+    },
+    {
+      "id": 2,
+      "question": "What gets wetter the more it dries?",
+      "options": ["A sponge", "A towel", "A cloud", "A mop"],
+      "answerIndex": 1,
+      "fact": "As a towel dries your hands and body, it soaks up water and becomes wetter!"
+    },
+    {
+      "id": 3,
+      "question": "I have branches, but no fruit, trunk, or leaves. What am I?",
+      "options": ["A bank", "A river", "A road", "A cactus"],
+      "answerIndex": 0,
+      "fact": "Banks have branch offices all over towns, but no leaves or wood!"
+    },
+    {
+      "id": 4,
+      "question": "What has hands, but cannot clap or hold anything?",
+      "options": ["A glove", "A clock", "A statue", "A tree"],
+      "answerIndex": 1,
+      "fact": "A clock has an hour hand and a minute hand ticking around its face!"
+    },
+    {
+      "id": 5,
+      "question": "What can you catch, but never throw?",
+      "options": ["A ball", "A cold", "A fish", "A frisbee"],
+      "answerIndex": 1,
+      "fact": "You can catch a cold when you are sick, but you can't toss it through the air!"
+    },
+    {
+      "id": 6,
+      "question": "What goes up, but never comes back down?",
+      "options": ["A balloon", "Your age", "Smoke", "An airplane"],
+      "answerIndex": 1,
+      "fact": "Every birthday your age climbs higher, but it never goes backward!"
+    },
+    {
+      "id": 7,
+      "question": "What has one eye, but cannot see a single thing?",
+      "options": ["A needle", "A potato", "A hurricane", "All of these!"],
+      "answerIndex": 3,
+      "fact": "Needles have eyes for thread, potatoes have eye buds, and hurricanes have quiet center eyes!"
+    },
+    {
+      "id": 8,
+      "question": "What belongs to you, but everyone else uses it much more than you do?",
+      "options": ["Your shoes", "Your name", "Your backpack", "Your pencil"],
+      "answerIndex": 1,
+      "fact": "Other people call out your name constantly when speaking to you!"
+    },
+    {
+      "id": 9,
+      "question": "What has many teeth, but cannot chew any food?",
+      "options": ["A comb", "A zipper", "A saw", "A comb or zipper"],
+      "answerIndex": 3,
+      "fact": "Combs and zippers have rows of teeth to smooth hair or fasten coats, but no mouth!"
+    },
+    {
+      "id": 10,
+      "question": "What can travel around the entire world while staying in one tiny corner?",
+      "options": ["A postage stamp", "A compass", "A satellite", "A coin"],
+      "answerIndex": 0,
+      "fact": "A postage stamp stays tucked in the corner of an envelope as letters travel across continents!"
+    },
+    {
+      "id": 11,
+      "question": "If you drop a white hat into the Red Sea, what does it become?",
+      "options": ["Red", "Pink", "Wet", "Invisible"],
+      "answerIndex": 2,
+      "fact": "The Red Sea is blue water, so dropping any hat into it just makes it wet!"
+    },
+    {
+      "id": 12,
+      "question": "What has a thumb and four fingers, but is not alive?",
+      "options": ["A robot", "A glove", "A mannequin", "A skeleton"],
+      "answerIndex": 1,
+      "fact": "A winter glove or mitten has five finger slots to keep your hand warm!"
+    },
+    {
+      "id": 13,
+      "question": "What runs all around a backyard without ever moving?",
+      "options": ["A sprinkler", "A fence", "A puppy", "A lawnmower"],
+      "answerIndex": 1,
+      "fact": "A wooden or chain-link fence encloses the whole yard while standing perfectly still!"
+    },
+    {
+      "id": 14,
+      "question": "What has legs, but doesn't walk at all?",
+      "options": ["A table or chair", "A crab", "A caterpillar", "A clock"],
+      "answerIndex": 0,
+      "fact": "Tables and chairs stand steadily on four legs, but cannot take a step!"
+    },
+    {
+      "id": 15,
+      "question": "The more you take out of me, the bigger I become. What am I?",
+      "options": ["A hole", "A balloon", "A cave", "A wallet"],
+      "answerIndex": 0,
+      "fact": "When you dig dirt out of a hole in the ground, the hole expands larger and larger!"
+    },
+    {
+      "id": 16,
+      "question": "What begins with T, finishes with T, and has T (tea) inside it?",
+      "options": ["A teapot", "A tent", "A target", "A throat"],
+      "answerIndex": 0,
+      "fact": "A 'Teapot' starts with T, ends with T, and holds delicious hot tea inside!"
+    }
+  ]
+}

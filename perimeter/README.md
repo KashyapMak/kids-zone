@@ -1,102 +1,75 @@
 # 📐 Perimeter Trail
 
-**Perimeter Trail** is a single‑file, kid‑friendly game to practice **perimeter** of **squares, rectangles, equilateral triangles, and regular pentagons**.
-It matches the Trail experience (Practice/Test modes, timers, audio, read‑aloud, streaks, badges, printable summary) and runs **offline**.
+An interactive geometry exploration game that challenges learners to calculate the perimeters of 2D shapes with dynamic canvas drawings.
 
 ---
 
-## ✨ Highlights
+## 👤 For End Users (Kids, Parents & Educators)
 
-- Shapes: **Square**, **Rectangle**, **Equilateral Triangle** (scaled to 75% per design), **Regular Pentagon**
-- **Practice** & **Test (Timed)** modes
-  - **Per‑question** or **Total‑time** timers
-- **Smart options** (realistic distractors) to prompt conceptual checks
-- **Visual**: Canvas‑drawn shapes with side labels (cm)
-- **Hints**: Formula hints (toggle)
-- **Accessibility**: keyboard shortcuts, high‑contrast, read‑aloud
-- **Progress**: streaks, badges, local best/last, printable Q&A summary
-- **Offline**: one HTML file, no tracking, no accounts
+### Overview & Educational Value
+Perimeter Trail helps students master the geometric concept of perimeter — the total distance around the outside of a 2D shape. Rather than relying purely on static textbook diagrams, every shape is dynamically rendered with labeled side lengths and clear formula aids.
 
----
+### Supported Shapes & Formulas
+- **Square**: `Perimeter = 4 × side`
+- **Rectangle**: `Perimeter = 2 × (Length + Width)`
+- **Equilateral Triangle**: `Perimeter = 3 × side`
+- **Regular Pentagon**: `Perimeter = 5 × side`
 
-## 🚀 Getting Started
+### How to Play
+1. **Choose Shapes**: Check any combination of Square, Rectangle, Triangle, or Pentagon.
+2. **Select Difficulty**:
+   - **1-digit dimensions**: Side lengths between 1 cm and 9 cm (ideal for mental arithmetic).
+   - **2-digit dimensions**: Side lengths between 10 cm and 30 cm (encourages multi-digit addition).
+3. **Optional Formula Hints**: Toggle the hint display to view the shape's formula beneath the active problem.
+4. **Choose Mode**:
+   - **Practice Mode**: Untimed, friendly practice where learners can retry until they find the correct answer.
+   - **Test Mode**: Timed assessment with per-question or total-time countdowns.
+5. **Answer & Print**: Select the correct perimeter in centimeters. At the end, inspect your badges, accuracy streak, and print the report.
 
-1. Open folder: `perimeter/`
-2. Double‑click **`perimeter-trail.html`** to launch in a browser.
-3. Pick **shapes**, **difficulty**, **mode**, and timers → **START TRAIL**.
+### Keyboard Shortcuts
+- `1` to `6`: Select answer option
+- `Enter` or `N`: Next question (Test mode)
+- `S`: Skip question
+- `R`: Read problem aloud
 
-> Works offline in Chrome, Edge, Firefox, and Safari.
-
----
-
-## 🧮 Perimeter Formulas
-
-- **Square**: `P = 4 × side`
-- **Rectangle**: `P = 2 × (L + W)`
-- **Equilateral triangle**: `P = 3 × side`
-- **Regular pentagon**: `P = 5 × side`
-
-> The app shows the hint text under the message area when **Show formula hint** is on.
-
----
-
-## 🎮 Keyboard Shortcuts
-
-- `1–6` → choose an option  
-- `N` or `Enter` → Next (in Test mode)  
-- `S` → Skip  
-- `R` → Read the question aloud  
-- Header toggles: **🔊** sound, **🗣️** voice, **🌓** high‑contrast
+### Tips for Parents & Educators
+- Remind students of the real-world definition of perimeter: "walking all the way around the outside fence."
+- Highlight the common trap in rectangles: forgetting to add both lengths and both widths (adding only 2 sides instead of 4).
 
 ---
 
-## 🔧 Configuration (inline defaults)
+## 🛠️ For Editors & Developers
 
-```js
-const cfg = {
-  shapes: ['square','rectangle','triangle','pentagon'],
-  digits: 1,            // 1 → 1–9 cm, 2 → 10–30 cm
-  total: 15,
-  mode: 'practice',     // 'practice' | 'test'
-  timeboxType: 'per-question', // or 'total'
-  perQSeconds: 12,
-  totalSeconds: 240,
-  showHint: true,
-  shuffleOptions: true
-};
+### Directory & File Structure
+```text
+perimeter/
+├── index.html                 # Clean setup and quiz markup with Canvas element
+├── perimeter.css              # Styling for shape canvas, formula hint boxes, and buttons
+├── perimeter.js               # Canvas polygon drawing routines, math engine, and quiz flow
+├── perimeter-trail.html       # Backward-compatible forwarder
+└── README.md                  # This documentation
 ```
 
----
+### Canvas Rendering Pipeline
+In `perimeter.js`, shapes are drawn dynamically inside an HTML5 `<canvas>` element:
+- **Geometry Coordinates**:
+  - `drawSquare(ctx, s)`: Centered rectangle with equal width and height.
+  - `drawRectangle(ctx, w, h)`: Aspect ratio preserved with labeled width and height.
+  - `drawTriangle(ctx, s)`: Equilateral triangle using trigonometric vertices (`cos(θ)`, `sin(θ)`).
+  - `drawPentagon(ctx, s)`: 5-vertex regular polygon calculated via 72-degree increments (`2π / 5`).
+- **Side Dimension Placement**:
+  - Labels are positioned with offset math along the outer normal vectors of each edge to prevent text clipping.
+- **Smart Distractor Generation**:
+  Plausible incorrect options test specific conceptual misunderstandings:
+  - Area instead of perimeter (e.g., `L × W` for rectangles or `s × s` for squares).
+  - Half-perimeter error (`L + W` instead of `2(L + W)`).
+  - Adding wrong number of sides (e.g., 4 sides for pentagon instead of 5).
 
-## 🛡️ Kids‑Safe & Privacy‑First
+### Common Engine Integration
+- **Header & Footer**: Auto-mounted via `KZ.mountHeader('perimeter')` and `KZ.mountFooter()`.
+- **Sound & Confetti**: Integrates with `KZAudio` sound synthesis and `KZ.confetti()`.
+- **Theme Variables**: Canvas colors and UI cards inherit CSS variables (`--primary`, `--accent`) defined in `../common/common.css`.
 
-- **No ads**, **no analytics**, **no logins**
-- Works **offline**; only optional web fonts/effects if online
-- Saves progress **locally** (can be reset in UI)
-
----
-
-## 👤 Author & Links
-
-- **Author:** Kashyap Makadia  
-- **LinkedIn:** https://www.linkedin.com/in/kashyapmakadia/  
-- **GitHub Repo:** https://github.com/KashyapMak/kids-zone
-
----
-
-## 📄 License
-
-Released under the **MIT License**.
-
----
-
-## 🗂️ Folder Layout
-
-```text
-kids-zone/
-│
-├── perimeter/
-│   ├── perimeter-trail-triangle-075.html
-│   └── README.md        ← (this file)
-│
-└── ... other games ...
+### Customization Guide
+- **Adding Regular Hexagons**: Add a `'hexagon'` option to `cfg.shapes`, write a `drawHexagon()` routine using 60-degree vertex increments (`2π / 6`), and define its formula as `6 × side`.
+- **Custom Units**: Replace `'cm'` with `'m'`, `'inches'`, or `'units'` in the label generation logic inside `perimeter.js`.

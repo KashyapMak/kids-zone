@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Seesaw Battle Quiz Arena | Kids Zone</title>
+  <link rel="icon" type="image/svg+xml" href="../common/logo.svg" />
+  <link rel="apple-touch-icon" href="../common/logo.svg" />
+
+  <!-- Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <!-- Common Design System, Audio & Progress -->
+  <link rel="stylesheet" href="../common/common.css" />
+  <script src="../common/audio.js"></script>
+  <script src="../common/progress.js"></script>
+  <script src="../common/common.js"></script>
+
+  <!-- Tug / Seesaw Quiz CSS -->
+  <link rel="stylesheet" href="tug-war.css" />
+</head>
+
+<body class="theme-jungle">
+  <!-- Common Header Auto-Mounted -->
+  <header data-kz-header="Seesaw-war-quiz"></header>
+
+  <main class="arena-wrap">
+    <!-- Active Match Battle View -->
+    <div id="battle-container" class="battle-arena">
+      <!-- Scoreboard Header -->
+      <div class="match-scoreboard">
+        <!-- Team 1 Card -->
+        <div class="team-score-card t1">
+          <span class="team-score-avatar" id="t1-score-avatar">🦁</span>
+          <div class="team-score-info">
+            <span class="team-score-name" id="t1-score-name">Red Dragons</span>
+            <span class="team-score-num" id="t1-score-val">0</span>
+          </div>
+        </div>
+
+        <!-- Center Match Info -->
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 0.3rem;">
+          <div class="match-round-pill" id="match-round-display">Round 1 of 5</div>
+          <span id="quiz-topic-badge" style="font-size: 0.8rem; font-weight: 700; color: var(--muted);">Science & Nature</span>
+        </div>
+
+        <!-- Team 2 Card -->
+        <div class="team-score-card t2">
+          <div class="team-score-info" style="text-align: right;">
+            <span class="team-score-name" id="t2-score-name">Blue Sharks</span>
+            <span class="team-score-num" id="t2-score-val">0</span>
+          </div>
+          <span class="team-score-avatar" id="t2-score-avatar">🦈</span>
+        </div>
+      </div>
+
+      <!-- Animated Visual Seesaw Stadium -->
+      <div class="seesaw-stage" id="seesaw-stage">
+        <!-- Playground Backdrop (Sky, Sun, Clouds) -->
+        <div class="playground-backdrop">
+          <div class="playground-sun">☀️</div>
+          <div class="playground-cloud c1">☁️</div>
+          <div class="playground-cloud c2">☁️</div>
+        </div>
+
+        <!-- Playground Grassy Lawn Mound with Grass Tufts -->
+        <div class="seesaw-lawn">
+          <div class="grass-tuft t-left">🌱</div>
+          <div class="grass-tuft t-center-left">🌿</div>
+          <div class="grass-tuft t-center-right">🌿</div>
+          <div class="grass-tuft t-right">🌱</div>
+        </div>
+
+        <!-- Central Seesaw Assembly -->
+        <div class="seesaw-assembly" id="seesaw-assembly">
+          <!-- Tilting Seesaw Plank (Pivot center aligns directly with fulcrum pin) -->
+          <div class="seesaw-plank" id="seesaw-plank">
+            <!-- Left Seat (Team 1) -->
+            <div class="seesaw-seat seat-left" id="t1-seesaw-seat">
+              <div class="seesaw-rider" id="t1-seesaw-char">🦁</div>
+              <div class="seesaw-handle left-handle">
+                <div class="handle-ball"></div>
+                <div class="handle-bar"></div>
+              </div>
+              <div class="seat-cushion cushion-left"></div>
+            </div>
+
+            <!-- Center Pivot Joint Pin -->
+            <div class="seesaw-plank-pivot-joint"></div>
+
+            <!-- Right Seat (Team 2) -->
+            <div class="seesaw-seat seat-right" id="t2-seesaw-seat">
+              <div class="seesaw-handle right-handle">
+                <div class="handle-ball"></div>
+                <div class="handle-bar"></div>
+              </div>
+              <div class="seesaw-rider" id="t2-seesaw-char">🦈</div>
+              <div class="seat-cushion cushion-right"></div>
+            </div>
+          </div>
+
+          <!-- Sturdy Central Fulcrum Base (Blue stand with red circular pivot cap) -->
+          <div class="seesaw-fulcrum" id="seesaw-fulcrum">
+            <div class="fulcrum-pivot-cap"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Seesaw Angle & Balance Gauge Bar -->
+      <div class="seesaw-gauge-bar" id="seesaw-gauge-bar">
+        <span style="color: var(--t1-color);" id="t1-gauge-label">◀ Team 1 (0 pts)</span>
+        <span id="seesaw-status-label" class="seesaw-status-text">⚖️ Seesaw Balanced in Center</span>
+        <span style="color: var(--t2-color);" id="t2-gauge-label">Team 2 (0 pts) ▶</span>
+      </div>
+
+      <!-- Mode 1: Side-by-Side Dual Arena (Racing Mode) -->
+      <div id="dual-arena-container" class="dual-arena-grid">
+        <!-- Team 1 Side Panel -->
+        <div class="dual-team-panel t1" id="t1-dual-panel">
+          <div class="dual-team-header">
+            <div class="dual-team-title">
+              <span id="t1-dual-avatar">🦁</span>
+              <span id="t1-dual-name">Red Dragons</span>
+            </div>
+            <div style="display: flex; gap: 0.4rem; align-items: center;">
+              <span class="dual-team-pill" id="t1-dual-qnum">Q 1/5</span>
+              <span class="dual-team-pill" id="t1-dual-score" style="color: var(--t1-color); font-weight: 900;">0 pts</span>
+            </div>
+          </div>
+
+          <div class="dual-q-text" id="t1-dual-qtext">
+            Loading question...
+          </div>
+
+          <div class="dual-options-grid" id="t1-dual-options">
+            <!-- 4 option buttons for Team 1 -->
+          </div>
+
+          <div class="dual-actions-row">
+            <span class="feedback-msg" id="t1-dual-feedback" style="font-size: 0.85rem; color: var(--muted);">
+              Select option:
+            </span>
+            <button type="button" class="skip-btn" id="t1-dual-skip-btn" onclick="skipDualTeam('t1')" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;">
+              <span>⏭️ Skip</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Team 2 Side Panel -->
+        <div class="dual-team-panel t2" id="t2-dual-panel">
+          <div class="dual-team-header">
+            <div class="dual-team-title">
+              <span id="t2-dual-avatar">🦈</span>
+              <span id="t2-dual-name">Blue Sharks</span>
+            </div>
+            <div style="display: flex; gap: 0.4rem; align-items: center;">
+              <span class="dual-team-pill" id="t2-dual-qnum">Q 1/5</span>
+              <span class="dual-team-pill" id="t2-dual-score" style="color: var(--t2-color); font-weight: 900;">0 pts</span>
+            </div>
+          </div>
+
+          <div class="dual-q-text" id="t2-dual-qtext">
+            Loading question...
+          </div>
+
+          <div class="dual-options-grid" id="t2-dual-options">
+            <!-- 4 option buttons for Team 2 -->
+          </div>
+
+          <div class="dual-actions-row">
+            <span class="feedback-msg" id="t2-dual-feedback" style="font-size: 0.85rem; color: var(--muted);">
+              Select option:
+            </span>
+            <button type="button" class="skip-btn" id="t2-dual-skip-btn" onclick="skipDualTeam('t2')" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;">
+              <span>⏭️ Skip</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Keyboard Shortcuts Helper for Side-by-Side Dual -->
+      <div class="kbd-helper-bar" id="kbd-helper-bar">
+        <div>
+          <strong style="color: var(--t1-color);">Team 1:</strong>
+          <span class="kbd-badge">1</span> <span class="kbd-badge">2</span> <span class="kbd-badge">3</span> <span class="kbd-badge">4</span> (or <span class="kbd-badge">A</span> <span class="kbd-badge">S</span> <span class="kbd-badge">D</span> <span class="kbd-badge">F</span>) | Skip: <span class="kbd-badge">Space</span>
+        </div>
+        <div>
+          <strong style="color: var(--t2-color);">Team 2:</strong>
+          <span class="kbd-badge">7</span> <span class="kbd-badge">8</span> <span class="kbd-badge">9</span> <span class="kbd-badge">0</span> (or <span class="kbd-badge">J</span> <span class="kbd-badge">K</span> <span class="kbd-badge">L</span> <span class="kbd-badge">;</span>) | Skip: <span class="kbd-badge">Enter</span>
+        </div>
+      </div>
+
+      <!-- Mode 2: Pass & Play Turns Container -->
+      <div id="pass-turn-container" style="display: none;">
+        <!-- Current Turn Alert Banner -->
+        <div class="turn-banner t1" id="turn-banner">
+          <div class="turn-action-text">
+            <span id="turn-avatar" style="font-size: 1.5rem;">🦁</span>
+            <span id="turn-message">Red Dragons' Turn: Answer correctly to tilt the seesaw!</span>
+          </div>
+          <button type="button" class="kz-icon-btn" onclick="speakCurrentQuestion()" title="Read Question Aloud" style="background: var(--card);">
+            🗣️
+          </button>
+        </div>
+
+        <!-- Question Card -->
+        <div class="question-card" id="question-card">
+          <div class="question-meta">
+            <span class="question-badge" id="question-num-badge">Question 1</span>
+            <span class="question-badge" id="question-team-badge" style="font-weight: 800;">Team 1</span>
+          </div>
+
+          <div class="question-text" id="question-text">
+            Loading question...
+          </div>
+
+          <!-- Options Grid -->
+          <div class="options-grid" id="options-grid">
+            <!-- 4 option buttons populated dynamically -->
+          </div>
+
+          <!-- Question Action Footer (Skip & Status) -->
+          <div class="question-actions-row">
+            <div class="feedback-msg" id="feedback-msg" style="color: var(--muted);">
+              Choose your answer above:
+            </div>
+
+            <button type="button" class="skip-btn" id="skip-btn" onclick="skipQuestion()">
+              <span>⏭️ Skip Question</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Match Completion & Review Screen -->
+    <div id="review-container" class="review-overlay">
+      <div class="winner-hero">
+        <div class="winner-trophy" id="winner-trophy">🏆</div>
+        <h2 class="winner-title" id="winner-title">Victory!</h2>
+        <p class="winner-sub" id="winner-sub">The battle was legendary!</p>
+      </div>
+
+      <!-- Review Tabs for Both Teams -->
+      <div class="review-tabs">
+        <button type="button" class="review-tab-btn active t1" id="tab-t1-btn" onclick="showReviewTab('t1')">
+          <span id="tab-t1-avatar">🦁</span>
+          <span id="tab-t1-title">Red Dragons' Questions (0/5)</span>
+        </button>
+        <button type="button" class="review-tab-btn t2" id="tab-t2-btn" onclick="showReviewTab('t2')">
+          <span id="tab-t2-avatar">🦈</span>
+          <span id="tab-t2-title">Blue Sharks' Questions (0/5)</span>
+        </button>
+      </div>
+
+      <!-- Team 1 Review List -->
+      <div class="review-list" id="t1-review-list"></div>
+
+      <!-- Team 2 Review List (Hidden by default) -->
+      <div class="review-list" id="t2-review-list" style="display: none;"></div>
+
+      <!-- Action Buttons -->
+      <div class="action-btn-group">
+        <button type="button" class="btn-primary" onclick="rematch()">
+          🔄 Play Rematch (Same Teams)
+        </button>
+        <a href="index.html" class="btn-secondary">
+          ⚙️ New Match Setup
+        </a>
+        <a href="../index.html" class="btn-secondary">
+          🏠 Kids Zone Home
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <!-- Common Footer Auto-Mounted -->
+  <footer data-kz-footer></footer>
+
+  <!-- Game Logic Script -->
+  <script src="game.js"></script>
+</body>
+</html>

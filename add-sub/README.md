@@ -1,103 +1,71 @@
 # ➕➖ Add & Sub Trail
 
-**Add & Sub Trail** is a single‑file, kid‑friendly game that helps learners practice **addition** and **subtraction** with **1–4 digit** numbers.  
-It mirrors the experience of _Times Table Trail_ with practice/test modes, fun themes, audio feedback, streaks, badges, and a printable summary—while adding options that are specific to +/− learning.
+A customizable arithmetic game focusing on addition and subtraction with comprehensive scaffolding controls.
 
 ---
 
-## ✨ Highlights
+## 👤 For End Users (Kids, Parents & Educators)
 
-- **Digits:** choose **1‑digit**, **2‑digit**, **3‑digit**, or **4‑digit** problems
-- **Operations:** **Addition**, **Subtraction**, or **Mixed**
-- **Smart options:** realistic distractors (near answers, off‑by‑one, etc.)
-- **Practice** vs **Test (Timed)**  
-  - **Per‑question** timer _or_ **Total‑time** countdown
-- **Concept support:** optional **Number Line** for small values
-- **Subtraction safety:** **No negatives** (optional)
-- **Skill scaffolds:** **No carry** (addition) / **No borrow** (subtraction) toggles
-- **Kid‑friendly UI:** jungle theme (default), big buttons, fun fonts, confetti 🎉
-- **Audio:** feedback sounds (on by default) + optional **Read‑aloud**
-- **Progress:** local best/last saved; **printable** results with Q&A summary
-- **Offline:** single HTML file, no build step, no tracking
+### Overview & Educational Value
+Add & Sub Trail helps learners master addition and subtraction from basic single-digit facts up to multi-digit operations (1 to 4 digits). It features essential scaffolding options that prevent frustration, allowing learners to focus on foundational mechanics before introducing complex regrouping.
 
----
+### How to Play
+1. **Choose Digit Level**: Select **1-digit** (1–9), **2-digit** (10–99), **3-digit** (100–999), or **4-digit** (1,000–9,999) problems.
+2. **Select Operation**: Practice pure **Addition**, pure **Subtraction**, or a **Mixed** blend of both.
+3. **Configure Scaffolding & Safety**:
+   - **No Negatives (Subtraction)**: Automatically places the larger number first so the result is always non-negative.
+   - **No Carry (Addition)**: Filters out sums where column regrouping occurs (e.g., `23 + 14` instead of `28 + 15`).
+   - **No Borrow (Subtraction)**: Filters out subtractions where decomposition is required (e.g., `47 - 23` instead of `42 - 19`).
+   - **Number Line Aid**: Displays a visual number line for small calculations to demonstrate step counting.
+4. **Select Mode & Timers**:
+   - **Practice Mode**: Untimed with unlimited retries on missed questions.
+   - **Test Mode**: Timed evaluation with either a per-question countdown or total test timer.
+5. **Answer & Review**: Click answer buttons or press keyboard keys (`1`–`6`). Finish the quiz to see streaks, badges, and a printable mistake review sheet.
 
-## 🚀 Getting Started
+### Keyboard Shortcuts
+- `1` to `6`: Choose corresponding answer choice
+- `Enter` or `N`: Advance to next question (Test mode)
+- `S`: Skip question
+- `R`: Read problem aloud
 
-1. Open the folder `add-sub/`.
-2. Double‑click **`add-sub-trail.html`** to open it in your browser.
-3. Choose digits, operation mode, and number of questions → **START TRAIL**.
-
-> Works offline in modern browsers (Chrome, Edge, Firefox, Safari).
-
----
-
-## 🧩 How to Play
-
-1. Pick **Digits**: 1‑digit to 4‑digit.
-2. Pick **Operation**: Addition, Subtraction, or Mixed.
-3. Set **Questions** (5–50).
-4. (Optional) Enable **No negatives**, **No carry**, **No borrow**, **Number line**.
-5. Choose **Practice** or **Test (Timed)**:
-   - _Per‑question_ (e.g., 10 seconds each)
-   - _Total time_ (e.g., 3 minutes for the whole quiz)
-6. Answer using the large **option buttons**.
-7. View **Score**, **Time taken**, **Badges**, and **Summary**. Use **Print** to save.
+### Tips for Parents & Educators
+- For children just learning column addition: select **2-digit**, check **No Carry**, and play in **Practice Mode**.
+- Once confident, uncheck **No Carry** to introduce regrouping concepts gradually.
+- Subtraction beginners benefit immensely from enabling both **No Negatives** and **No Borrow**.
 
 ---
 
-## ⏱️ Timing & Tracking
+## 🛠️ For Editors & Developers
 
-- **Practice:** no countdown, but total time taken is recorded and shown at the end.
-- **Test:** choose **Per‑question** or **Total‑time** countdown.
-- Local best/last performance is stored in `localStorage` (device‑only).
+### Directory & File Structure
+```text
+add-sub/
+├── index.html                 # Clean HTML shell mounting common layout
+├── add-sub.css                # Scoped styles for number line, option buttons, and quiz cards
+├── add-sub.js                 # Math engine, problem generation, and validation
+├── add-sub-trail.html         # Backward-compatible redirect for legacy URLs
+└── README.md                  # This documentation
+```
 
----
+### Problem Generation Algorithm & Constraints
+The problem generator in `add-sub.js` validates every generated equation against user-selected safety rules:
+- **Operand Range Calculation**:
+  ```js
+  const min = digits === 1 ? 1 : Math.pow(10, digits - 1);
+  const max = Math.pow(10, digits) - 1;
+  ```
+- **Regrouping Filters**:
+  - `hasCarry(a, b)`: Inspects digit-by-digit addition; rejects candidate pairs if `(a_i + b_i) >= 10`.
+  - `hasBorrow(a, b)`: Inspects digit-by-digit subtraction; rejects pairs if `a_i < b_i`.
+- **Smart Distractors**:
+  - Candidate wrong answers include `correct ± 1`, `correct ± 10`, `correct ± 2`, and common carry/borrow mistake outcomes.
+  - Distractors are deduplicated and shuffled alongside the correct solution.
 
-## 🧠 Options & Aids
+### Common Engine Integration
+- **Header & Footer**: Auto-mounted via `KZ.mountHeader('add-sub')` and `KZ.mountFooter()`.
+- **Audio Feedback**: Utilizes `KZAudio` synthesized audio (`KZAudio.playOk()`, `KZAudio.playWrong()`, etc.).
+- **Confetti**: Calls `KZ.confetti()` upon high scores and quiz completion.
 
-- **No negatives (subtraction):** prevents negative answers by ordering operands.
-- **No carry (addition):** filters problems that require carrying.
-- **No borrow (subtraction):** filters problems that require borrowing.
-- **Number line:** appears for small values to visualize +/− steps.
-
----
-
-## 🎮 Keyboard Shortcuts
-
-- `1`–`6` → choose an answer
-- `N` or `Enter` → Next (in Test mode)
-- `S` → Skip
-- `R` → Read the question aloud
-- Header toggles: **🔊** sound, **🗣️** voice, **🌓** high‑contrast
-
----
-
-## 🎨 Themes
-
-- **Jungle** (default), **Blue**, **Pink**, **Space**, **Ocean**, **Candy**  
-  Choose from the **Theme** dropdown in the header.
-
----
-
-## 🔧 Configuration (inline)
-
-The app is a single HTML file with default config set at runtime:
-
-```js
-// defaults at startup (simplified)
-cfg = {
-  digits: 1,           // 1|2|3|4
-  opMode: 'add',       // 'add' | 'sub' | 'mix'
-  total: 15,
-  mode: 'practice',    // 'practice' | 'test'
-  timeboxType: 'per-question', // or 'total'
-  perQSeconds: 10,
-  totalSeconds: 180,
-  theme: 'theme-jungle',
-  noNegative: true,
-  avoidCarry: false,
-  avoidBorrow: false,
-  showNumberLine: true,
-  shuffleOptions: true
-};
+### Customization Guide
+- **Adding 5-Digit Challenges**: Increase max digit input in `index.html` and update the upper limit clamp in `add-sub.js`.
+- **Number Line Range**: Visual number line display threshold is set in `add-sub.js` (`a + b <= 20`); this can be adjusted for wider visual scales.

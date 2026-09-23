@@ -1,0 +1,122 @@
+{
+  "id": "math-ninjas",
+  "title": "Math & Number Ninjas",
+  "subject": "Math & Numbers",
+  "ageGroup": "Ages 6-11",
+  "difficulty": "Easy",
+  "description": "Fun, quick-fire math puzzles, shapes, fractions, and mental calculations for swift thinkers.",
+  "questions": [
+    {
+      "id": 1,
+      "question": "What is 7 × 8?",
+      "options": ["54", "56", "58", "64"],
+      "answerIndex": 1,
+      "fact": "7 times 8 equals 56!"
+    },
+    {
+      "id": 2,
+      "question": "How many sides does an octagon have?",
+      "options": ["6", "7", "8", "10"],
+      "answerIndex": 2,
+      "fact": "An octagon has 8 straight sides and 8 angles."
+    },
+    {
+      "id": 3,
+      "question": "What is half of 50?",
+      "options": ["20", "25", "30", "15"],
+      "answerIndex": 1,
+      "fact": "50 divided by 2 equals 25."
+    },
+    {
+      "id": 4,
+      "question": "What is the next number in the pattern: 3, 6, 9, 12, ...?",
+      "options": ["13", "14", "15", "16"],
+      "answerIndex": 2,
+      "fact": "The pattern counts up by adding 3 each time: 12 + 3 = 15."
+    },
+    {
+      "id": 5,
+      "question": "How many minutes are in two hours?",
+      "options": ["100", "120", "140", "60"],
+      "answerIndex": 1,
+      "fact": "There are 60 minutes in an hour, so 60 × 2 = 120 minutes."
+    },
+    {
+      "id": 6,
+      "question": "What shape has 3 corners and 3 straight sides?",
+      "options": ["Square", "Circle", "Triangle", "Pentagon"],
+      "answerIndex": 2,
+      "fact": "A triangle always has 3 vertices (corners) and 3 sides."
+    },
+    {
+      "id": 7,
+      "question": "What is 100 minus 37?",
+      "options": ["63", "53", "73", "67"],
+      "answerIndex": 0,
+      "fact": "100 - 37 = 63."
+    },
+    {
+      "id": 8,
+      "question": "Which of these numbers is an even number?",
+      "options": ["17", "23", "34", "45"],
+      "answerIndex": 2,
+      "fact": "Even numbers end in 0, 2, 4, 6, or 8. 34 is divisible by 2."
+    },
+    {
+      "id": 9,
+      "question": "How many quarters make up one whole dollar?",
+      "options": ["2", "4", "5", "10"],
+      "answerIndex": 1,
+      "fact": "Four quarters (25 cents each) make one dollar ($1.00)."
+    },
+    {
+      "id": 10,
+      "question": "What is 9 × 9?",
+      "options": ["72", "81", "90", "99"],
+      "answerIndex": 1,
+      "fact": "9 times 9 equals 81."
+    },
+    {
+      "id": 11,
+      "question": "How many centimeters are in 1 meter?",
+      "options": ["10", "100", "1,000", "10,000"],
+      "answerIndex": 1,
+      "fact": "Centi means one hundredth; there are 100 cm in a meter."
+    },
+    {
+      "id": 12,
+      "question": "If you have 15 cookies and share them equally among 3 friends, how many does each get?",
+      "options": ["3", "4", "5", "6"],
+      "answerIndex": 2,
+      "fact": "15 divided by 3 friends equals 5 cookies each."
+    },
+    {
+      "id": 13,
+      "question": "What is the perimeter of a square with sides of length 4 cm?",
+      "options": ["8 cm", "12 cm", "16 cm", "20 cm"],
+      "answerIndex": 2,
+      "fact": "Perimeter = 4 + 4 + 4 + 4 = 16 cm."
+    },
+    {
+      "id": 14,
+      "question": "What is 250 + 750?",
+      "options": ["900", "950", "1,000", "1,050"],
+      "answerIndex": 2,
+      "fact": "250 plus 750 equals exactly 1,000."
+    },
+    {
+      "id": 15,
+      "question": "What fraction is equal to 50%?",
+      "options": ["1/4", "1/2", "3/4", "1/5"],
+      "answerIndex": 1,
+      "fact": "50% represents 50 out of 100, which simplifies to 1/2."
+    },
+    {
+      "id": 16,
+      "question": "What is 12 × 5?",
+      "options": ["50", "55", "60", "65"],
+      "answerIndex": 2,
+      "fact": "12 times 5 equals 60."
+    }
+  ]
+}

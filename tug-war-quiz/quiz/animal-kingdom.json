@@ -1,0 +1,122 @@
+{
+  "id": "animal-kingdom",
+  "title": "Wildlife & Animal Kingdom",
+  "subject": "Biology & Animals",
+  "ageGroup": "Ages 6-12",
+  "difficulty": "Easy-Medium",
+  "description": "Fun facts about majestic beasts, ocean wonders, flying champions, and secret creature abilities.",
+  "questions": [
+    {
+      "id": 1,
+      "question": "What is the largest living animal currently on planet Earth?",
+      "options": ["African Bush Elephant", "Blue Whale", "Colossal Squid", "Giraffe"],
+      "answerIndex": 1,
+      "fact": "The Blue Whale can weigh up to 200 tons and its heart is as large as a small car!"
+    },
+    {
+      "id": 2,
+      "question": "How many hearts does an octopus have?",
+      "options": ["1", "2", "3", "4"],
+      "answerIndex": 2,
+      "fact": "An octopus has 3 hearts: two pump blood to the gills, while the third pumps blood through the body!"
+    },
+    {
+      "id": 3,
+      "question": "Which bird is the fastest animal in the entire world when diving?",
+      "options": ["Bald Eagle", "Peregrine Falcon", "Ostrich", "Golden Eagle"],
+      "answerIndex": 1,
+      "fact": "A Peregrine Falcon can exceed speeds of 320 km/h (200 mph) in a high-speed hunting dive!"
+    },
+    {
+      "id": 4,
+      "question": "What is the only mammal capable of true sustained flight?",
+      "options": ["Flying Squirrel", "Bat", "Sugar Glider", "Colugo"],
+      "answerIndex": 1,
+      "fact": "Bats flap their webbed finger-wings for true powered flight; flying squirrels only glide!"
+    },
+    {
+      "id": 5,
+      "question": "What do giant pandas eat for roughly 99% of their daily diet?",
+      "options": ["Eucalyptus leaves", "Bamboo", "Fish", "Berries & honey"],
+      "answerIndex": 1,
+      "fact": "Giant pandas spend up to 12 hours a day chewing through heaps of nutrient-rich bamboo."
+    },
+    {
+      "id": 6,
+      "question": "Which ocean creature sleeps with one eye open and half of its brain awake?",
+      "options": ["Shark", "Dolphin", "Sea Turtle", "Jellyfish"],
+      "answerIndex": 1,
+      "fact": "Dolphins use unihemispheric sleep so they can continue surfacing for air and stay alert for predators!"
+    },
+    {
+      "id": 7,
+      "question": "What is a group of lions called?",
+      "options": ["Pack", "Herd", "Pride", "Flock"],
+      "answerIndex": 2,
+      "fact": "A lion family group is called a pride, typically led by related females and a few strong males."
+    },
+    {
+      "id": 8,
+      "question": "Which animal has the longest neck in the world?",
+      "options": ["Ostrich", "Giraffe", "Camel", "Llama"],
+      "answerIndex": 1,
+      "fact": "A giraffe's neck can reach up to 2 meters (6 feet) long, yet it still has only 7 cervical vertebrae—the same number as humans!"
+    },
+    {
+      "id": 9,
+      "question": "Which of these animals is a marsupial that carries its young in a pouch?",
+      "options": ["Kangaroo", "Cheetah", "Sloth", "Otter"],
+      "answerIndex": 0,
+      "fact": "Female kangaroos nurture tiny newborn joeys inside an abdominal front pouch."
+    },
+    {
+      "id": 10,
+      "question": "How many legs does a spider have?",
+      "options": ["6", "8", "10", "12"],
+      "answerIndex": 1,
+      "fact": "Spiders are arachnids with 8 legs and two body segments, unlike 6-legged insects."
+    },
+    {
+      "id": 11,
+      "question": "What color is a polar bear's skin underneath its thick white fur?",
+      "options": ["White", "Pink", "Black", "Yellow"],
+      "answerIndex": 2,
+      "fact": "A polar bear has jet-black skin to absorb heat from the sun, while its clear hollow hairs reflect light!"
+    },
+    {
+      "id": 12,
+      "question": "Which of these birds cannot fly?",
+      "options": ["Hummingbird", "Penguin", "Parrot", "Pelican"],
+      "answerIndex": 1,
+      "fact": "Penguins evolved flippers to swim gracefully through icy seas instead of flying in the air."
+    },
+    {
+      "id": 13,
+      "question": "What is the fastest land animal in the world over short sprints?",
+      "options": ["Lion", "Cheetah", "Gazelle", "Greyhound"],
+      "answerIndex": 1,
+      "fact": "A cheetah can accelerate from 0 to 100 km/h (60 mph) in just 3 seconds!"
+    },
+    {
+      "id": 14,
+      "question": "What do honeybees collect from blossoms to create sweet honey?",
+      "options": ["Pollen only", "Nectar", "Tree sap", "Flower petals"],
+      "answerIndex": 1,
+      "fact": "Bees sip sugary floral nectar and break it down with enzymes into honey in the hive."
+    },
+    {
+      "id": 15,
+      "question": "Which creature is known for being able to regenerate completely lost limbs?",
+      "options": ["Axolotl (Mexican Salamander)", "Goldfish", "Frog", "Hamster"],
+      "answerIndex": 0,
+      "fact": "Axolotls can regrow entire legs, tails, and even portions of their heart and brain without scarring!"
+    },
+    {
+      "id": 16,
+      "question": "Which of these animals breathes air through a blowhole on the top of its head?",
+      "options": ["Salmon", "Great White Shark", "Dolphin", "Octopus"],
+      "answerIndex": 2,
+      "fact": "Dolphins and whales are marine mammals that breathe air through blowholes connected directly to their lungs."
+    }
+  ]
+}

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Abacus Trail — Interactive Soroban & Arithmetic | Kids Zone</title>
+  <link rel="icon" type="image/svg+xml" href="../common/logo.svg" />
+  <link rel="apple-touch-icon" href="../common/logo.svg" />
+
+  <!-- Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <!-- Common Design System & Audio -->
+  <link rel="stylesheet" href="../common/common.css" />
+  <script src="../common/audio.js"></script>
+  <script src="../common/common.js"></script>
+
+  <!-- Game Specific CSS & JS -->
+  <link rel="stylesheet" href="abacus.css" />
+  <script src="abacus.js" defer></script>
+</head>
+
+<body>
+  <!-- Common Header Auto-Mounted -->
+  <header data-kz-header="abacus"></header>
+
+  <main>
+    <div class="card">
+      <h2 style="margin:0.1rem 0 0.6rem; font-size:1.6rem; font-weight:800;">Choose Your Abacus Trail 🚀</h2>
+
+      <div class="trail-group" role="group">
+        <button class="trail-btn active" data-mode="represent">🔢 Show Number</button>
+        <button class="trail-btn" data-mode="add">➕ Add Numbers</button>
+        <button class="trail-btn" data-mode="sub">➖ Subtract Numbers</button>
+      </div>
+
+      <div class="fun-tip" id="mode-tip">💡 Type a number and watch the abacus beads snap into place!</div>
+
+      <div class="input-zone">
+        <div>
+          <label style="font-weight:800; display:block; margin-bottom:0.3rem;" for="num1">First number</label>
+          <input class="num-input kz-select" id="num1" type="number" min="0" max="9999999999" placeholder="e.g. 42" />
+        </div>
+        <span class="op-badge hidden" id="op-badge">+</span>
+        <div class="hidden" id="num2-wrap">
+          <label style="font-weight:800; display:block; margin-bottom:0.3rem;" for="num2">Second number</label>
+          <input class="num-input kz-select" id="num2" type="number" min="0" max="9999999999" placeholder="e.g. 15" />
+        </div>
+        <button class="main-btn" id="start-btn" style="align-self:flex-end;">Let's Go! 🚀</button>
+      </div>
+
+      <div class="step-bar hidden" id="step-bar">
+        <div class="step-dot" id="dot0"></div>
+        <div class="step-dot" id="dot1"></div>
+        <div class="step-dot" id="dot2"></div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Abacus Display -->
+      <div class="abacus-wrapper">
+        <div id="step-display"></div>
+
+        <div class="abacus-outer">
+          <div class="abacus-frame" id="abacus"></div>
+        </div>
+
+        <div id="result-display"></div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Common Footer Auto-Mounted -->
+  <footer data-kz-footer></footer>
+</body>
+</html>

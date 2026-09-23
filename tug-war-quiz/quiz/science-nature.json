@@ -1,0 +1,122 @@
+{
+  "id": "science-nature",
+  "title": "Science & Nature Explorers",
+  "subject": "Science & Nature",
+  "ageGroup": "Ages 7-12",
+  "difficulty": "Easy-Medium",
+  "description": "Fascinating questions about plants, water cycles, forces, weather, and our living planet.",
+  "questions": [
+    {
+      "id": 1,
+      "question": "What gas do green plants absorb from the air during photosynthesis?",
+      "options": ["Oxygen", "Carbon Dioxide", "Nitrogen", "Helium"],
+      "answerIndex": 1,
+      "fact": "Plants take in carbon dioxide and water with sunlight to produce oxygen and glucose!"
+    },
+    {
+      "id": 2,
+      "question": "What is the boiling point of pure water at sea level?",
+      "options": ["50°C (122°F)", "100°C (212°F)", "150°C (302°F)", "200°C (392°F)"],
+      "answerIndex": 1,
+      "fact": "Water boils at 100 degrees Celsius (212 degrees Fahrenheit) under standard atmospheric pressure."
+    },
+    {
+      "id": 3,
+      "question": "Which of these is the hardest natural mineral found on Earth?",
+      "options": ["Gold", "Quartz", "Diamond", "Iron"],
+      "answerIndex": 2,
+      "fact": "Diamond ranks 10 on the Mohs hardness scale, making it the hardest natural mineral."
+    },
+    {
+      "id": 4,
+      "question": "What force pulls dropped objects toward the center of the Earth?",
+      "options": ["Magnetism", "Gravity", "Friction", "Air Pressure"],
+      "answerIndex": 1,
+      "fact": "Gravity is the invisible force that attracts objects toward each other."
+    },
+    {
+      "id": 5,
+      "question": "What part of a plant absorbs water and nutrients from the soil?",
+      "options": ["Leaves", "Flowers", "Stem", "Roots"],
+      "answerIndex": 3,
+      "fact": "Roots anchor the plant firmly in the ground and draw up essential moisture and minerals."
+    },
+    {
+      "id": 6,
+      "question": "Which state of matter has a definite shape and a definite volume?",
+      "options": ["Solid", "Liquid", "Gas", "Plasma"],
+      "answerIndex": 0,
+      "fact": "In solids, molecules are packed closely together in a rigid, fixed arrangement."
+    },
+    {
+      "id": 7,
+      "question": "What color appears at the very top outer edge of a standard rainbow?",
+      "options": ["Blue", "Green", "Red", "Violet"],
+      "answerIndex": 2,
+      "fact": "Rainbow colors follow ROYGBIV: Red is at the top because it has the longest wavelength!"
+    },
+    {
+      "id": 8,
+      "question": "How many bones are there in an adult human body?",
+      "options": ["106", "206", "306", "406"],
+      "answerIndex": 1,
+      "fact": "Babies are born with about 300 bones, but many fuse together as they grow to 206 bones in adulthood."
+    },
+    {
+      "id": 9,
+      "question": "What is the process called when water vapor cools down and turns back into liquid water droplets?",
+      "options": ["Evaporation", "Condensation", "Precipitation", "Freezing"],
+      "answerIndex": 1,
+      "fact": "Condensation creates clouds in the sky and dew on morning grass."
+    },
+    {
+      "id": 10,
+      "question": "Which organ in the human body pumps blood through all your blood vessels?",
+      "options": ["Lungs", "Brain", "Heart", "Stomach"],
+      "answerIndex": 2,
+      "fact": "Your heart beats about 100,000 times each day to circulate oxygen-rich blood."
+    },
+    {
+      "id": 11,
+      "question": "What instrument is used to measure air temperature?",
+      "options": ["Barometer", "Thermometer", "Anemometer", "Telescope"],
+      "answerIndex": 1,
+      "fact": "A thermometer measures temperature in degrees Celsius or Fahrenheit."
+    },
+    {
+      "id": 12,
+      "question": "Which type of animal can live both on land and in water?",
+      "options": ["Mammals", "Reptiles", "Amphibians", "Birds"],
+      "answerIndex": 2,
+      "fact": "Amphibians like frogs and salamanders start life breathing in water through gills and develop lungs to live on land!"
+    },
+    {
+      "id": 13,
+      "question": "What is the layer of gases surrounding Earth called?",
+      "options": ["Hydrosphere", "Atmosphere", "Lithosphere", "Biosphere"],
+      "answerIndex": 1,
+      "fact": "The atmosphere shields Earth from space radiation and gives us air to breathe."
+    },
+    {
+      "id": 14,
+      "question": "What substance makes plant leaves look green?",
+      "options": ["Chlorophyll", "Hemoglobin", "Melanin", "Keratin"],
+      "answerIndex": 0,
+      "fact": "Chlorophyll absorbs sunlight energy to convert water and carbon dioxide into food."
+    },
+    {
+      "id": 15,
+      "question": "Sound travels fastest through which of the following?",
+      "options": ["Air", "Vacuum of space", "Water", "Solid steel"],
+      "answerIndex": 3,
+      "fact": "Sound waves need particles to vibrate; closely packed solid particles transmit sound much faster than liquids or gases!"
+    },
+    {
+      "id": 16,
+      "question": "What natural event is measured using the Richter scale?",
+      "options": ["Tornadoes", "Earthquakes", "Hurricanes", "Volcanic eruptions"],
+      "answerIndex": 1,
+      "fact": "The Richter scale calculates the seismic energy and magnitude released by an earthquake."
+    }
+  ]
+}

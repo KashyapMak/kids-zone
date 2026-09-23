@@ -1,0 +1,122 @@
+{
+  "id": "history-quest",
+  "title": "History & Inventions Quest",
+  "subject": "History & Inventions",
+  "ageGroup": "Ages 8-14",
+  "difficulty": "Hard",
+  "description": "Challenging historical breakthroughs, ancient civilizations, world explorers, and famous discoveries.",
+  "questions": [
+    {
+      "id": 1,
+      "question": "Which ancient civilization built the Pyramids of Giza?",
+      "options": ["Ancient Romans", "Ancient Egyptians", "Mesopotamians", "Mayans"],
+      "answerIndex": 1,
+      "fact": "The ancient Egyptians built the Giza pyramids as grand royal tombs."
+    },
+    {
+      "id": 2,
+      "question": "Who is credited with inventing the modern movable-type printing press in Europe?",
+      "options": ["Leonardo da Vinci", "Johannes Gutenberg", "Isaac Newton", "Galileo Galilei"],
+      "answerIndex": 1,
+      "fact": "Johannes Gutenberg introduced movable metal type around 1440 in Mainz, Germany."
+    },
+    {
+      "id": 3,
+      "question": "In what year did humans first set foot on the Moon?",
+      "options": ["1959", "1965", "1969", "1972"],
+      "answerIndex": 2,
+      "fact": "Neil Armstrong and Buzz Aldrin landed the Apollo 11 lunar module in July 1969."
+    },
+    {
+      "id": 4,
+      "question": "Which scientist discovered penicillin, the world's first widespread antibiotic?",
+      "options": ["Alexander Fleming", "Louis Pasteur", "Marie Curie", "Robert Koch"],
+      "answerIndex": 0,
+      "fact": "Sir Alexander Fleming noticed antibacterial mold in 1928, leading to penicillin."
+    },
+    {
+      "id": 5,
+      "question": "The ancient Olympic Games originated in which country?",
+      "options": ["Italy", "Egypt", "Greece", "China"],
+      "answerIndex": 2,
+      "fact": "The ancient games were held every four years in Olympia, Greece starting in 776 BC."
+    },
+    {
+      "id": 6,
+      "question": "Who flew the world's first successful powered, controlled heavier-than-air airplane in 1903?",
+      "options": ["Wright Brothers", "Alexander Graham Bell", "Charles Lindbergh", "Amelia Earhart"],
+      "answerIndex": 0,
+      "fact": "Orville and Wilbur Wright achieved flight at Kitty Hawk, North Carolina on December 17, 1903."
+    },
+    {
+      "id": 7,
+      "question": "Which legendary queen ruled ancient Egypt during its final Ptolemaic kingdom?",
+      "options": ["Nefertiti", "Hatshepsut", "Cleopatra VII", "Sobekneferu"],
+      "answerIndex": 2,
+      "fact": "Cleopatra VII was the last active ruler of the Ptolemaic Kingdom of Egypt."
+    },
+    {
+      "id": 8,
+      "question": "What famous ship brought the Pilgrims to North America in 1620?",
+      "options": ["Santa Maria", "Mayflower", "Endeavour", "Beagle"],
+      "answerIndex": 1,
+      "fact": "The Mayflower carried 102 passengers across the Atlantic to Plymouth Rock."
+    },
+    {
+      "id": 9,
+      "question": "Who was the first woman to win a Nobel Prize, and the only person to win in two different scientific fields?",
+      "options": ["Rosalind Franklin", "Marie Curie", "Ada Lovelace", "Lise Meitner"],
+      "answerIndex": 1,
+      "fact": "Marie Curie won Nobel Prizes in Physics (1903) and Chemistry (1911)."
+    },
+    {
+      "id": 10,
+      "question": "The Great Wall of China was primarily built to protect against invasions from which direction?",
+      "options": ["The South", "The North", "The East", "The West"],
+      "answerIndex": 1,
+      "fact": "The wall guarded China's northern frontier against nomadic invaders."
+    },
+    {
+      "id": 11,
+      "question": "Which telephone inventor made the famous call: 'Mr. Watson, come here, I want to see you'?",
+      "options": ["Thomas Edison", "Alexander Graham Bell", "Nikola Tesla", "Samuel Morse"],
+      "answerIndex": 1,
+      "fact": "Alexander Graham Bell spoke these historic words over the telephone on March 10, 1876."
+    },
+    {
+      "id": 12,
+      "question": "Which Renaissance master painted the Mona Lisa and the Last Supper?",
+      "options": ["Michelangelo", "Raphael", "Leonardo da Vinci", "Donatello"],
+      "answerIndex": 2,
+      "fact": "Leonardo da Vinci was a polymath artist, inventor, engineer, and scientist."
+    },
+    {
+      "id": 13,
+      "question": "What ancient code is one of the earliest and most complete written legal codes in history?",
+      "options": ["Code of Hammurabi", "Magna Carta", "Twelve Tables", "Justinian Code"],
+      "answerIndex": 0,
+      "fact": "The Code of Hammurabi was carved into stone in Babylon circa 1754 BC."
+    },
+    {
+      "id": 14,
+      "question": "What was the name of the first artificial satellite placed into orbit by humans in 1957?",
+      "options": ["Explorer 1", "Sputnik 1", "Vostok 1", "Telstar"],
+      "answerIndex": 1,
+      "fact": "Sputnik 1 was launched by the Soviet Union on October 4, 1957, beginning the Space Age."
+    },
+    {
+      "id": 15,
+      "question": "Which English document signed in 1215 established that everyone, even the king, is subject to the law?",
+      "options": ["Bill of Rights", "Magna Carta", "Declaration of Arbroath", "Petition of Right"],
+      "answerIndex": 1,
+      "fact": "King John signed Magna Carta (Great Charter) at Runnymede in June 1215."
+    },
+    {
+      "id": 16,
+      "question": "Who developed the theory of universal gravitation after observing a falling apple?",
+      "options": ["Albert Einstein", "Sir Isaac Newton", "Galileo Galilei", "Johannes Kepler"],
+      "answerIndex": 1,
+      "fact": "Sir Isaac Newton formulated the laws of motion and universal gravitation in 1687."
+    }
+  ]
+}

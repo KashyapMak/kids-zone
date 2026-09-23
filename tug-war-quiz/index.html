@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Seesaw Battle Quiz Arena — 2-Player Head-to-Head Knowledge Battle | Kids Zone</title>
+  <link rel="icon" type="image/svg+xml" href="../common/logo.svg" />
+  <link rel="apple-touch-icon" href="../common/logo.svg" />
+
+  <!-- Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <!-- Common Design System, Audio & Progress -->
+  <link rel="stylesheet" href="../common/common.css" />
+  <script src="../common/audio.js"></script>
+  <script src="../common/progress.js"></script>
+  <script src="../common/common.js"></script>
+
+  <!-- Tug / Seesaw Quiz CSS -->
+  <link rel="stylesheet" href="tug-war.css" />
+</head>
+
+<body class="theme-jungle">
+  <!-- Common Header Auto-Mounted -->
+  <header data-kz-header="tug-war-quiz"></header>
+
+  <main class="arena-wrap">
+    <!-- Hero Setup -->
+    <section class="setup-hero">
+      <div class="setup-hero-icon">🎠⚡</div>
+      <h1>Seesaw Battle <span>Quiz Arena</span></h1>
+      <p>
+        Challenge a friend, classmate, or sibling in an exciting head-to-head seesaw quiz showdown!
+        Answer questions correctly to tilt the seesaw down with cheerful bounce physics and claim the trophy.
+      </p>
+    </section>
+
+    <!-- STEP 1: Quiz Catalog & Filters View -->
+    <div id="view-catalog" class="catalog-section">
+
+      <!-- Always-Visible Custom CSV Upload Zone (Visible across all filter states) -->
+      <div class="always-upload-box">
+        <div class="always-upload-header">
+          <div class="always-upload-title">
+            <span>➕</span>
+            <span>Upload Your Own Quiz (CSV)</span>
+            <span class="always-upload-badge">Teacher & Parent Friendly</span>
+          </div>
+          <button type="button" class="btn-secondary" style="font-size: 0.85rem; padding: 0.35rem 0.85rem;" onclick="toggleCsvZone()">
+            <span id="csv-toggle-label">📂 Expand Upload Form</span>
+          </button>
+        </div>
+
+        <div class="csv-zone" id="csv-zone">
+          <p style="margin: 0; font-size: 0.86rem; color: var(--muted); font-family: var(--font-body);">
+            Format: <code>Question, Option 1, Option 2, Option 3, Option 4, Correct Option (1-4 or Answer Text)</code>
+          </p>
+
+          <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <input type="text" id="custom-quiz-title" placeholder="Quiz Title (e.g. Dinosaur Discovery)" class="kz-select" style="flex: 1; min-width: 180px; padding: 0.5rem;" />
+            <input type="text" id="custom-quiz-subject" placeholder="Subject (e.g. Science)" class="kz-select" style="width: 150px; padding: 0.5rem;" />
+            <select id="custom-quiz-difficulty" class="kz-select" style="width: 140px; padding: 0.5rem;">
+              <option value="Easy">Easy</option>
+              <option value="Easy-Medium" selected>Easy-Medium</option>
+              <option value="Medium">Medium</option>
+              <option value="Hard">Hard</option>
+            </select>
+          </div>
+
+          <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+            <input type="file" id="csv-file-input" accept=".csv,text/csv" style="font-size: 0.85rem; flex: 1; min-width: 200px;" onchange="handleCsvFile(this)" />
+            <button type="button" class="btn-secondary" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;" onclick="loadSampleCsv()">
+              📥 Load Sample CSV
+            </button>
+          </div>
+
+          <textarea id="csv-textarea" class="csv-textarea" placeholder="Or paste CSV rows here:&#10;What planet is closest to Sun?,Venus,Mercury,Mars,Jupiter,2&#10;How many legs does an insect have?,4,6,8,10,2&#10;What is H2O?,Water,Air,Salt,Sugar,1&#10;Which bird cannot fly?,Penguin,Eagle,Owl,Robin,1"></textarea>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+            <span id="csv-status" style="font-size: 0.85rem; font-weight: 700; color: var(--muted);">At least 4 questions required</span>
+            <button type="button" class="btn-primary" style="padding: 0.55rem 1.15rem; font-size: 0.92rem;" onclick="saveCustomQuiz()">
+              ✓ Save & Battle With This Quiz ➔
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filter Controls Bar -->
+      <div class="filter-bar">
+        <div class="filter-row">
+          <!-- Subject Filter -->
+          <div class="filter-item">
+            <label for="filter-subject" class="filter-label">
+              <span>📚</span>
+              <span>Subject:</span>
+            </label>
+            <select id="filter-subject" class="filter-select" onchange="onFilterChange()">
+              <option value="all">All Subjects</option>
+            </select>
+          </div>
+
+          <!-- Difficulty Filter -->
+          <div class="filter-item">
+            <label for="filter-difficulty" class="filter-label">
+              <span>🎯</span>
+              <span>Difficulty:</span>
+            </label>
+            <select id="filter-difficulty" class="filter-select" onchange="onFilterChange()">
+              <option value="all">All Difficulties</option>
+              <option value="Easy">Easy</option>
+              <option value="Easy-Medium">Easy-Medium</option>
+              <option value="Medium">Medium</option>
+              <option value="Hard">Hard</option>
+              <option value="Custom">Custom Uploads</option>
+            </select>
+          </div>
+
+          <!-- Quick Search -->
+          <div class="filter-item" style="flex: 1.3;">
+            <label for="filter-search" class="filter-label">
+              <span>🔍</span>
+              <span>Search Quizzes:</span>
+            </label>
+            <input type="text" id="filter-search" class="filter-select" placeholder="Search by name, topic, or keyword..." oninput="onFilterChange()" />
+          </div>
+        </div>
+
+        <div class="filter-count-row">
+          <span class="filter-count-text" id="filter-count-text">Showing all quizzes</span>
+          <button type="button" class="filter-reset-btn" id="filter-reset-btn" onclick="resetFilters()" style="display: none;">
+            ✕ Reset Filters
+          </button>
+        </div>
+      </div>
+
+      <!-- Quizzes Grid -->
+      <div class="catalog-grid" id="catalog-grid">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+
+    <!-- STEP 2: Match & Teams Setup View (Shown after selecting a quiz) -->
+    <div id="view-setup" class="setup-view-wrap" style="display: none;">
+      <!-- Selected Quiz Banner -->
+      <div class="selected-quiz-banner">
+        <div class="selected-quiz-left">
+          <div class="selected-quiz-icon" id="banner-quiz-icon">🌿</div>
+          <div class="selected-quiz-details">
+            <h3 id="banner-quiz-title">Science & Nature Explorers</h3>
+            <div class="selected-quiz-meta-row">
+              <span class="tag-subject" id="banner-quiz-subject">Science & Nature</span>
+              <span class="tag-difficulty easy-medium" id="banner-quiz-difficulty">Easy-Medium</span>
+              <span style="font-size: 0.8rem; font-weight: 700; color: var(--muted);" id="banner-quiz-count">16 questions available</span>
+            </div>
+          </div>
+        </div>
+        <button type="button" class="back-to-catalog-btn" onclick="backToCatalog()">
+          <span>← Choose Different Quiz</span>
+        </button>
+      </div>
+
+      <!-- Teams Setup & Game Mode Card -->
+      <section class="setup-card">
+        <!-- Battle Mode Selector -->
+        <div class="battle-mode-section">
+          <div class="battle-mode-title">1. Select Battle Mode</div>
+          <div class="battle-mode-grid">
+            <div class="battle-mode-card active" id="mode-card-dual" onclick="setBattleMode('dual')">
+              <div class="battle-mode-card-header">
+                <span class="battle-mode-icon">⚔️</span>
+                <span>Side-by-Side Dual</span>
+              </div>
+              <div class="battle-mode-desc">
+                Both teams race simultaneously on screen. Fast, competitive seesaw showdown!
+              </div>
+            </div>
+
+            <div class="battle-mode-card" id="mode-card-pass" onclick="setBattleMode('pass-play')">
+              <div class="battle-mode-card-header">
+                <span class="battle-mode-icon">👥</span>
+                <span>Pass & Play Turns</span>
+              </div>
+              <div class="battle-mode-desc">
+                Alternating turns. One team answers to tilt the seesaw, then passes to the other team.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Teams Configuration -->
+        <div class="setup-card-title" style="margin-top: 0.3rem;">
+          <span>👥</span>
+          <span>2. Team Names & Mascots</span>
+        </div>
+
+        <div class="teams-config-row">
+          <!-- Team 1 -->
+          <div class="team-box team-box-1">
+            <div class="team-box-header">
+              <span>🚩 Team 1 (Left)</span>
+              <span id="t1-avatar-preview" style="font-size: 1.5rem;">🦁</span>
+            </div>
+            <input type="text" id="t1-name-input" value="Red Dragons" class="kz-select" style="font-weight: 800; padding: 0.4rem 0.6rem;" />
+            <div style="font-size: 0.78rem; font-weight: 700; color: var(--muted);">Choose Mascot:</div>
+            <div class="avatar-selector" id="t1-avatar-list"></div>
+          </div>
+
+          <!-- Team 2 -->
+          <div class="team-box team-box-2">
+            <div class="team-box-header">
+              <span>🔷 Team 2 (Right)</span>
+              <span id="t2-avatar-preview" style="font-size: 1.5rem;">🦈</span>
+            </div>
+            <input type="text" id="t2-name-input" value="Blue Sharks" class="kz-select" style="font-weight: 800; padding: 0.4rem 0.6rem;" />
+            <div style="font-size: 0.78rem; font-weight: 700; color: var(--muted);">Choose Mascot:</div>
+            <div class="avatar-selector" id="t2-avatar-list"></div>
+          </div>
+        </div>
+
+        <!-- Question Count & Fair Play Info -->
+        <div style="margin-top: 0.5rem; display: flex; flex-direction: column; gap: 0.6rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+            <label for="question-count-select" style="font-weight: 800; font-size: 0.95rem; color: var(--text);">
+              3. Total Questions in Match:
+            </label>
+            <select id="question-count-select" class="kz-select" style="padding: 0.45rem 0.85rem; font-weight: 800; min-width: 220px;">
+              <!-- Populated dynamically in descending order e.g. 18 questions (9/team) -->
+            </select>
+          </div>
+
+          <div style="background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 0.75rem 1rem; font-size: 0.85rem; color: var(--muted); font-family: var(--font-body); line-height: 1.45;">
+            🎠 <strong>Seesaw Fair Play:</strong> Questions are randomized and divided evenly (50/50) between both teams. Correct answers tilt the seesaw down with joyful bounce physics! Wrong answers buzz and shake without deducting points.
+          </div>
+        </div>
+
+        <!-- Start Button -->
+        <div style="margin-top: 0.5rem; padding-top: 0.5rem;">
+          <button type="button" class="btn-primary" style="width: 100%; justify-content: center; font-size: 1.25rem; padding: 0.95rem;" onclick="startBattle()">
+            🎠 Enter Seesaw Arena ➔
+          </button>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Common Footer Auto-Mounted -->
+  <footer data-kz-footer></footer>
+
+  <script>
+    const T1_AVATARS = ['🦁', '🦖', '🚀', '🐯', '🦅', '🦊', '⚡', '🤖', '🦄', '🐼'];
+    const T2_AVATARS = ['🦈', '🐻', '🐬', '🐺', '👑', '🌟', '🛸', '🐙', '🦉', '🦍'];
+
+    let allGames = [];
+    let selectedQuizId = 'science-nature';
+    let selectedBattleMode = 'dual'; // 'dual' (Side-by-Side Dual) or 'pass-play' (Pass & Play Turns)
+    let selectedT1Avatar = '🦁';
+    let selectedT2Avatar = '🦈';
+
+    function setBattleMode(mode) {
+      if (window.KZAudio) KZAudio.playClick();
+      selectedBattleMode = mode;
+      const cardDual = document.getElementById('mode-card-dual');
+      const cardPass = document.getElementById('mode-card-pass');
+      if (mode === 'dual') {
+        cardDual.classList.add('active');
+        cardPass.classList.remove('active');
+      } else {
+        cardPass.classList.add('active');
+        cardDual.classList.remove('active');
+      }
+    }
+
+    async function loadGamesCatalog() {
+      try {
+        const res = await fetch('games.json');
+        const defaultList = await res.json();
+        
+        let customList = [];
+        try {
+          const raw = localStorage.getItem('kz_custom_tug_quizzes');
+          if (raw) customList = JSON.parse(raw);
+        } catch (e) {}
+
+        allGames = [...defaultList, ...customList];
+        populateSubjectFilterOptions();
+        onFilterChange();
+      } catch (err) {
+        console.error('Failed to load games.json:', err);
+      }
+    }
+
+    function populateSubjectFilterOptions() {
+      const subjectSelect = document.getElementById('filter-subject');
+      if (!subjectSelect) return;
+
+      const currentVal = subjectSelect.value;
+      const subjects = Array.from(new Set(allGames.map(g => g.subject).filter(Boolean))).sort();
+
+      subjectSelect.innerHTML = `<option value="all">All Subjects (${allGames.length})</option>` +
+        subjects.map(s => {
+          const count = allGames.filter(g => g.subject === s).length;
+          return `<option value="${s}">${s} (${count})</option>`;
+        }).join('');
+
+      if (subjects.includes(currentVal)) {
+        subjectSelect.value = currentVal;
+      } else {
+        subjectSelect.value = 'all';
+      }
+    }
+
+    function onFilterChange() {
+      const subjectVal = document.getElementById('filter-subject').value;
+      const diffVal = document.getElementById('filter-difficulty').value;
+      const searchVal = document.getElementById('filter-search').value.trim().toLowerCase();
+
+      const filtered = allGames.filter(g => {
+        // Subject match
+        if (subjectVal !== 'all' && g.subject !== subjectVal) return false;
+
+        // Difficulty match
+        if (diffVal !== 'all') {
+          if (diffVal === 'Custom') {
+            if (!g.isCustom && g.difficulty !== 'Custom') return false;
+          } else {
+            if (g.difficulty !== diffVal) return false;
+          }
+        }
+
+        // Search keyword match
+        if (searchVal) {
+          const text = `${g.title} ${g.subject} ${g.difficulty || ''} ${g.description || ''}`.toLowerCase();
+          if (!text.includes(searchVal)) return false;
+        }
+
+        return true;
+      });
+
+      // Update count & reset button
+      const countEl = document.getElementById('filter-count-text');
+      const resetBtn = document.getElementById('filter-reset-btn');
+      const isFiltered = subjectVal !== 'all' || diffVal !== 'all' || searchVal.length > 0;
+
+      if (isFiltered) {
+        countEl.textContent = `Showing ${filtered.length} of ${allGames.length} quizzes`;
+        resetBtn.style.display = 'inline-block';
+      } else {
+        countEl.textContent = `Showing all ${allGames.length} quizzes`;
+        resetBtn.style.display = 'none';
+      }
+
+      renderCatalogGrid(filtered);
+    }
+
+    function resetFilters() {
+      if (window.KZAudio) KZAudio.playClick();
+      document.getElementById('filter-subject').value = 'all';
+      document.getElementById('filter-difficulty').value = 'all';
+      document.getElementById('filter-search').value = '';
+      onFilterChange();
+    }
+
+    function getDifficultyClass(diff) {
+      if (!diff) return 'easy-medium';
+      const clean = diff.toLowerCase().replace(/\s+/g, '-');
+      if (clean.includes('easy-med') || clean.includes('easy-medium')) return 'easy-medium';
+      if (clean.includes('easy')) return 'easy';
+      if (clean.includes('medium')) return 'medium';
+      if (clean.includes('hard')) return 'hard';
+      if (clean.includes('custom')) return 'custom';
+      return 'easy-medium';
+    }
+
+    function renderCatalogGrid(quizzes) {
+      const container = document.getElementById('catalog-grid');
+      if (!container) return;
+
+      if (!quizzes || quizzes.length === 0) {
+        container.innerHTML = `
+          <div class="catalog-empty-state">
+            <div class="catalog-empty-icon">🔍</div>
+            <div class="catalog-empty-title">No Quizzes Found</div>
+            <div class="catalog-empty-desc">
+              No quiz packs match your chosen subject and difficulty filters. You can clear your filters or upload your own custom CSV quiz above!
+            </div>
+            <button type="button" class="btn-primary" style="padding: 0.5rem 1.2rem; font-size: 0.95rem; margin-top: 0.4rem;" onclick="resetFilters()">
+              Clear Filters
+            </button>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = quizzes.map(g => {
+        const count = g.questionCount || (g.questions ? g.questions.length : 16);
+        const diff = g.difficulty || 'Easy-Medium';
+        const diffClass = getDifficultyClass(diff);
+
+        return `
+          <div class="catalog-card" id="quiz-card-${g.id}">
+            <div class="catalog-card-header">
+              <div class="catalog-card-icon">${g.icon || '📝'}</div>
+              <div class="catalog-card-tags">
+                <span class="tag-difficulty ${diffClass}">${diff}</span>
+                <span class="tag-subject">${g.subject}</span>
+              </div>
+            </div>
+
+            <div class="catalog-card-title">${g.title}</div>
+            <div class="catalog-card-desc">${g.description || 'Exciting questions for head-to-head knowledge competition.'}</div>
+
+            <div class="catalog-card-meta">
+              <span>📊 ${count} Questions</span>
+              <span>🧒 ${g.ageGroup || 'All Ages'}</span>
+            </div>
+
+            <button type="button" class="catalog-play-btn" onclick="openMatchSetup('${g.id}')">
+              <span>⚔️ Play Game</span>
+              <span>➔</span>
+            </button>
+          </div>
+        `;
+      }).join('');
+    }
+
+    async function openMatchSetup(id) {
+      if (window.KZAudio) KZAudio.playClick();
+      selectedQuizId = id;
+
+      const chosen = allGames.find(g => g.id === id) || allGames[0];
+      if (!chosen) return;
+
+      // Update Selected Quiz Banner
+      const iconEl = document.getElementById('banner-quiz-icon');
+      const titleEl = document.getElementById('banner-quiz-title');
+      const subjectEl = document.getElementById('banner-quiz-subject');
+      const diffEl = document.getElementById('banner-quiz-difficulty');
+      const countEl = document.getElementById('banner-quiz-count');
+
+      if (iconEl) iconEl.textContent = chosen.icon || '📝';
+      if (titleEl) titleEl.textContent = chosen.title;
+      if (subjectEl) subjectEl.textContent = chosen.subject;
+      if (diffEl) {
+        diffEl.textContent = chosen.difficulty || 'Easy-Medium';
+        diffEl.className = `tag-difficulty ${getDifficultyClass(chosen.difficulty)}`;
+      }
+
+      // Fetch questions if not cached to calculate question count dropdown
+      if (chosen.questions && chosen.questions.length > 0) {
+        populateQuestionCountDropdown(chosen.questions.length);
+        if (countEl) countEl.textContent = `${chosen.questions.length} questions available`;
+      } else if (chosen.quizPath) {
+        try {
+          const res = await fetch(chosen.quizPath);
+          const data = await res.json();
+          chosen.questions = data.questions || [];
+          chosen.questionCount = chosen.questions.length;
+          populateQuestionCountDropdown(chosen.questions.length);
+          if (countEl) countEl.textContent = `${chosen.questions.length} questions available`;
+        } catch (e) {
+          populateQuestionCountDropdown(chosen.questionCount || 16);
+          if (countEl) countEl.textContent = `${chosen.questionCount || 16} questions available`;
+        }
+      } else {
+        populateQuestionCountDropdown(chosen.questionCount || 16);
+        if (countEl) countEl.textContent = `${chosen.questionCount || 16} questions available`;
+      }
+
+      // Switch views: Hide Catalog, Show Match Setup
+      document.getElementById('view-catalog').style.display = 'none';
+      const setupView = document.getElementById('view-setup');
+      setupView.style.display = 'flex';
+      setupView.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function backToCatalog() {
+      if (window.KZAudio) KZAudio.playClick();
+      document.getElementById('view-setup').style.display = 'none';
+      const catalogView = document.getElementById('view-catalog');
+      catalogView.style.display = 'flex';
+      catalogView.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function populateQuestionCountDropdown(totalAvailableQuestions) {
+      const select = document.getElementById('question-count-select');
+      if (!select) return;
+
+      const total = parseInt(totalAvailableQuestions, 10) || 16;
+      // Per user specification:
+      // "total questions in match must be less then total questions / 2 or less.
+      // for example if i have selected a quiz having 19 questions then dropdown will show in decending order.
+      // 18 questions (9/team)
+      // 16 questions (8/team)
+      // 14 questions (7/team)
+      // 12 questions (6/team)
+      // 10 questions (5/team)"
+      const maxPerTeam = Math.floor(total / 2);
+      const options = [];
+
+      const minPerTeam = Math.min(2, maxPerTeam);
+      for (let p = maxPerTeam; p >= minPerTeam; p--) {
+        const totalMatch = p * 2;
+        options.push({
+          value: totalMatch,
+          label: `${totalMatch} questions (${p}/team)`
+        });
+      }
+
+      if (options.length === 0) {
+        options.push({ value: 2, label: '2 questions (1/team)' });
+      }
+
+      const prevVal = parseInt(select.value, 10);
+
+      select.innerHTML = options.map(opt => `
+        <option value="${opt.value}">${opt.label}</option>
+      `).join('');
+
+      // Keep previous selection if still valid, or default to 10 questions (5/team) or top option
+      const hasPrev = options.find(o => o.value === prevVal);
+      if (hasPrev) {
+        select.value = prevVal;
+      } else {
+        const defaultTen = options.find(o => o.value === 10);
+        if (defaultTen) {
+          select.value = 10;
+        } else {
+          select.value = options[0].value;
+        }
+      }
+    }
+
+    function initAvatars() {
+      const t1List = document.getElementById('t1-avatar-list');
+      const t2List = document.getElementById('t2-avatar-list');
+
+      t1List.innerHTML = T1_AVATARS.map(av => `
+        <button type="button" class="avatar-btn ${av === selectedT1Avatar ? 'selected' : ''}" onclick="pickAvatar('t1', '${av}')">${av}</button>
+      `).join('');
+
+      t2List.innerHTML = T2_AVATARS.map(av => `
+        <button type="button" class="avatar-btn ${av === selectedT2Avatar ? 'selected' : ''}" onclick="pickAvatar('t2', '${av}')">${av}</button>
+      `).join('');
+    }
+
+    function pickAvatar(team, av) {
+      if (window.KZAudio) KZAudio.playClick();
+      if (team === 't1') {
+        selectedT1Avatar = av;
+        document.getElementById('t1-avatar-preview').textContent = av;
+      } else {
+        selectedT2Avatar = av;
+        document.getElementById('t2-avatar-preview').textContent = av;
+      }
+      initAvatars();
+    }
+
+    function toggleCsvZone() {
+      if (window.KZAudio) KZAudio.playClick();
+      const zone = document.getElementById('csv-zone');
+      const label = document.getElementById('csv-toggle-label');
+      zone.classList.toggle('open');
+      if (zone.classList.contains('open')) {
+        label.textContent = '✖️ Close Upload Form';
+      } else {
+        label.textContent = '📂 Expand Upload Form';
+      }
+    }
+
+    function loadSampleCsv() {
+      document.getElementById('custom-quiz-title').value = "Mega Trivia Challenge";
+      document.getElementById('custom-quiz-subject').value = "General Knowledge";
+      document.getElementById('custom-quiz-difficulty').value = "Easy-Medium";
+      document.getElementById('csv-textarea').value = 
+`What is the capital of Italy?,Rome,Milan,Venice,Naples,1
+Which planet has the most rings?,Jupiter,Saturn,Uranus,Mars,2
+How many colors are in a rainbow?,5,6,7,8,3
+What animal is known as the King of the Jungle?,Tiger,Lion,Elephant,Bear,2
+What is the freezing point of water?,0°C,10°C,32°C,100°C,1
+Which insect produces honey?,Ant,Wasp,Honeybee,Butterfly,3`;
+      parseCsvQuestions();
+    }
+
+    function handleCsvFile(input) {
+      const file = input.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        document.getElementById('csv-textarea').value = e.target.result;
+        if (!document.getElementById('custom-quiz-title').value) {
+          document.getElementById('custom-quiz-title').value = file.name.replace(/\.[^/.]+$/, "");
+        }
+        parseCsvQuestions();
+      };
+      reader.readAsText(file);
+    }
+
+    function parseCsvQuestions() {
+      const text = document.getElementById('csv-textarea').value.trim();
+      const status = document.getElementById('csv-status');
+      if (!text) {
+        status.textContent = 'At least 4 questions required';
+        return [];
+      }
+
+      const lines = text.split(/\r?\n/).filter(l => l.trim().length > 0);
+      const parsed = [];
+
+      lines.forEach((line, index) => {
+        const parts = line.split(',').map(s => s.trim().replace(/^["']|["']$/g, ''));
+        if (parts.length >= 6) {
+          const qText = parts[0];
+          const opts = [parts[1], parts[2], parts[3], parts[4]];
+          let ansIdx = 0;
+          const ansRaw = parts[5];
+          const num = parseInt(ansRaw, 10);
+          if (!isNaN(num) && num >= 1 && num <= 4) {
+            ansIdx = num - 1;
+          } else {
+            const matchIdx = opts.findIndex(o => o.toLowerCase() === ansRaw.toLowerCase());
+            if (matchIdx >= 0) ansIdx = matchIdx;
+          }
+          parsed.push({
+            id: index + 1,
+            question: qText,
+            options: opts,
+            answerIndex: ansIdx,
+            fact: `Verified answer: ${opts[ansIdx]}`
+          });
+        }
+      });
+
+      status.textContent = `${parsed.length} valid questions parsed`;
+      status.style.color = parsed.length >= 4 ? 'var(--ok)' : '#ef4444';
+      return parsed;
+    }
+
+    function saveCustomQuiz() {
+      const title = document.getElementById('custom-quiz-title').value.trim() || 'My Custom Quiz';
+      const subject = document.getElementById('custom-quiz-subject').value.trim() || 'Custom';
+      const difficulty = document.getElementById('custom-quiz-difficulty').value || 'Easy-Medium';
+      const questions = parseCsvQuestions();
+
+      if (questions.length < 4) {
+        alert('Please provide at least 4 questions in CSV format!');
+        return;
+      }
+
+      const customId = 'custom_' + Date.now();
+      const customQuiz = {
+        id: customId,
+        title: title,
+        subject: subject,
+        ageGroup: 'All Ages',
+        difficulty: difficulty,
+        questionCount: questions.length,
+        icon: '⭐',
+        color: '#8b5cf6',
+        isCustom: true,
+        questions: questions
+      };
+
+      let list = [];
+      try {
+        const raw = localStorage.getItem('kz_custom_tug_quizzes');
+        if (raw) list = JSON.parse(raw);
+      } catch (e) {}
+      list.unshift(customQuiz);
+      localStorage.setItem('kz_custom_tug_quizzes', JSON.stringify(list));
+
+      allGames.unshift(customQuiz);
+      populateSubjectFilterOptions();
+      onFilterChange();
+
+      // Close upload form
+      document.getElementById('csv-zone').classList.remove('open');
+      const label = document.getElementById('csv-toggle-label');
+      if (label) label.textContent = '📂 Expand Upload Form';
+
+      if (window.KZAudio) KZAudio.playOk();
+
+      // Immediately open match setup for the new custom quiz!
+      openMatchSetup(customId);
+    }
+
+    async function startBattle() {
+      if (window.KZAudio) KZAudio.playClick();
+
+      const chosenGame = allGames.find(g => g.id === selectedQuizId) || allGames[0];
+      let questions = [];
+
+      if (chosenGame.questions && chosenGame.questions.length > 0) {
+        questions = chosenGame.questions;
+      } else if (chosenGame.quizPath) {
+        try {
+          const res = await fetch(chosenGame.quizPath);
+          const data = await res.json();
+          questions = data.questions || [];
+        } catch (e) {
+          console.error('Failed to load quiz file:', e);
+        }
+      }
+
+      if (!questions || questions.length < 2) {
+        alert('Could not load questions for this quiz pack. Please select another quiz!');
+        return;
+      }
+
+      const countReq = document.getElementById('question-count-select').value;
+      const t1Name = document.getElementById('t1-name-input').value.trim() || 'Red Dragons';
+      const t2Name = document.getElementById('t2-name-input').value.trim() || 'Blue Sharks';
+
+      const matchConfig = {
+        quizId: chosenGame.id,
+        quizTitle: chosenGame.title,
+        quizSubject: chosenGame.subject,
+        mode: selectedBattleMode, // 'dual' or 'pass-play'
+        team1: {
+          name: t1Name,
+          avatar: selectedT1Avatar,
+          color: '#ef4444'
+        },
+        team2: {
+          name: t2Name,
+          avatar: selectedT2Avatar,
+          color: '#3b82f6'
+        },
+        countReq: countReq,
+        questions: questions
+      };
+
+      try {
+        sessionStorage.setItem('kz_tug_match', JSON.stringify(matchConfig));
+      } catch (e) {
+        console.warn('sessionStorage failed, relying on url params fallback');
+      }
+
+      window.location.href = 'game.html';
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      initAvatars();
+      loadGamesCatalog();
+    });
+  </script>
+</body>
+</html>

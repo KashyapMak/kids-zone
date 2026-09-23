@@ -1,0 +1,8 @@
+{
+  "name": "Kids Zone",
+  "description": "Safe, fun, and educational web games for children including multiplication tables, addition & subtraction, decimals & fractions, geometry, number nature, abacus, memory, puzzles, and two-player Seesaw Battle Quiz Arena with custom CSV question sets.",
+  "permissions": [],
+  "capabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

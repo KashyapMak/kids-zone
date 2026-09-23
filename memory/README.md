@@ -1,101 +1,98 @@
 # 🧠 Memory Trail
 
-**Memory Trail** is a single‑file, kid‑friendly game where learners practice **working memory** by matching pairs of **numbers** or **symbols** under a **global countdown**. It follows the Kids Zone “Trail” UX—**Practice/Test vibe**, streaks, badges, print‑ready summary, offline‑first—and now includes **themes in the header** plus a **High contrast** toggle for accessibility.
+A card-matching memory workout game designed to exercise short-term working memory, concentration, and visual recall under gentle time challenges.
 
 ---
 
-## ✨ Highlights
+## 👤 For End Users (Kids, Parents & Educators)
 
-- **Sets:** Numbers, Symbols, or **Mixed** (both pools)  
-- **Difficulties:** **Easy / Medium / Hard** (flip‑back speed, time penalty, and score tuned per mode)  
-- **Levels:** Up to **5**; Level 1 starts at **8 cards** then **12, 16, 20, 24**  
-- **Timer:** Global countdown (**120s** default; editable); optional **1‑second peek** at the start of each level  
-- **Themes (Header):** Jungle, Ocean, Space, Candy, Mono — live palette swap  
-- **High contrast:** Overrides colors for maximum readability (works over any theme)  
-- **Progress:** Streaks, badges, local best/last; printable end summary  
-- **Offline:** One HTML file, no tracking, no sign‑ins
+### Overview & Educational Value
+Memory Trail trains working memory and cognitive focus by challenging players to find matching pairs hidden beneath face-down cards. By adjusting card sets between familiar numbers and distinctive graphic symbols, it helps children develop spatial recall and pattern recognition strategies.
 
----
+### Card Sets & Progressive Difficulty
+- **Card Sets**:
+  - **Numbers**: Integer cards from 1 to 50.
+  - **Symbols**: Distinctive geometric and playful symbols (stars, hearts, music notes, clouds, fruits).
+  - **Mixed**: A challenging blend of numbers and symbols.
+- **5 Progressive Levels**:
+  - Level 1: 8 cards (4 pairs)
+  - Level 2: 12 cards (6 pairs)
+  - Level 3: 16 cards (8 pairs)
+  - Level 4: 20 cards (10 pairs)
+  - Level 5: 24 cards (12 pairs)
+- **Difficulty Modes**:
+  | Mode | Flip-back Delay | Timer Penalty per Miss | Base Score per Match |
+  | :--- | :---: | :---: | :---: |
+  | **Easy** | 850 ms | None (0s) | 10 pts |
+  | **Medium** | 700 ms | −2 seconds | 12 pts |
+  | **Hard** | 550 ms | −5 seconds | 15 pts |
 
-## 🚀 Getting Started
+### How to Play
+1. **Configure Setup**: Pick your Card Set, Difficulty Mode, and Total Time (default is 120 seconds).
+2. **Helpful Options**:
+   - **1-Second Peek**: Flips all cards face-up for 1 second at the start of each level to allow quick mental mapping.
+   - **Shuffle Cards**: Re-shuffles card placement between levels.
+3. **Flip Cards**: Click any card to turn it over, then click a second card:
+   - **Match**: Both cards stay face-up, your score increases, and your streak counter grows!
+   - **Mismatch**: Both cards flip back after a brief pause. In Medium and Hard modes, time is deducted from the clock.
+4. **Advance & Finish**: Clear all pairs on the board to advance to the next level before the countdown expires. View your final score, trophies, and print your trail certificate.
 
-1. Open the folder: `memory/`
-2. Double‑click **`memory-trail.html`** to launch.  
-3. In the **header**, set **Theme**, toggle **Sound/High contrast**, then on the setup choose **Set**, **Difficulty**, **Timer**, and options.  
-4. Click **START TRAIL** and begin matching pairs.
-
-> Works offline in Chrome, Edge, Firefox, and Safari.
-
----
-
-## 🎮 How to Play
-
-- Each level deals an **even number of tiles** (pairs). Flip **two** tiles:
-  - **Match** → both stay open, **score increases**, streak goes up
-  - **Mismatch** → both flip back after a short delay; on Medium/Hard the **global timer** is reduced
-- Clear all pairs to **advance to the next level**. There are up to **5** levels.
-- Use **👀 Peek** for a quick 1‑second look at all tiles (if enabled).
-
----
-
-## 🧩 Difficulty Tuning
-
-| Mode   | Flip‑back delay | Time penalty (per miss) | Score per match |
-|:------:|:----------------|:------------------------|:----------------|
-| Easy   | 850 ms          | 0 s                     | 10              |
-| Medium | 700 ms          | 2 s                     | 12              |
-| Hard   | 550 ms          | 5 s                     | 15              |
-
-**Streak bonus:** consecutive matches add a small ramp (+1 extra per additional match in the streak).
+### Tips for Parents & Educators
+- Encourage younger children to verbalize the symbol or number out loud when flipping ("Top left is a red apple").
+- Start on **Easy** with **1-Second Peek** enabled to build confidence and reduce frustration.
 
 ---
 
-## 🎨 Themes & Accessibility
+## 🛠️ For Editors & Developers
 
-- **Theme selector (Header):** Jungle (default), Ocean, Space, Candy, Mono — instantly updates **colors**, **borders**, and **tile faces**.
-- **High contrast:** Adds a dedicated palette override across backgrounds, text, and tile fronts/backs for visibility.
-- **Keyboard/Mouse:** Click tiles to flip. UI buttons are large and touch‑friendly.
-
----
-
-## ⏱️ Timer & Scoring
-
-- A **single global timer** counts down across all levels (default **120s**).  
-- **Medium/Hard** apply a **time penalty** for each mismatch.  
-- Final screen shows **Score**, **Time left**, **Badges**, and a **Level Summary** (timestamped matches/misses).
-
----
-
-## 🛡️ Kids‑Safe & Privacy‑First
-
-- **No ads**, **no analytics**, **no accounts**  
-- Runs **offline**; only optional web fonts/effects if online  
-- Saves progress **locally** (`localStorage`) and provides a **Reset Progress** button
-
----
-
-## 👤 Author & Links
-
-- **Author:** Kashyap Makadia  
-- **LinkedIn:** https://www.linkedin.com/in/kashyapmakadia/  
-- **GitHub Repo:** https://github.com/KashyapMak/kids-zone
-
----
-
-## 📄 License
-
-Released under the **MIT License**.
-
----
-
-## 🗂️ Suggested Folder Layout
-
+### Directory & File Structure
 ```text
-kids-zone/
-│
-├── memory/
-│   ├── memory-trail.html
-│   └── README.md        ← (this file)
-│
-└── ... other games ...
+memory/
+├── index.html                 # Clean setup screen, dynamic card grid, and results modal
+├── memory.css                 # 3D card flip styles, grid layouts, and badge styling
+├── memory.js                  # Deck builder, flip state machine, timer, and score tracker
+├── memory-trail.html          # Backward-compatible redirect for legacy URLs
+└── README.md                  # This documentation
 ```
+
+### 3D Card Flip Mechanics & State Machine
+- **CSS 3D Transform Architecture**:
+  In `memory.css`, tiles utilize hardware-accelerated 3D backface visibility:
+  ```css
+  .tile { perspective: 800px; }
+  .tile-inner { transform-style: preserve-3d; transition: transform 0.35s ease; }
+  .tile.flipped .tile-inner { transform: rotateY(180deg); }
+  .front, .back { backface-visibility: hidden; }
+  ```
+- **Concurrency & Board Locking**:
+  `memory.js` employs a strict `lockBoard` boolean flag to prevent rapid-click race conditions:
+  ```js
+  function onFlip(tile, t) {
+    if (lockBoard || tile.classList.contains('flipped')) return;
+    tile.classList.add('flipped');
+    if (!firstPick) { firstPick = { tile, t }; return; }
+    lockBoard = true;
+    if (firstPick.t.val === t.val) {
+      // Match found -> unlock board immediately
+      lockBoard = false;
+    } else {
+      // Mismatch -> pause, then flip back and unlock
+      setTimeout(() => {
+        a.classList.remove('flipped');
+        b.classList.remove('flipped');
+        lockBoard = false;
+      }, flipBackDelay);
+    }
+  }
+  ```
+- **Deck Builder**:
+  Randomly samples `N / 2` unique symbols/numbers from the pool, duplicates each element with distinct IDs, and applies an in-place Fisher-Yates shuffle.
+
+### Common Engine Integration
+- **Header & Footer**: Auto-mounted via `KZ.mountHeader('memory')` and `KZ.mountFooter()`.
+- **Sound Effects**: Plays `KZAudio.playOk()` on matches, `KZAudio.playWrong()` on mismatches, and `KZAudio.playTick()` on countdowns.
+- **Confetti**: Celebrates level clearances and game completion using `KZ.confetti()`.
+
+### Customization Guide
+- **Adding Custom Emoji/Icon Packs**: Expand `symbolBank` in `memory.js` with new emoji, letters, or unicode icons.
+- **Adjusting Level Card Counts**: Modify `cfg.levelCards` (default: `[8, 12, 16, 20, 24]`) to adjust grid progression.

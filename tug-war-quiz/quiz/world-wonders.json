@@ -1,0 +1,122 @@
+{
+  "id": "world-wonders",
+  "title": "World Geography & Wonders",
+  "subject": "Geography & Earth",
+  "ageGroup": "Ages 7-13",
+  "difficulty": "Medium",
+  "description": "Explore countries, capitals, continents, grand monuments, and natural world wonders.",
+  "questions": [
+    {
+      "id": 1,
+      "question": "How many continents are there on planet Earth?",
+      "options": ["5", "6", "7", "8"],
+      "answerIndex": 2,
+      "fact": "The 7 continents are Asia, Africa, North America, South America, Antarctica, Europe, and Australia!"
+    },
+    {
+      "id": 2,
+      "question": "What is the largest ocean on Earth by surface area?",
+      "options": ["Atlantic Ocean", "Indian Ocean", "Arctic Ocean", "Pacific Ocean"],
+      "answerIndex": 3,
+      "fact": "The Pacific Ocean covers more area than all the continents combined!"
+    },
+    {
+      "id": 3,
+      "question": "Which is the tallest mountain peak above sea level in the world?",
+      "options": ["Mount Kilimanjaro", "Mount Everest", "K2", "Mount Fuji"],
+      "answerIndex": 1,
+      "fact": "Mount Everest rises 8,848.86 meters (29,031.7 feet) high in the majestic Himalayas."
+    },
+    {
+      "id": 4,
+      "question": "What is the longest river in the world?",
+      "options": ["Amazon River", "Nile River", "Yangtze River", "Mississippi River"],
+      "answerIndex": 1,
+      "fact": "The Nile River stretches over 6,650 km (4,132 miles) through northeastern Africa."
+    },
+    {
+      "id": 5,
+      "question": "In which country can you visit the ancient Pyramids of Giza and the Sphinx?",
+      "options": ["Greece", "Egypt", "Italy", "Peru"],
+      "answerIndex": 1,
+      "fact": "The Great Pyramid of Giza was built thousands of years ago for Pharaoh Khufu."
+    },
+    {
+      "id": 6,
+      "question": "What is the capital city of France?",
+      "options": ["Rome", "Madrid", "Paris", "Berlin"],
+      "answerIndex": 2,
+      "fact": "Paris is known as the 'City of Light' and is home to the world-famous Eiffel Tower."
+    },
+    {
+      "id": 7,
+      "question": "Which country is both a continent and an island nation?",
+      "options": ["Greenland", "Australia", "Madagascar", "Iceland"],
+      "answerIndex": 1,
+      "fact": "Australia is completely surrounded by ocean water and spans an entire continent."
+    },
+    {
+      "id": 8,
+      "question": "What is the largest hot desert in the world?",
+      "options": ["Gobi Desert", "Kalahari Desert", "Sahara Desert", "Atacama Desert"],
+      "answerIndex": 2,
+      "fact": "The Sahara Desert in North Africa covers about 9.2 million square kilometers!"
+    },
+    {
+      "id": 9,
+      "question": "Which ancient stone monument in England is aligned with the summer solstice sunrise?",
+      "options": ["Colosseum", "Stonehenge", "Parthenon", "Petra"],
+      "answerIndex": 1,
+      "fact": "Stonehenge's giant standing stones were placed between 3000 and 2000 BCE."
+    },
+    {
+      "id": 10,
+      "question": "Which is the most populous country in the world?",
+      "options": ["United States", "India", "China", "Brazil"],
+      "answerIndex": 1,
+      "fact": "India has over 1.4 billion residents, making it the most populous nation."
+    },
+    {
+      "id": 11,
+      "question": "Which iconic wall stretches thousands of miles across northern China?",
+      "options": ["Hadrian's Wall", "The Great Wall of China", "Berlin Wall", "Western Wall"],
+      "answerIndex": 1,
+      "fact": "The Great Wall was built over several dynasties to guard historic borders."
+    },
+    {
+      "id": 12,
+      "question": "Which continent is the coldest, windiest, and driest on Earth?",
+      "options": ["Europe", "North America", "Antarctica", "Asia"],
+      "answerIndex": 2,
+      "fact": "Antarctica is covered by an ice sheet holding 90% of the world's ice and 70% of fresh water."
+    },
+    {
+      "id": 13,
+      "question": "What is the capital city of Japan?",
+      "options": ["Kyoto", "Osaka", "Tokyo", "Seoul"],
+      "answerIndex": 2,
+      "fact": "Tokyo is the bustling capital of Japan and one of the world's most vibrant technology hubs."
+    },
+    {
+      "id": 14,
+      "question": "What massive coral reef system off Australia's coast is visible from space?",
+      "options": ["Mesoamerican Reef", "Great Barrier Reef", "Red Sea Coral Reef", "Florida Reef"],
+      "answerIndex": 1,
+      "fact": "The Great Barrier Reef is composed of over 2,900 individual reefs and 900 islands!"
+    },
+    {
+      "id": 15,
+      "question": "In which continent is the Amazon Rainforest primarily located?",
+      "options": ["Africa", "South America", "Asia", "North America"],
+      "answerIndex": 1,
+      "fact": "The Amazon Rainforest covers much of northwestern Brazil and neighbor nations in South America."
+    },
+    {
+      "id": 16,
+      "question": "What is the imaginary line around the middle of Earth dividing Northern and Southern hemispheres?",
+      "options": ["Prime Meridian", "Tropic of Cancer", "Equator", "Arctic Circle"],
+      "answerIndex": 2,
+      "fact": "The Equator receives direct sunlight all year round, giving it warm tropical climates."
+    }
+  ]
+}

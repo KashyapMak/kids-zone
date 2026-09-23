@@ -1,49 +1,84 @@
 # 🧮 Abacus Trail
 
-An interactive, animated vertical abacus (Soroban style) designed to help kids visualize numbers and understand the mechanics of addition and subtraction. Part of the **Kids Zone** educational suite.
+An interactive, animated vertical Japanese Soroban abacus designed to teach place value and arithmetic through tactile bead mechanics.
 
-## 🚀 Features
+---
 
-- **Three Learning Modes**:
-  - **Show Number**: Instant visualization of any number up to 9,999,999,999.
-  - **Add Numbers**: Step-by-step animated addition showing the transition from initial value to sum.
-  - **Subtract Numbers**: Visual subtraction logic with state transitions.
-- **Authentic Abacus Logic**:
-  - **Heaven Beads**: 1 bead per column, valued at 5 (slides down to activate).
-  - **Earth Beads**: 4 beads per column, valued at 1 each (slide up to activate).
-- **Customization & Accessibility**:
-  - 6 Vibrant themes (Jungle, Space, Candy, etc.).
-  - High Contrast mode for better visibility.
-  - Audio feedback for interactions.
-  - Responsive design for tablets and desktops.
+## 👤 For End Users (Kids, Parents & Educators)
 
-## 🕹️ How to Use
+### Overview & Educational Value
+Abacus Trail transforms the ancient Japanese Soroban abacus into a vibrant, animated digital learning tool. By visualizing numbers as physical beads on rods rather than abstract symbols, children develop intuitive mental math capabilities (Anzan) and understand how place value functions from Ones all the way up to Billions.
 
-1.  **Select a Trail**: Choose between "Show Number", "Add", or "Subtract".
-2.  **Input Values**: Enter your numbers in the provided fields.
-3.  **Start the Trail**: Click **"Let's Go! 🚀"** or press **Enter**.
-4.  **Observe**: Watch the beads move! 
-    - The top bead moves down to add 5.
-    - The bottom beads move up to add 1, 2, 3, or 4.
-5.  **Place Values**: Use the labels above the rods (Billions to Ones) to understand large number structures.
+### How the Soroban Works
+Each vertical rod represents a decimal place value:
+- **Upper Deck (Heaven Bead)**: Contains **1 bead** per rod. Each heaven bead has a value of **5**. It activates when slid **down** toward the central horizontal divider beam.
+- **Lower Deck (Earth Beads)**: Contains **4 beads** per rod. Each earth bead has a value of **1**. They activate when slid **up** toward the central beam.
+- **Reading a Rod**:
+  - `0`: All beads away from the beam (heaven up, earth down).
+  - `1` to `4`: 1 to 4 earth beads pushed up to the beam.
+  - `5`: Heaven bead pushed down, earth beads down.
+  - `6` to `9`: Heaven bead pushed down PLUS 1 to 4 earth beads pushed up (e.g., `5 + 3 = 8`).
 
-## 🛠️ Technical Details
+### How to Use the 3 Learning Trails
+1. **Show Number**:
+   - Enter any number up to `9,999,999,999`.
+   - Click **"Let's Go! 🚀"** or press **Enter**.
+   - Watch the beads smoothly glide to represent the exact number across all place value rods (Ones, Tens, Hundreds, Thousands, etc.).
+2. **Add Numbers**:
+   - Enter a starting number and an addition amount.
+   - Watch the animated transition: the abacus first displays the initial value, then slides additional beads up/down to arrive at the final sum.
+3. **Subtract Numbers**:
+   - Enter a minuend and subtrahend.
+   - Watch the beads step-by-step retreat away from the beam to illustrate subtraction.
 
-- **Animation**: Uses CSS transitions with `cubic-bezier` timing to simulate the "snap" of physical abacus beads.
-- **Logic Engine**: 
-  - A 10-column system mapping to a 10-digit integer.
-  - Dynamic class toggling handles bead stacking and "active" states.
-- **Audio**: Web Audio API generates real-time oscillators for the "tick" and "success" sounds.
-- **Graphics**: Lightweight SVG icons and pure CSS-drawn abacus frame/beads (no external images).
+### Tips for Parents & Educators
+- Start in **Show Number** mode with numbers between 1 and 20 to help young children recognize when 5 requires moving the heaven bead down.
+- Challenge students to predict how many beads will touch the beam before clicking "Let's Go!".
+- Relate the column labels (Units, Tens, Hundreds, Thousands) directly to standard school place-value charts.
 
-## 📂 Project Structure
+---
 
+## 🛠️ For Editors & Developers
+
+### Directory & File Structure
 ```text
-kids-zone/
-│
-├── abacus/
-│   ├── abacus-trail.html
-│   └── README.md        ← (this file)
-│
-└── ... other games ...
+abacus/
+├── index.html                 # Clean markup containing setup controls and 10-rod abacus frame
+├── abacus.css                 # Soroban wooden frame, rod rails, and bead CSS transitions
+├── abacus.js                  # Place value digit parser, bead animation state, and audio triggers
+├── abacus-trail.html          # Backward-compatible redirect for legacy URLs
+└── README.md                  # This documentation
 ```
+
+### Soroban Bead State & Math Engine
+In `abacus.js`, any number is decomposed into its individual base-10 digits across 10 rods:
+```js
+function getDigitAt(num, rodIndex) {
+  // rodIndex 0 = Ones, 1 = Tens, 2 = Hundreds ...
+  return Math.floor(num / Math.pow(10, rodIndex)) % 10;
+}
+```
+- **Bead State Mapping**:
+  For each rod representing digit `D` (from 0 to 9):
+  - **Heaven Bead (Val 5)**: Active if `D >= 5`. Applied class `.active` translates the bead downward by `var(--bead-travel)`.
+  - **Earth Beads (Val 1 each)**: Number of active earth beads is `D % 5`. The first `k` beads receive `.active` and translate upward toward the beam.
+- **Realistic Bead Physics**:
+  CSS transitions in `abacus.css` utilize a snappy cubic-bezier timing function:
+  ```css
+  .bead {
+    transition: transform 0.28s cubic-bezier(0.25, 1, 0.5, 1);
+  }
+  ```
+- **Animation Sequencing (Add / Sub)**:
+  Uses `setTimeout` promises to stage transitions:
+  1. Render starting number state (delay: 600ms).
+  2. Highlight active rods involved in the operation.
+  3. Animate intermediate carries/borrows into the final calculated state.
+
+### Common Engine Integration
+- **Header & Footer**: Auto-mounted via `KZ.mountHeader('abacus')` and `KZ.mountFooter()`.
+- **Sound Synthesis**: Uses `KZAudio.playTick()` on individual bead movements and `KZAudio.playOk()` on calculation completions.
+- **Themes**: Bead colors and abacus wooden textures adapt smoothly across all 6 Kids Zone color themes.
+
+### Customization Guide
+- **Changing Rod Count**: The default is 10 rods (supports up to 9.9 Billion). To change to 7 rods (Millions), adjust `NUM_RODS = 7` in `abacus.js` and modify column labels in `index.html`.

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Memory Trail — Card Matching Challenge | Kids Zone</title>
+  <link rel="icon" type="image/svg+xml" href="../common/logo.svg" />
+  <link rel="apple-touch-icon" href="../common/logo.svg" />
+
+  <!-- Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <!-- Common Design System & Audio -->
+  <link rel="stylesheet" href="../common/common.css" />
+  <script src="../common/audio.js"></script>
+  <script src="../common/common.js"></script>
+
+  <!-- Game Specific CSS & JS -->
+  <link rel="stylesheet" href="memory.css" />
+  <script src="memory.js" defer></script>
+</head>
+
+<body>
+  <!-- Common Header Auto-Mounted -->
+  <header data-kz-header="memory"></header>
+
+  <main>
+    <!-- SETUP -->
+    <section id="setup-screen" class="card-wrap" aria-label="Setup">
+      <h2 style="margin:0.2rem 0; font-size:1.6rem; font-weight:800;">Choose Your Memory Trail 🚀</h2>
+
+      <div class="row" style="margin-top:0.4rem">
+        <strong>Remember:</strong>
+        <label><input type="radio" name="set" value="numbers" checked> Numbers</label>
+        <label><input type="radio" name="set" value="symbols"> Symbols</label>
+        <label><input type="radio" name="set" value="mixed"> Mixed</label>
+      </div>
+
+      <div class="row" style="margin-top:0.4rem">
+        <strong>Difficulty:</strong>
+        <label><input type="radio" name="diff" value="easy" checked> Easy</label>
+        <label><input type="radio" name="diff" value="medium"> Medium</label>
+        <label><input type="radio" name="diff" value="hard"> Hard</label>
+      </div>
+
+      <div class="row" style="margin-top:0.4rem">
+        <label for="time-secs"><strong>Total time (seconds):</strong></label>
+        <input type="number" id="time-secs" class="kz-select" min="30" max="900" value="120" style="width:110px">
+      </div>
+
+      <div class="row" style="margin-top:0.4rem">
+        <label><input type="checkbox" id="shuffle-cards" checked> <strong>Shuffle tiles each level</strong></label>
+        <label><input type="checkbox" id="show-peek"> <strong>1-second peek at new level</strong></label>
+      </div>
+
+      <div class="row" style="margin-top:0.75rem; justify-content:space-between">
+        <div class="grow"><div id="stats" style="font-weight:800; color:var(--muted)"></div></div>
+        <button class="secondary-btn" id="reset-progress" title="Reset saved best/last scores">🧹 Reset Progress</button>
+        <button class="main-btn" id="start-btn" style="min-width:180px">START TRAIL 🏁</button>
+      </div>
+    </section>
+
+    <!-- GAME -->
+    <section id="game-screen" class="card-wrap" aria-label="Game" style="display:none">
+      <div id="quiz-info">
+        <div id="level-info">Level 1/5</div>
+        <div id="timer-clock" aria-live="assertive">02:00</div>
+        <div id="pairs-info" style="justify-self:end">Pairs 0/0</div>
+      </div>
+
+      <div id="message" style="font-weight:800; color:var(--muted); min-height:1.2em; text-align:center;"></div>
+
+      <div id="board" style="--cols:4"></div>
+
+      <div class="stats">
+        <div id="score-box">Score: 0</div>
+        <div id="streak-box">Streak: 0 🔥</div>
+        <div id="found-box">Found: 0</div>
+      </div>
+
+      <div class="row" style="margin-top:0.75rem; justify-content:space-between">
+        <button class="ghost-btn no-print" id="peek-btn">👀 Peek</button>
+        <div class="row">
+          <button class="secondary-btn no-print" id="quit-btn">Quit ↷</button>
+          <button class="main-btn no-print" id="next-btn" disabled>Next Level ➜</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- RESULTS -->
+    <section id="result-screen" class="card-wrap" aria-label="Results" style="display:none">
+      <h2 style="font-size:1.8rem; font-weight:800;">Trail Complete! 🎉</h2>
+      <div id="appraise" style="font-size:1.1rem; font-weight:800; color:var(--muted); margin-top:0.25rem;"></div>
+      <div id="score-big">0</div>
+      <div style="font-weight:800; color:var(--muted)">Time left: <span id="time-left">00:00</span></div>
+      <div class="badges" id="badges"></div>
+
+      <div class="row" style="gap:0.5rem; margin:0.5rem 0">
+        <button class="main-btn no-print" id="play-again">Play Again 🔄</button>
+        <button class="secondary-btn no-print" id="print-btn">🖨️ Print / Save PDF</button>
+      </div>
+
+      <div id="summary-title" style="font-weight:800; margin-top:0.5rem">Level Summary</div>
+      <div id="review-list" class="review-list"></div>
+    </section>
+  </main>
+
+  <!-- Common Footer Auto-Mounted -->
+  <footer data-kz-footer></footer>
+</body>
+</html>

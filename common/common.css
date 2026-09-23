@@ -1,0 +1,599 @@
+/**
+ * Kids Zone - Common Universal Design System & Theme Styles
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Fredoka:wght@400;500;600;700&family=Orbitron:wght@700&family=Outfit:wght@600;700&display=swap');
+
+/* ==========================================================================
+   1. Theme Variables & Color Tokens
+   ========================================================================== */
+:root {
+  --primary: #059669;
+  --primary-light: #10b981;
+  --bg: #ecfdf5;
+  --text: #052e1c;
+  --muted: #475569;
+  --prog: #10b981;
+  --accent: #f59e0b;
+  --card: #ffffff;
+  --card-bg: #ffffff;
+  --border: rgba(5, 46, 28, 0.12);
+  --danger: #ef4444;
+  --ok: #16a34a;
+  --shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 16px 36px rgba(0, 0, 0, 0.12);
+  --radius: 20px;
+  --radius-sm: 12px;
+  --font-main: 'Baloo 2', 'Fredoka', system-ui, -apple-system, sans-serif;
+  --font-body: 'Fredoka', system-ui, sans-serif;
+  --font-mono: 'Orbitron', monospace;
+}
+
+/* Blue / Ocean Breeze */
+body.theme-blue, .theme-blue {
+  --primary: #2563eb;
+  --primary-light: #3b82f6;
+  --bg: #eff6ff;
+  --text: #0b1220;
+  --muted: #475569;
+  --prog: #22c55e;
+  --accent: #f59e0b;
+  --card: #ffffff;
+  --card-bg: #ffffff;
+  --border: rgba(37, 99, 235, 0.12);
+}
+
+/* Pink / Bubblegum */
+body.theme-pink, .theme-pink {
+  --primary: #ec4899;
+  --primary-light: #f472b6;
+  --bg: #fdf2f8;
+  --text: #831843;
+  --muted: #64748b;
+  --prog: #db2777;
+  --accent: #fbbf24;
+  --card: #ffffff;
+  --card-bg: #ffffff;
+  --border: rgba(236, 72, 153, 0.14);
+}
+
+/* Deep Space / Dark Mode */
+body.theme-space, .theme-space {
+  --primary: #7c3aed;
+  --primary-light: #a78bfa;
+  --bg: #0b1020;
+  --text: #f1f5f9;
+  --muted: #94a3b8;
+  --prog: #22d3ee;
+  --accent: #fbbf24;
+  --card: #141a2a;
+  --card-bg: #141a2a;
+  --border: rgba(255, 255, 255, 0.1);
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+/* Jungle / Emerald Nature (Default) */
+body.theme-jungle, .theme-jungle {
+  --primary: #059669;
+  --primary-light: #10b981;
+  --bg: #ecfdf5;
+  --text: #052e1c;
+  --muted: #475569;
+  --prog: #10b981;
+  --accent: #f59e0b;
+  --card: #ffffff;
+  --card-bg: #ffffff;
+  --border: rgba(5, 46, 28, 0.12);
+}
+
+/* Ocean Turquoise */
+body.theme-ocean, .theme-ocean {
+  --primary: #0ea5e9;
+  --primary-light: #38bdf8;
+  --bg: #e0f2fe;
+  --text: #06243b;
+  --muted: #475569;
+  --prog: #22c55e;
+  --accent: #f97316;
+  --card: #ffffff;
+  --card-bg: #ffffff;
+  --border: rgba(14, 165, 233, 0.14);
+}
+
+/* Candy Strawberry */
+body.theme-candy, .theme-candy {
+  --primary: #f43f5e;
+  --primary-light: #fb7185;
+  --bg: #fff1f2;
+  --text: #7f1d1d;
+  --muted: #57534e;
+  --prog: #34d399;
+  --accent: #fb7185;
+  --card: #ffffff;
+  --card-bg: #ffffff;
+  --border: rgba(244, 63, 94, 0.14);
+}
+
+/* High Contrast Accessibility */
+body.high-contrast, .high-contrast {
+  --bg: #000000;
+  --text: #ffffff;
+  --card: #111111;
+  --card-bg: #111111;
+  --primary: #ffd000;
+  --primary-light: #ffe566;
+  --accent: #00ffff;
+  --prog: #00ff66;
+  --muted: #cccccc;
+  --border: #ffd000;
+  --danger: #ff4d4d;
+  --ok: #00ff66;
+  --shadow: 0 0 0 2px #ffd000;
+}
+
+/* ==========================================================================
+   2. Base & Typography
+   ========================================================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-main);
+  transition: background 0.3s ease, color 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Accessible focus ring */
+:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ==========================================================================
+   3. Common Header
+   ========================================================================== */
+.kz-header {
+  background: var(--card);
+  border-bottom: 3px solid var(--border);
+  box-shadow: var(--shadow);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  padding: 0.55rem 1.25rem;
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.kz-header-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.kz-header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.kz-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  color: var(--text);
+  font-weight: 800;
+  font-size: 1.2rem;
+  letter-spacing: -0.3px;
+}
+
+.kz-brand-logo {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.1));
+  transform: rotate(-2deg);
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  display: block;
+}
+
+.kz-brand:hover .kz-brand-logo {
+  transform: rotate(3deg) scale(1.12);
+}
+
+.kz-footer-logo {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  display: inline-block;
+  vertical-align: middle;
+  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.1));
+}
+
+.kz-brand-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: var(--primary);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+  transform: rotate(-3deg);
+  transition: transform 0.2s ease;
+}
+
+.kz-brand:hover .kz-brand-icon {
+  transform: rotate(3deg) scale(1.08);
+}
+
+.kz-game-label {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.25rem 0.65rem;
+  background: var(--bg);
+  border: 1.5px solid var(--primary);
+  border-radius: 999px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.kz-game-switcher {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.kz-select, .kz-header select {
+  font-family: inherit;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--text);
+  background: var(--card);
+  border: 2px solid var(--primary);
+  padding: 0.35rem 0.65rem;
+  border-radius: 10px;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.kz-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.kz-icon-btn {
+  background: var(--card);
+  border: 2px solid var(--primary);
+  color: var(--primary);
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  font-weight: 800;
+  transition: all 0.15s ease;
+}
+
+.kz-icon-btn:hover {
+  background: var(--primary);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.kz-icon-btn[aria-pressed="true"],
+.kz-icon-btn.active {
+  background: var(--primary);
+  color: #ffffff;
+}
+
+.kz-home-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: var(--primary);
+  color: #ffffff !important;
+  text-decoration: none;
+  font-weight: 800;
+  font-size: 0.85rem;
+  padding: 0.4rem 0.85rem;
+  border-radius: 10px;
+  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.15);
+  transition: transform 0.1s ease, filter 0.15s ease;
+}
+
+.kz-home-btn:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+}
+
+.kz-home-btn:active {
+  transform: translateY(1px);
+}
+
+.kz-progress-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: var(--card);
+  border: 2px solid var(--accent);
+  color: var(--text) !important;
+  text-decoration: none;
+  font-weight: 800;
+  font-size: 0.86rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 12px;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.kz-progress-btn:hover,
+.kz-progress-btn.active {
+  background: var(--accent);
+  color: #ffffff !important;
+  border-color: var(--accent);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 6px 16px rgba(245, 158, 11, 0.3);
+}
+
+.kz-progress-btn:active {
+  transform: translateY(1px);
+}
+
+.kz-profile-avatar {
+  font-size: 1.15rem;
+  line-height: 1;
+}
+
+.kz-profile-name {
+  max-width: 120px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.kz-progress-badge {
+  font-size: 0.85rem;
+}
+
+/* Header progress bar slot */
+.kz-header-progress {
+  height: 4px;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.06);
+  margin-top: 0.4rem;
+  border-radius: 999px;
+  overflow: hidden;
+  display: none;
+}
+
+.kz-header-progress.active {
+  display: block;
+}
+
+.kz-header-progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--prog), var(--accent));
+  transition: width 0.35s ease;
+}
+
+/* ==========================================================================
+   4. Common Footer
+   ========================================================================== */
+.kz-footer {
+  background: var(--card);
+  border-top: 3px solid var(--border);
+  padding: 1.5rem 1rem;
+  margin-top: auto;
+  font-family: var(--font-body);
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.kz-footer-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.kz-footer-brand {
+  font-family: var(--font-main);
+  font-weight: 800;
+  font-size: 1.15rem;
+  color: var(--text);
+  margin-bottom: 0.3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+}
+
+.kz-footer-desc {
+  font-size: 0.88rem;
+  color: var(--muted);
+  line-height: 1.5;
+  margin-bottom: 0.75rem;
+}
+
+.kz-footer-links {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.9rem;
+  flex-wrap: wrap;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.kz-footer-links a, .kz-footer-links button {
+  color: var(--primary);
+  text-decoration: none;
+  background: transparent;
+  border: none;
+  font-family: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 0;
+}
+
+.kz-footer-links a:hover, .kz-footer-links button:hover {
+  text-decoration: underline;
+}
+
+.kz-footer-sep {
+  color: var(--muted);
+  opacity: 0.5;
+}
+
+/* ==========================================================================
+   5. Reusable UI Components
+   ========================================================================== */
+.kz-card {
+  background: var(--card);
+  border: 3px solid var(--primary);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1.5rem;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.kz-btn {
+  font-family: var(--font-main);
+  font-weight: 800;
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 0.65rem 1.25rem;
+  border-radius: var(--radius-sm);
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.15);
+  transition: transform 0.1s ease, filter 0.15s ease;
+}
+
+.kz-btn:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.15);
+}
+
+.kz-btn:hover {
+  filter: brightness(1.08);
+}
+
+.kz-btn-primary {
+  background: var(--primary);
+  color: #ffffff;
+}
+
+.kz-btn-secondary {
+  background: transparent;
+  border: 2px dashed var(--primary);
+  color: var(--primary);
+  box-shadow: none;
+}
+
+.kz-btn-secondary:hover {
+  background: rgba(5, 150, 105, 0.08);
+}
+
+/* Modal */
+.kz-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: 200;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.kz-modal-overlay.open {
+  display: flex;
+}
+
+.kz-modal-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  border: 4px solid var(--primary);
+  max-width: 540px;
+  width: 100%;
+  padding: 1.8rem;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+  position: relative;
+  animation: kzModalPop 0.25s ease-out;
+}
+
+@keyframes kzModalPop {
+  from {
+    opacity: 0;
+    transform: scale(0.92) translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.kz-modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: rgba(0, 0, 0, 0.08);
+  border: none;
+  font-size: 1.2rem;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text);
+}
+
+/* Utility hidden */
+.kz-hidden {
+  display: none !important;
+}
+
+@media (max-width: 768px) {
+  .kz-header {
+    padding: 0.5rem 0.8rem;
+  }
+  .kz-brand-title {
+    display: none;
+  }
+  .kz-game-label {
+    max-width: 140px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}

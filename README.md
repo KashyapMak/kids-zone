@@ -1,215 +1,63 @@
 # 🌈 Kids Zone
 
-**Kids Zone** is a growing collection of **safe, fun, and educational web tools for children**.
-All activities are **offline‑friendly** and **distraction‑free**, built with **HTML, CSS, and JavaScript** — no frameworks, no tracking, no accounts.
+**Kids Zone** is a curated suite of **safe, fun, and interactive educational web games and math tools for children**.  
+Designed for home learning, classrooms, and independent play, every activity is **100% distraction-free**, **offline-capable**, and built using clean, lightweight web standards with **zero advertisements, no logins, and no user tracking**.
 
-Our mission: **help kids learn through play**.
-
-👉 Play online: [Kids-zone](https://kashyapmak.github.io/kids-zone) 
-- [🧮 Times Table Trail](https://kashyapmak.github.io/kids-zone/time-table/times-table-trail.html) 
-- [➕➖ Add & Sub Trail](https://kashyapmak.github.io/kids-zone/add-sub/add-sub-trail.html) 
-- [➗➕ Deci‑Frac Trail](https://kashyapmak.github.io/kids-zone/deci-frac/deci-frac-trail.html) 
-- [📐 Perimeter Trail](https://kashyapmak.github.io/kids-zone/perimeter/perimeter-trail.html)   
-- [⚖️ Number Nature Trail - Comparision](https://kashyapmak.github.io/kids-zone/compare-number/number-compare-trail.html)
-- [🔢 Number Order Trail](https://kashyapmak.github.io/kids-zone/order-number/number-order-trail.html)
-- [🔢 Memory Trail](https://kashyapmak.github.io/kids-zone/memory/memory-trail.html)
-- [🏗️ Equation Architect](https://kashyapmak.github.io/kids-zone/equation-architect/equation-architect.html)
-- [🧩 KLOTSKI Trail](https://kashyapmak.github.io/kids-zone/klotski/klotski-trail.html)
-- [🧮 Abacus Trail](https://kashyapmak.github.io/kids-zone/abacus/abacus-trail.html)
-- [🧪 Magic Sort](https://kashyapmak.github.io/kids-zone/magic-sort/magic-sort.html)
+👉 **Play Online:** [Kids Zone Learning Portal](https://kashyapmak.github.io/kids-zone)
 
 ---
 
-## 📦 What's Inside
+## 🌟 Why Kids Zone? Core Benefits
 
-### 🧮 Times Table Trail
-A kid‑friendly multiplication practice game covering tables **1–30** with custom ranges, **Practice** & **Test (Timed)** modes (per‑question or total‑time), smart distractors, visual arrays, audio feedback, streaks, badges, and a printable summary.
-
-- **Folder:** `time-table/`
-- **Run:** [time-table/times-table-trail.html](https://kashyapmak.github.io/kids-zone/time-table/times-table-trail.html) 
-- **Docs:** `time-table/README.md`
-
----
-
-### ➕➖ Add & Sub Trail
-A flexible addition and subtraction practice game with custom difficulty, 1–4-digit numbers, and configurable “No negatives / No carry / No borrow” options.
-
-- **Folder:** `add-sub/`
-- **Run:** [add-sub/add-sub-trail.html](https://kashyapmak.github.io/kids-zone/add-sub/add-sub-trail.html)
-- **Docs:** `add-sub/README.md`
+- 🧠 **Conceptual & Visual Learning**: Bridges abstract numbers with tangible visual aids — including interactive abacus beads, dot arrays, fraction bars, 100-grids, and geometric canvas models.
+- 🎯 **Dual Learning Modes**: Choose between relaxed, self-paced **Practice Mode** (with instant retries and zero pressure) and focused **Timed Test Mode** (for building speed and recall fluency).
+- 🛡️ **Safe & Distraction-Free**: 100% ad-free, COPPA-friendly, and privacy-respecting. No accounts, cookies, or data collection.
+- 📊 **Recharts Progress Dashboard**: Visual score history and accuracy trends over time for each game, powered by the `recharts` library. 100% on-device local storage with personalized kid avatars, nickname customization ("How should we call you?"), JSON export, and instant reset controls.
+- 🖨️ **Printable Summaries**: Real-time mistake tracking with one-click printable results sheets for homework review and classroom assessments.
+- ⚡ **Offline & Lightweight**: Fast loading with zero framework overhead. Runs directly from browser bookmarks or downloaded files on Chromebooks, tablets, laptops, and smartphones.
+- ♿ **Inclusive & Accessible**: Includes high-contrast modes, dynamic theme choices (Jungle, Ocean, Space, Candy, etc.), keyboard navigation, and synthesized audio feedback.
 
 ---
 
-### ➗➕ Deci‑Frac Trail
-A decimal/fraction addition and subtraction game with vertical layout, stacked fraction visuals, and practice/test modes.
+## 🎮 Explore the Games
 
-- **Folder:** `deci-frac/`
-- **Run:** [deci-frac/deci-frac-trail.html](https://kashyapmak.github.io/kids-zone/deci-frac/deci-frac-trail.html)
-- **Docs:** `deci-frac/README.md`
-
----
-
-### 📐 Perimeter Trail
-A geometry perimeter practice app with interactive shapes, side labels, and formula hints for square, rectangle, triangle, and pentagon.
-
-- **Folder:** `perimeter/`
-- **Run:** [perimeter/perimeter-trail.html](https://kashyapmak.github.io/kids-zone/perimeter/perimeter-trail.html)
-- **Docs:** `perimeter/README.md`
-
----
-
-### ⚖️ Number Nature Trail
-A comparison game with whole numbers, decimals, and fractions (stacked display), where learners choose `<`, `=`, or `>`.
-
-- **Folder:** `compare-number/`
-- **Run:** [compare-number/number-compare-trail.html](https://kashyapmak.github.io/kids-zone/compare-number/number-compare-trail.html)
-- **Docs:** `compare-number/README.md`
+| Activity | Category & Age | Description | Key Benefits |
+| :--- | :--- | :--- | :--- |
+| [🧮 **Times Table Trail**](time-table/) | Math & Arithmetic *(Ages 6–12)* | Master multiplication tables 1–30 with customizable ranges, horizontal choice options, and dot arrays. | Builds multiplication fluency, visualizes factors with arrays, and offers flexible per-question or total timers. |
+| [➕➖ **Add & Sub Trail**](add-sub/) | Math & Arithmetic *(Ages 5–11)* | Practice addition and subtraction from 1 to 4 digits with optional safety constraints. | Supports beginners with **No Carry**, **No Borrow**, and **No Negatives** toggles, plus interactive number lines. |
+| [➗➕ **Deci-Frac Trail**](deci-frac/) | Math & Arithmetic *(Ages 8–13)* | Vertical decimal sums and stacked fraction calculations (+ and −). | Mirrors paper worksheet layouts, reinforces common denominators, and includes fraction bar visual aids. |
+| [📐 **Perimeter Trail**](perimeter/) | Geometry *(Ages 7–12)* | Calculate perimeters of dynamic squares, rectangles, equilateral triangles, and regular pentagons. | Teaches geometric formulas, side-length addition, and proportional shape scaling via live canvas drawings. |
+| [⚖️ **Number Nature Trail**](compare-number/) | Number Sense *(Ages 6–11)* | Compare two numbers by choosing **`<`**, **`=`**, or **`>`** across whole numbers, decimals, and stacked fractions. | Strengthens relational reasoning and magnitude estimation with side-by-side number line plotting. |
+| [🔢 **Number Order Trail**](order-number/) | Number Sense *(Ages 6–11)* | Arrange shuffled cards in **Ascending** or **Descending** order via drag-and-drop or tap-to-place. | Enhances sequencing skills across mixed number representations (fractions, decimals, and integers). |
+| [🧮 **Abacus Trail**](abacus/) | Math & Arithmetic *(Ages 5–11)* | Interactive 10-rod vertical Soroban abacus with smooth animated bead physics. | Demystifies place value (Units to Billions) and visualizes the mechanics of addition and subtraction. |
+| [🏗️ **Equation Architect**](equation-architect/) | Logic & Puzzles *(Ages 7–12)* | Reverse-math puzzle: combine number and operator tiles to construct equations that reach a target value. | Develops algebraic thinking, mental arithmetic, and multi-step computational reasoning. |
+| [🧠 **Memory Trail**](memory/) | Brain & Focus *(All Ages)* | Card matching challenge featuring numbers, symbols, mixed card decks, and progressive level sizes. | Exercises short-term working memory, concentration, and pattern recognition under gentle time challenges. |
+| [🧩 **Klotski Trail**](klotski/) | Logic & Puzzles *(Ages 6–99)* | Classic sliding tile puzzle in 4×4, 8×8, and 12×12 board sizes. | Sharpens spatial planning, algorithmic problem solving, and patience with guaranteed solvable shuffles. |
+| [🧪 **Magic Sort**](magic-sort/) | Logic & Puzzles *(All Ages)* | Sort vibrant magic potions across glass test tubes until each tube holds a single uniform color. | Encourages forward planning, working memory, and logical deduction in a soothing, tactile environment. |
+| [🪢 **Tug War of Math**](https://kashyapmak.github.io/tug-war-of-math/) ↗ | Math & Arithmetic *(Ages 6–14 • 2 Players)* | Two-team same-screen battle with animated tug-of-war SVG arena, customizable team names/photos, and dual key controls. | Sparks high-energy arithmetic speed and mental calculation; features customizable operations, carry/borrow toggles, and procedural audio. ([GitHub Repository](https://github.com/KashyapMak/tug-war-of-math)) |
+| [⚖️ **Seesaw Battle Quiz Arena**](seesaw-war-quiz/) | Logic & Puzzles *(All Ages • 2 Players)* | Exciting 2-team seesaw quiz battle with dynamic physics, customizable mascots, science, space, nature, and riddles question packs, and custom CSV uploads. | Fosters team-based knowledge sharing, quick thinking, and collaborative learning with kid-safe non-negative scoring. |
 
 ---
 
-### 🔢 Number Order Trail
-A number ordering game where learners place 3–5 cards in ascending/descending order, with mixed number types and a responsive drag-and-drop UI.
+## 🚀 Quick Start
 
-- **Folder:** `order-number/`
-- **Run:** [order-number/number-order-trail.html](https://kashyapmak.github.io/kids-zone/order-number/number-order-trail.html)
-- **Docs:** `order-number/README.md`
+1. **Play in Browser**: Simply click any of the links above or open `index.html` in your browser.
+2. **Run Locally**:
+   ```bash
+   # Clone the repository
+   git clone https://github.com/KashyapMak/kids-zone.git
+   cd kids-zone
 
----
-
-
-### 🧠 Memory Trail
-A memory matching game with numbers, symbols, and mixed sets, plus adjustable difficulty, themes, and a global timer.
-
-- **Folder:** `memory/`
-- **Run:** [memory/memory-trail.html](https://kashyapmak.github.io/kids-zone/memory/memory-trail.html)
-- **Docs:** `memory/README.md`
-
----
-### 🏗️ Equation Architect
-A puzzle game to build valid equations with number/operator tiles, featuring guaranteed solvable problems and helpful guidance.
-
-- **Folder:** `equation-architect/`
-- **Run:** [equation-architect/equation-architect.html](https://kashyapmak.github.io/kids-zone/equation-architect/equation-architect.html)
-- **Docs:** `equation-architect/README.md`
+   # Run with Node.js
+   npm start
+   # Open http://localhost:3000 in your browser
+   ```
+3. **Run Offline**: Download the repository as a ZIP, unpack it, and double-click `index.html`. No internet required!
 
 ---
 
-### 🧩 KLOTSKI Trail
-KLOTSKI Trail is a single‑file, kid‑friendly **sliding tile puzzle** inspired by the classic wooden Klotski board game.  
+## 👨‍💻 Author & License
 
-- **Folder:** `klotski/`
-- **Run:** [klotski/klotski-trail.html](https://kashyapmak.github.io/kids-zone/klotski/klotski-trail.html)
-- **Docs:** `klotski/README.md`
-
----
-
-### 🧮 Abacus Trail
-An interactive visual tool to master the vertical abacus, allowing kids to explore place value and arithmetic through animated bead movements.
-
-- **Folder:** `abacus/`
-- **Run:** [abacus/abacus-trail.html](https://kashyapmak.github.io/kids-zone/abacus/abacus-trail.html)
-- **Docs:** `abacus/README.md`
-
----
-
-### 🧪 Magic Sort
-Sort liquids across glass test tubes until each tube contains only one color.
-
-- **Folder:** `magic-sort/`
-- **Run:** [magic-sort/magic-sort.html](https://kashyapmak.github.io/kids-zone/magic-sort/magic-sort.html)
-- **Docs:** `magic-sort/README.md`
-
-
----
-
-## 🎯 Design Principles
-
-- ✅ **Offline‑first**
-- ✅ **Single‑file apps** where possible
-- ✅ **No ads, no tracking, no sign‑ups**
-- ✅ **Kid‑friendly** fonts, colors, and buttons
-- ✅ **Accessible** (keyboard, high‑contrast, readable sizes)
-- ✅ **Safe** for classrooms and homes
-
----
-
-## 🛡️ Kids‑Safe & Privacy‑First
-
-Kids Zone apps:
-
-- Do **not** collect personal data
-- Make **no** analytics or advertising calls
-- Store progress **locally** in the browser only
-- Run fully **offline** (optional CDN fonts/effects if online)
-- Provide a **Reset Progress** option to clear saved data
-
----
-
-## 🚀 Roadmap
-
-- ➗ Division practice
-- 🔢 Number sense & place value
-- 🧠 Logic & pattern games
-- 🧩 Early‑learner mini puzzles
-- 👩‍🏫 Teacher / Parent modes
-- 📄 Printable worksheets & learning packs
-
-All future tools will remain:
-
-> **Simple. Safe. Fun. Educational.**
-
----
-
-## 🛠️ Technology
-
-- HTML5, CSS3, Vanilla JavaScript
-- Optional CDN assets for fonts/effects
-- No frameworks
-- No build system
-
----
-
-## 👨‍💻 Author
-
-- **Author:** Kashyap Makadia  
-- **LinkedIn:** https://www.linkedin.com/in/kashyapmakadia/  
-- **GitHub Repo:** https://github.com/KashyapMak/kids-zone
-
----
-
-## 🤝 Contributing
-
-Contributions and ideas are welcome!
-
-- New kid‑friendly learning tools
-- UI/UX & accessibility improvements
-- Learning logic & difficulty refinements
-
-Please keep contributions:
-- **Simple**
-- **Kid‑safe**
-- **Framework‑free** where possible
-
----
-
-## 📄 License
-
-**MIT License** — free to use, modify, and share.  
-Attribution appreciated:
-
-> _"Kids Zone by Kashyap Makadia."_
-
----
-
-## 🗂️ Repository Structure
-
-```text
-kids-zone/
-│
-├── <game folder>/
-│   ├── <game>.html
-│   └── README.md
-│
-├── LICENSE
-└── README.md   ← (this file)
-```
+- **Created by:** [Kashyap Makadia](https://www.linkedin.com/in/kashyapmakadia/)
+- **Repository:** [https://github.com/KashyapMak/kids-zone](https://github.com/KashyapMak/kids-zone)
+- **License:** [MIT License](LICENSE) — free for families, schools, and educators everywhere.

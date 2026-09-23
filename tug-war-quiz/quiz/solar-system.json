@@ -1,0 +1,122 @@
+{
+  "id": "solar-system",
+  "title": "Solar System & Cosmic Quests",
+  "subject": "Space & Astronomy",
+  "ageGroup": "Ages 6-13",
+  "difficulty": "Easy-Medium",
+  "description": "Travel across planets, moons, asteroids, and stars in our solar system and beyond.",
+  "questions": [
+    {
+      "id": 1,
+      "question": "Which planet is known as the 'Red Planet' because of iron oxide on its surface?",
+      "options": ["Venus", "Mars", "Jupiter", "Mercury"],
+      "answerIndex": 1,
+      "fact": "Mars looks reddish-orange because of rust (iron oxide) in its soil and atmosphere."
+    },
+    {
+      "id": 2,
+      "question": "What is the largest planet in our solar system?",
+      "options": ["Saturn", "Neptune", "Jupiter", "Earth"],
+      "answerIndex": 2,
+      "fact": "Jupiter is so massive that more than 1,300 Earths could fit inside it!"
+    },
+    {
+      "id": 3,
+      "question": "Which planet is closest to the Sun?",
+      "options": ["Mercury", "Venus", "Earth", "Mars"],
+      "answerIndex": 0,
+      "fact": "Mercury is the smallest planet and closest to the Sun, orbiting it every 88 days."
+    },
+    {
+      "id": 4,
+      "question": "What celestial body is at the exact center of our solar system?",
+      "options": ["The Moon", "The Sun", "Jupiter", "Polaris"],
+      "answerIndex": 1,
+      "fact": "The Sun contains 99.8% of all the mass in the entire solar system!"
+    },
+    {
+      "id": 5,
+      "question": "Which planet is famous for having large, bright, visible rings made of ice and dust?",
+      "options": ["Uranus", "Jupiter", "Saturn", "Neptune"],
+      "answerIndex": 2,
+      "fact": "Saturn has thousands of beautiful ringlets composed mostly of chunks of water ice."
+    },
+    {
+      "id": 6,
+      "question": "How long does it take for Earth to complete one full orbit around the Sun?",
+      "options": ["24 hours", "30 days", "365.25 days", "10 years"],
+      "answerIndex": 2,
+      "fact": "One Earth year takes about 365 days and 6 hours, which is why we add a leap day every 4 years!"
+    },
+    {
+      "id": 7,
+      "question": "What was the name of the first person to walk on the Moon?",
+      "options": ["Buzz Aldrin", "Neil Armstrong", "Yuri Gagarin", "Michael Collins"],
+      "answerIndex": 1,
+      "fact": "Neil Armstrong stepped onto the lunar surface on July 20, 1969, saying 'That's one small step for man, one giant leap for mankind.'"
+    },
+    {
+      "id": 8,
+      "question": "Which planet is the hottest in our solar system due to a runaway greenhouse effect?",
+      "options": ["Mercury", "Venus", "Mars", "Saturn"],
+      "answerIndex": 1,
+      "fact": "Venus has thick clouds of carbon dioxide and sulfuric acid that trap heat at over 460°C (860°F)!"
+    },
+    {
+      "id": 9,
+      "question": "What is the natural satellite of Earth?",
+      "options": ["Titan", "The Moon", "Europa", "Phobos"],
+      "answerIndex": 1,
+      "fact": "The Moon is Earth's only natural satellite, orbiting about 384,400 km away."
+    },
+    {
+      "id": 10,
+      "question": "Which galaxy do we live in?",
+      "options": ["Andromeda", "Milky Way", "Whirlpool", "Sombrero"],
+      "answerIndex": 1,
+      "fact": "The Milky Way is a spiral galaxy containing billions of stars, including our Sun."
+    },
+    {
+      "id": 11,
+      "question": "What is a shooting star really?",
+      "options": ["A dying star", "A meteor burning up in Earth's atmosphere", "A comet tail", "Space junk"],
+      "answerIndex": 1,
+      "fact": "A shooting star is a small meteoroid burning brightly as it streaks through the atmosphere."
+    },
+    {
+      "id": 12,
+      "question": "Which dwarf planet in our solar system was considered the 9th planet until 2006?",
+      "options": ["Ceres", "Eris", "Pluto", "Makemake"],
+      "answerIndex": 2,
+      "fact": "Pluto was reclassified as a dwarf planet by the International Astronomical Union in 2006."
+    },
+    {
+      "id": 13,
+      "question": "What causes day and night on Earth?",
+      "options": ["Earth revolving around the Sun", "Earth spinning on its axis", "The Moon blocking sunlight", "Sun turning off"],
+      "answerIndex": 1,
+      "fact": "As Earth rotates once every 24 hours, different parts face toward or away from the Sun."
+    },
+    {
+      "id": 14,
+      "question": "Which telescope launched into space in 2021 to view the deepest reaches of the universe with infrared light?",
+      "options": ["Hubble", "James Webb Space Telescope", "Kepler", "Spitzer"],
+      "answerIndex": 1,
+      "fact": "The James Webb Space Telescope has a giant gold-plated mirror that captures light from the earliest galaxies!"
+    },
+    {
+      "id": 15,
+      "question": "Which planet is tipped on its side and rotates almost completely horizontally?",
+      "options": ["Jupiter", "Uranus", "Neptune", "Mars"],
+      "answerIndex": 1,
+      "fact": "Uranus has an extreme axial tilt of 98 degrees, so its poles face almost directly at the Sun during parts of its orbit!"
+    },
+    {
+      "id": 16,
+      "question": "What is the Great Red Spot on Jupiter?",
+      "options": ["A volcano", "A giant canyon", "A massive swirling storm", "An ocean of lava"],
+      "answerIndex": 2,
+      "fact": "The Great Red Spot is an enormous anti-cyclonic storm that has been raging for hundreds of years!"
+    }
+  ]
+}

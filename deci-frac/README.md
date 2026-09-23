@@ -1,212 +1,81 @@
-# ➗➕ Deci‑Frac Trail
+# ➗➕ Deci-Frac Trail
 
-**Deci‑Frac Trail** is a single‑file, kid‑friendly game that helps learners practice **addition** and **subtraction** with **decimals** and **fractions** — using a **vertical, column layout** to mirror how sums are worked out on paper.
-
-It follows the same feel as your *Trail* series (Times Table Trail, Add & Sub Trail): kid‑safe design, practice/test modes, timers, audio feedback, optional read‑aloud, streaks, badges, and a printable summary. Works **offline** and needs **no build tools**.
+An educational math game designed to practice addition and subtraction with decimals and fractions using authentic stacked and column layouts.
 
 ---
 
-## ✨ Highlights
+## 👤 For End Users (Kids, Parents & Educators)
 
-- **Decimals, Fractions, or Mixed** questions
-- **Vertical (column) layout**
-  - **Decimals** (aligned to decimal point)
-  - **Fractions** shown **stacked** side‑by‑side:
+### Overview & Educational Value
+Deci-Frac Trail bridges the gap between horizontal equation solving and vertical paper-and-pencil calculations. It displays decimal arithmetic aligned strictly to the decimal point and renders fractions with true stacked numerators and denominators (`a/b`), reinforcing conceptual grasp and mental calculation.
 
-  ```
-    2     4
-   --- + ---
-    5     5
-  ```
+### How to Play
+1. **Choose Problem Type**:
+   - **Decimals**: Practice multi-digit decimal addition or subtraction with configurable whole digits (1–3) and decimal places (1–3).
+   - **Fractions**: Work with fractions including like or unlike denominators, with options for auto-simplification and proper fractions only.
+   - **Mixed**: Alternates between decimal and fraction problems for comprehensive review.
+2. **Select Operation**: Pure **Addition**, pure **Subtraction**, or a **Mixed** blend.
+3. **Visual Learning Aids**:
+   - **100-Grid Visualizer**: Highlights percentage-like shaded areas for decimal values up to 2 decimal places.
+   - **Fraction Bars**: Renders side-by-side fraction proportion bars to visualize the magnitude of each fraction before adding or subtracting.
+4. **Choose Game Mode**:
+   - **Practice Mode**: Explore without a timer; re-attempt any incorrect answer immediately.
+   - **Test Mode (Timed)**: Choose per-question or total test countdowns to measure speed and accuracy.
+5. **Answer & Print Summary**: Select the correct answer or press keyboard keys `1`–`6`. Review your final score and print the detailed calculation sheet.
 
-- **Practice** vs **Test (Timed)**  
-  - **Per‑question** timer *or* **Total‑time** countdown
-- **Configurable difficulty**
-  - **Decimals**: whole‑number digits (1–3) & decimal places (1–3)
-  - **Fractions**: like/unlike denominators, **simplify result**, **proper results**, **no negative answers**
-- **Smart options** (realistic distractors) to encourage understanding
-- **Visual aids**:
-  - **100‑grid** for small decimal problems
-  - **Fraction bars** for each operand
-- **Kid‑friendly UX**: jungle theme, big buttons, fun fonts, confetti 🎉
-- **Audio**: feedback sounds (on by default) + **read‑aloud** toggle
-- **Progress**: local best/last saved; detailed, **printable** summary
-- **Offline**: one HTML file, no tracking, no accounts
+### Keyboard Shortcuts
+- `1` to `6`: Select answer option
+- `Enter` or `N`: Proceed to next question (Test mode)
+- `S`: Skip current question
+- `R`: Read question aloud
 
----
-
-## 🚀 Getting Started
-
-1. Open the folder (recommended name): `deci-frac/`
-2. Double‑click **`deci-frac-trail.html`** to open it in a modern browser.
-3. Choose **Type**, **Operation**, and **Questions** → **START TRAIL**.
-
-> Works offline in Chrome, Edge, Firefox, and Safari.
+### Tips for Parents & Educators
+- For beginners introducing fractions, keep **Like Denominators** checked.
+- Once learners understand common denominators, uncheck **Like Denominators** to practice finding LCM.
+- Encourage students to observe the **Fraction Bars** before selecting an answer to estimate whether the sum should be greater or less than 1.
 
 ---
 
-## 🧩 How to Play
+## 🛠️ For Editors & Developers
 
-1. **Choose Type**  
-   - **Decimals**: select whole digits (1–3) and decimal places (1–3)  
-   - **Fractions**: pick denominator range, like/unlike denoms, simplify/proper
-   - **Mixed**: a blend of both
-2. **Choose Operation**: Addition, Subtraction, or Mixed (+/−)
-3. **Set Questions**: 5–50
-4. **Options**:
-   - **No negative answers** (for subtraction)
-   - **Show visual aid** (100‑grid or fraction bars)
-   - **Shuffle options**
-5. **Mode**:
-   - **Practice**: no countdown; immediate feedback; retries allowed
-   - **Test (Timed)**:
-     - **Per‑question** timer (e.g., 12s each)
-     - **Total‑time** countdown (e.g., 240s for the whole quiz)
-6. Answer using the large **option buttons**.  
-7. At the end, view **Score**, **Time Taken**, **Badges**, and a **Q&A Summary**. Use **Print** to save/print a sheet.
-
----
-
-## ⏱️ Timing & Tracking
-
-- **Practice** mode tracks **total time** (shown on the results screen).
-- **Test** mode supports **per‑question** and **total‑time** timers.
-- Best/last stats are saved **locally** in `localStorage` (per type/mode/timer).
-
----
-
-## 🧠 Visual Aids
-
-- **Decimals**: a **100‑grid** highlights approximate quantity (for small values and up to 2 dp).
-- **Fractions**: **fraction bars** show each operand’s size (top vs bottom).
-
----
-
-## 🎮 Keyboard Shortcuts
-
-- `1`–`6` → choose an answer  
-- `N` or `Enter` → Next (in Test mode)  
-- `S` → Skip  
-- `R` → Read the question aloud  
-- Header toggles: **🔊** sound, **🗣️** voice, **🌓** high‑contrast
-
----
-
-## 🎨 Display & Layout
-
-- **Decimals** are shown vertically, aligned to the decimal point:
-
-  ```
-   10.50
-  −  2.20
-  ------
-  ```
-
-- **Fractions** are shown **stacked**, side‑by‑side with the operator on the **middle** line:
-
-  ```
-    2     4
-   --- + ---
-    5     5
-  ```
-
-> Answer options for fractions are displayed as `a/b` by default (simple and compact).  
-> If you want **stacked fraction answers on the buttons** as well, say the word — easy to add.
-
----
-
-## 🔧 Configuration (inline)
-
-All configuration resides in the single HTML file and is set at runtime:
-
-```js
-const cfg = {
-  type: 'decimal',           // 'decimal' | 'fraction' | 'mixed'
-  opMode: 'add',             // 'add' | 'sub' | 'mix'
-  total: 15,
-  mode: 'practice',          // 'practice' | 'test'
-  timeboxType: 'per-question', // or 'total'
-  perQSeconds: 12,
-  totalSeconds: 240,
-  // Visuals & UX
-  shuffleOptions: true,
-  showAid: true,
-  // Decimals
-  wholeDigits: 2,
-  decPlaces: 2,
-  // Fractions
-  denMin: 3, denMax: 12,
-  likeDen: true,
-  simplify: true,
-  properOnly: false,
-  // Safety
-  noNegative: true
-};
-```
-
----
-
-## ♿ Accessibility & UX
-
-- Large, high‑contrast friendly buttons (toggle **🌓**)
-- Kid‑friendly typefaces and spacing
-- Keyboard navigation/shortcuts
-- Optional **read‑aloud** via Web Speech API (toggle **🗣️**)
-
----
-
-## 🛡️ Kids‑Safe & Privacy‑First
-
-This app:
-
-- Contains **no ads**, **no tracking**, and **no logins**
-- Runs **offline**; the only optional network hits are fonts/effects if online
-- Stores progress **locally** in the browser and can be reset in the UI
-
----
-
-## 🧪 Browser Support
-
-- Latest **Chrome**, **Edge**, **Firefox**, **Safari**
-- Audio feedback uses **Web Audio API**; read‑aloud uses **Web Speech API** (if available)
-
----
-
-## 🐛 Troubleshooting
-
-- **No sound?** Make sure the 🔊 toggle is on. Some browsers require a click before audio can play.
-- **No voice?** Your browser may not support **Speech Synthesis**; try enabling it after a user gesture (click).
-- **Fonts differ offline?** Web fonts load from Google Fonts; offline, it falls back to system fonts.
-- **Timer not counting down?** Ensure **Test (Timed)** is selected, and pick **Per‑question** or **Total**.
-
----
-
-## 👤 Author & Links
-
-- **Author:** Kashyap Makadia  
-- **LinkedIn:** https://www.linkedin.com/in/kashyapmakadia/  
-- **GitHub Repo:** https://github.com/KashyapMak/kids-zone
-
----
-
-## 📄 License
-
-Released under the **MIT License**.  
-See the repository `LICENSE` file.
-
----
-
-## 🗂️ Folder Layout
-
+### Directory & File Structure
 ```text
-kids-zone/
-│
-├── deci-frac/
-│   ├── deci-frac-trail.html
-│   └── README.md        ← (this file)
-│
-└── ... other games ...
+deci-frac/
+├── index.html                 # Clean markup containing setup form, quiz area, and print modal
+├── deci-frac.css              # Custom styling for stacked fractions, decimal columns, and visual grids
+├── deci-frac.js               # Fraction arithmetic library, decimal generator, and quiz engine
+├── deci-frac-trail.html       # Legacy URL forwarder
+└── README.md                  # This documentation
 ```
 
-> Want stacked **fraction answers** on the buttons, a column‑format **working pane**, or **mixed numbers**?  
-> I can add those next. Just say the word!
+### Fraction & Decimal Engine Logic
+- **Greatest Common Divisor (GCD) & Simplification**:
+  ```js
+  function gcd(a, b) { return b === 0 ? a : gcd(b, a % b); }
+  function simplifyFraction(n, d) {
+    const g = gcd(Math.abs(n), Math.abs(d));
+    return { n: n / g, d: d / g };
+  }
+  ```
+- **Fraction Layout Renderer**:
+  Constructs stacked HTML representations:
+  ```html
+  <div class="stacked-fraction">
+    <span class="num">3</span>
+    <span class="denom">4</span>
+  </div>
+  ```
+- **Decimal Alignment**:
+  Decimals are formatted with fixed decimal point string alignment, ensuring tenths and hundredths columns match standard classroom presentation.
+- **Visual Aid Generators**:
+  - `render100Grid(val)`: Populates a 10×10 CSS grid to represent hundredths graphically.
+  - `renderFractionBar(num, denom)`: Generates CSS flex containers with colored segments proportional to the fraction value.
+
+### Common Engine Integration
+- **Header & Footer**: Auto-mounted via `KZ.mountHeader('deci-frac')` and `KZ.mountFooter()`.
+- **Audio & Accessibility**: Integrates with `KZAudio` and supports high-contrast theme toggling via `../common/common.css`.
+- **Celebration**: Triggers `KZ.confetti()` upon quiz completion.
+
+### Customization Guide
+- **Adjusting Denominator Bounds**: Default denominator range is 2 to 12. Modify `cfg.denMin` and `cfg.denMax` in `deci-frac.js`.
+- **Supporting Mixed Numbers**: Extend the `Fraction` object to include a whole number component `w` and update the stacked fraction HTML template.

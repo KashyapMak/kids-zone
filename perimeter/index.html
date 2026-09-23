@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Perimeter Trail — Geometry Practice | Kids Zone</title>
+  <link rel="icon" type="image/svg+xml" href="../common/logo.svg" />
+  <link rel="apple-touch-icon" href="../common/logo.svg" />
+
+  <!-- Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <!-- Common Design System & Audio -->
+  <link rel="stylesheet" href="../common/common.css" />
+  <script src="../common/audio.js"></script>
+  <script src="../common/common.js"></script>
+
+  <!-- Game Specific CSS & JS -->
+  <link rel="stylesheet" href="perimeter.css" />
+  <script src="perimeter.js" defer></script>
+</head>
+
+<body>
+  <!-- Common Header Auto-Mounted -->
+  <header data-kz-header="perimeter"></header>
+
+  <main>
+    <!-- Setup Screen -->
+    <section id="setup-screen" class="card" aria-label="Setup">
+      <h2 style="margin:0.2rem 0; font-size:1.6rem; font-weight:800;">Choose Your Trail 🚀</h2>
+
+      <div class="row" style="margin-top:0.4rem">
+        <strong>Shapes:</strong>
+        <label><input type="checkbox" class="shape-cb" value="square" checked> Square</label>
+        <label><input type="checkbox" class="shape-cb" value="rectangle" checked> Rectangle</label>
+        <label><input type="checkbox" class="shape-cb" value="triangle" checked> Equilateral Triangle</label>
+        <label><input type="checkbox" class="shape-cb" value="pentagon" checked> Regular Pentagon</label>
+      </div>
+
+      <div class="row" style="margin-top:0.4rem">
+        <strong>Difficulty:</strong>
+        <label><input type="radio" name="digits" value="1" checked> 1‑digit (1–9 cm)</label>
+        <label><input type="radio" name="digits" value="2"> 2‑digit (10–30 cm)</label>
+      </div>
+
+      <div class="row" style="margin-top:0.4rem">
+        <label><input type="checkbox" id="show-hint" checked> <strong>Show formula hint</strong></label>
+        <label><input type="checkbox" id="shuffle-options" checked> <strong>Shuffle options</strong></label>
+      </div>
+
+      <div class="row" style="margin-top:0.4rem">
+        <label for="qty-num"><strong>Questions:</strong></label>
+        <input type="number" id="qty-num" class="kz-select" min="5" max="50" value="15" style="width:110px">
+      </div>
+
+      <div class="row" style="margin-top:0.6rem">
+        <strong>Mode:</strong>
+        <button type="button" id="btn-practice" class="mode-btn" aria-pressed="true">😌 Practice</button>
+        <button type="button" id="btn-test" class="mode-btn" aria-pressed="false" style="opacity:0.7">⏱️ Test (Timed)</button>
+
+        <div id="timed-controls" class="row hidden" style="align-items:flex-start">
+          <div class="row" style="gap:0.35rem">
+            <label><input type="radio" name="tbtype" value="per-question" checked> Per question</label>
+            <label><input type="radio" name="tbtype" value="total"> Total time</label>
+          </div>
+          <div id="perq-wrap" class="row">
+            <label for="per-q-secs">Seconds per Q:</label>
+            <input id="per-q-secs" class="kz-select" type="number" min="5" max="60" value="12" style="width:90px">
+          </div>
+          <div id="total-wrap" class="row hidden">
+            <label for="total-secs">Total seconds:</label>
+            <input id="total-secs" class="kz-select" type="number" min="30" max="1800" value="240" style="width:110px">
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="row" style="justify-content:space-between">
+        <div class="grow">
+          <div id="stats" style="font-weight:800; color:var(--muted)"></div>
+        </div>
+        <button class="secondary-btn" id="reset-progress" title="Reset saved best/last scores">🧹 Reset Progress</button>
+        <button class="main-btn" id="start-btn" style="min-width:180px">START TRAIL 🏁</button>
+      </div>
+    </section>
+
+    <!-- Quiz Screen -->
+    <section id="quiz-screen" class="card hidden" aria-label="Quiz" aria-live="polite">
+      <div id="quiz-info">
+        <div class="streak" id="streak">Streak: 0 🔥</div>
+        <div id="timer-clock" aria-live="assertive"></div>
+        <div id="q-progress" style="justify-self:end">Question 1/15</div>
+      </div>
+
+      <div id="question-wrap">
+        <div id="message" style="font-weight:800; color:var(--muted); min-height:1.2em"></div>
+        <div id="hint" style="font-weight:800; color:var(--muted); min-height:1.2em"></div>
+        <div id="canvas-wrap">
+          <canvas id="shapeCanvas" width="520" height="320" aria-label="Shape drawing canvas"></canvas>
+        </div>
+        <div id="question-text">Calculate the perimeter (in cm):</div>
+      </div>
+
+      <div id="options" class="options"></div>
+
+      <div class="row" style="margin-top:0.75rem; justify-content:space-between;">
+        <button class="ghost-btn no-print" id="read-btn">🔊 Read again (R)</button>
+        <div class="row">
+          <button class="secondary-btn no-print" id="skip-btn">Skip ↷</button>
+          <button class="main-btn no-print" id="next-btn">Next ➜</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Result Screen -->
+    <section id="result-screen" class="card hidden" aria-label="Results">
+      <h2 style="font-size:1.8rem; font-weight:800;">Trail Complete! 🎉</h2>
+      <div id="appraise" style="font-size:1.1rem; font-weight:800; color:var(--muted); margin-top:0.25rem;"></div>
+      <div id="score-big">0 / 0</div>
+      <div style="font-weight:800; color:var(--muted)">Time taken: <span id="time-taken">00:00</span></div>
+      <div class="badges" id="badges"></div>
+
+      <div class="row" style="gap:0.5rem; margin:0.5rem 0">
+        <button class="main-btn no-print" id="play-again">Play Again 🔄</button>
+        <button class="secondary-btn no-print" id="print-btn">🖨️ Print / Save PDF</button>
+      </div>
+
+      <div id="summary-title" style="font-weight:800; margin-top:0.5rem">Questions Summary</div>
+      <div id="review-list" class="review-list"></div>
+    </section>
+  </main>
+
+  <!-- Common Footer Auto-Mounted -->
+  <footer data-kz-footer></footer>
+</body>
+</html>

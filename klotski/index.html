@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Klotski Trail — Sliding Number Puzzle | Kids Zone</title>
+  <link rel="icon" type="image/svg+xml" href="../common/logo.svg" />
+  <link rel="apple-touch-icon" href="../common/logo.svg" />
+
+  <!-- Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <!-- Common Design System & Audio -->
+  <link rel="stylesheet" href="../common/common.css" />
+  <script src="../common/audio.js"></script>
+  <script src="../common/common.js"></script>
+
+  <!-- Game Specific CSS & JS -->
+  <link rel="stylesheet" href="klotski.css" />
+  <script src="klotski.js" defer></script>
+</head>
+
+<body>
+  <!-- Common Header Auto-Mounted -->
+  <header data-kz-header="klotski"></header>
+
+  <main>
+    <!-- Mode selector -->
+    <div class="mode-row" id="mode-row">
+      <button class="mode-btn active" data-mode="simple">
+        🟩 Simple &nbsp;<span style="font-size:0.8rem; opacity:0.8">(4×4)</span>
+      </button>
+      <button class="mode-btn" data-mode="medium">
+        🟦 Medium &nbsp;<span style="font-size:0.8rem; opacity:0.8">(8×8)</span>
+      </button>
+      <button class="mode-btn" data-mode="hard">
+        🟥 Hard &nbsp;<span style="font-size:0.8rem; opacity:0.8">(12×12)</span>
+      </button>
+    </div>
+
+    <!-- Scorebar -->
+    <div class="scorebar">
+      <div class="stat-chip">🔀 Moves: <span class="val" id="move-count">0</span></div>
+      <div class="stat-chip" id="timer-chip">⏱ Time: <span class="val" id="timer-disp">00:00</span></div>
+      <div class="stat-chip">🏆 Best: <span class="val" id="best-disp">—</span></div>
+    </div>
+
+    <!-- Board frame -->
+    <div class="board-wrapper">
+      <div class="board-frame">
+        <div class="board" id="board"></div>
+        <div class="win-overlay hidden" id="win-overlay">
+          <div style="font-size:3rem;">🎉</div>
+          <div class="win-title" id="win-title">Puzzle Solved!</div>
+          <div class="win-stats" id="win-stats"></div>
+          <button class="win-btn" id="play-again-btn">Play Again 🔄</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="action-row">
+      <button class="act-btn primary" id="new-game-btn">🔀 New Shuffle</button>
+      <button class="act-btn" id="reset-btn">↺ Reset</button>
+      <button class="act-btn" id="hint-btn">💡 Hint</button>
+    </div>
+
+    <!-- How to play -->
+    <div class="how-to" id="how-to-box">
+      <strong>How to play:</strong> Click a tile next to the empty space to slide it in (or use Arrow Keys).
+      Arrange all tiles <strong>1 → N</strong> in order, with the empty space at the bottom-right. 🎯
+    </div>
+  </main>
+
+  <!-- Common Footer Auto-Mounted -->
+  <footer data-kz-footer></footer>
+</body>
+</html>

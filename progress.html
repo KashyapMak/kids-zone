@@ -1,0 +1,1339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Progress Dashboard & Score History | Kids Zone</title>
+  <meta name="description" content="Track your score history, learning progress, and accuracy across all Kids Zone educational games. 100% local, safe on your device." />
+  <meta property="og:title" content="Kids Zone — Progress Dashboard" />
+  <meta property="og:description" content="Visual score history and progress tracking powered by Recharts. Stored 100% locally on your device." />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="common/logo.svg" />
+  <link rel="apple-touch-icon" href="common/logo.svg" />
+
+  <!-- Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <!-- Common Design System, Audio & Progress Engine -->
+  <link rel="stylesheet" href="common/common.css" />
+  <script src="common/audio.js"></script>
+  <script src="common/progress.js"></script>
+  <script src="common/common.js"></script>
+
+  <!-- Offline-Ready Vendor Libraries: React 18, ReactDOM, PropTypes, Recharts -->
+  <script src="common/vendor/react.production.min.js"></script>
+  <script src="common/vendor/prop-types.min.js"></script>
+  <script src="common/vendor/react-dom.production.min.js"></script>
+  <script src="common/vendor/recharts.min.js"></script>
+
+  <style>
+    /* Dashboard Custom Styles */
+    .dashboard-page {
+      max-width: 1200px;
+      margin: 1.2rem auto 2.5rem;
+      padding: 0 1.2rem;
+    }
+
+    /* Hero / Profile Card */
+    .profile-hero-card {
+      background: var(--card);
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 1.8rem 2rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .profile-hero-card::after {
+      content: '';
+      position: absolute;
+      top: -30px;
+      right: -30px;
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(245, 158, 11, 0.15) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .profile-hero-left {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+    }
+
+    .profile-avatar-large {
+      width: 78px;
+      height: 78px;
+      border-radius: 24px;
+      background: linear-gradient(135deg, rgba(5, 150, 105, 0.15), rgba(245, 158, 11, 0.2));
+      border: 3px solid var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+      cursor: pointer;
+      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .profile-avatar-large:hover {
+      transform: scale(1.08) rotate(5deg);
+    }
+
+    .profile-hero-info h1 {
+      font-family: var(--font-main);
+      font-size: 1.85rem;
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1.15;
+      margin-bottom: 0.25rem;
+    }
+
+    .profile-hero-info p {
+      font-family: var(--font-body);
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.4;
+      max-width: 580px;
+    }
+
+    .profile-hero-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-profile-edit {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--primary);
+      color: #ffffff;
+      border: none;
+      font-family: var(--font-body);
+      font-weight: 700;
+      font-size: 0.92rem;
+      padding: 0.65rem 1.15rem;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(5, 150, 105, 0.25);
+      transition: all 0.15s ease;
+    }
+
+    .btn-profile-edit:hover {
+      filter: brightness(1.08);
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--card);
+      border: 2px solid var(--border);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-weight: 700;
+      font-size: 0.88rem;
+      padding: 0.6rem 1rem;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .btn-secondary-action:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      transform: translateY(-1px);
+    }
+
+    /* KPI Summary Cards Grid */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.8rem;
+    }
+
+    .kpi-card {
+      background: var(--card);
+      border: 2px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 1.1rem 1.25rem;
+      box-shadow: var(--shadow);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .kpi-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--primary);
+    }
+
+    .kpi-icon-box {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background: rgba(5, 150, 105, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      flex-shrink: 0;
+    }
+
+    .kpi-val {
+      font-family: var(--font-main);
+      font-size: 1.7rem;
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1.1;
+    }
+
+    .kpi-lbl {
+      font-family: var(--font-body);
+      font-size: 0.82rem;
+      color: var(--muted);
+      font-weight: 600;
+      margin-top: 0.15rem;
+    }
+
+    /* Game Selector Bar */
+    .filter-tabs-wrapper {
+      margin-bottom: 1.5rem;
+    }
+
+    .filter-tabs-title {
+      font-family: var(--font-main);
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 0.6rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .filter-tabs-scroll {
+      display: flex;
+      gap: 0.5rem;
+      overflow-x: auto;
+      padding-bottom: 0.5rem;
+      scrollbar-width: thin;
+    }
+
+    .filter-tab-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      background: var(--card);
+      border: 2px solid var(--border);
+      border-radius: 999px;
+      padding: 0.45rem 0.95rem;
+      font-family: var(--font-body);
+      font-weight: 700;
+      font-size: 0.88rem;
+      color: var(--text);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.15s ease;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+    }
+
+    .filter-tab-pill:hover {
+      border-color: var(--primary);
+      transform: translateY(-1px);
+    }
+
+    .filter-tab-pill.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
+    }
+
+    /* Chart Container Card */
+    .chart-panel-card {
+      background: var(--card);
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.8rem;
+      box-shadow: var(--shadow);
+      margin-bottom: 1.8rem;
+    }
+
+    .chart-panel-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1.5px solid var(--border);
+    }
+
+    .chart-title-box h2 {
+      font-family: var(--font-main);
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .chart-title-box p {
+      font-family: var(--font-body);
+      color: var(--muted);
+      font-size: 0.88rem;
+      margin-top: 0.2rem;
+    }
+
+    .chart-view-toggles {
+      display: flex;
+      gap: 0.4rem;
+      background: var(--bg);
+      padding: 0.25rem;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+
+    .chart-toggle-btn {
+      background: transparent;
+      border: none;
+      padding: 0.35rem 0.75rem;
+      border-radius: 8px;
+      font-family: var(--font-body);
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .chart-toggle-btn.active {
+      background: var(--card);
+      color: var(--primary);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    }
+
+    .recharts-chart-box {
+      width: 100%;
+      height: 340px;
+      margin-top: 0.5rem;
+    }
+
+    /* Custom Recharts Tooltip */
+    .recharts-custom-tooltip {
+      background: var(--card);
+      border: 2px solid var(--primary);
+      border-radius: 14px;
+      padding: 0.85rem 1rem;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.15);
+      font-family: var(--font-body);
+      min-width: 180px;
+    }
+
+    .recharts-tooltip-date {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--muted);
+      margin-bottom: 0.25rem;
+    }
+
+    .recharts-tooltip-title {
+      font-family: var(--font-main);
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 0.4rem;
+    }
+
+    .recharts-tooltip-metric {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 0.2rem;
+    }
+
+    .recharts-tooltip-sub {
+      font-size: 0.8rem;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 0.35rem;
+      border-top: 1px dashed var(--border);
+      padding-top: 0.35rem;
+    }
+
+    /* History Table */
+    .history-card {
+      background: var(--card);
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem 1.8rem;
+      box-shadow: var(--shadow);
+      margin-bottom: 1.8rem;
+    }
+
+    .history-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .history-table-wrapper {
+      overflow-x: auto;
+    }
+
+    .history-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      text-align: left;
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+    }
+
+    .history-table th {
+      background: var(--bg);
+      color: var(--muted);
+      font-weight: 700;
+      padding: 0.75rem 1rem;
+      border-bottom: 2px solid var(--border);
+    }
+
+    .history-table th:first-child {
+      border-top-left-radius: 10px;
+      border-bottom-left-radius: 10px;
+    }
+    .history-table th:last-child {
+      border-top-right-radius: 10px;
+      border-bottom-right-radius: 10px;
+    }
+
+    .history-table td {
+      padding: 0.85rem 1rem;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .history-table tr:hover td {
+      background: rgba(5, 150, 105, 0.03);
+    }
+
+    .badge-pill-score {
+      display: inline-block;
+      padding: 0.2rem 0.65rem;
+      border-radius: 8px;
+      font-weight: 800;
+      font-size: 0.82rem;
+    }
+
+    .score-excellent {
+      background: #dcfce7;
+      color: #15803d;
+    }
+    .score-good {
+      background: #e0f2fe;
+      color: #0369a1;
+    }
+    .score-fair {
+      background: #fef3c7;
+      color: #b45309;
+    }
+
+    /* Data Privacy & Controls Footer Box */
+    .privacy-controls-box {
+      background: var(--card);
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem 1.8rem;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+    }
+
+    .privacy-info-block {
+      max-width: 600px;
+    }
+
+    .privacy-info-block h3 {
+      font-family: var(--font-main);
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 0.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .privacy-info-block p {
+      font-family: var(--font-body);
+      font-size: 0.86rem;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+
+    .privacy-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-danger-outline {
+      background: transparent;
+      border: 2px solid var(--danger);
+      color: var(--danger);
+      font-family: var(--font-body);
+      font-weight: 700;
+      font-size: 0.85rem;
+      padding: 0.55rem 0.95rem;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .btn-danger-outline:hover {
+      background: var(--danger);
+      color: #ffffff;
+      transform: translateY(-1px);
+    }
+
+    /* Empty State */
+    .empty-progress-state {
+      text-align: center;
+      padding: 3rem 1.5rem;
+    }
+
+    .empty-progress-state .icon {
+      font-size: 4rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .empty-progress-state h3 {
+      font-family: var(--font-main);
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 0.4rem;
+    }
+
+    .empty-progress-state p {
+      font-family: var(--font-body);
+      color: var(--muted);
+      max-width: 480px;
+      margin: 0 auto 1.5rem;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 768px) {
+      .profile-hero-card {
+        padding: 1.4rem;
+      }
+      .profile-hero-left {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .chart-panel-card {
+        padding: 1.2rem;
+      }
+      .recharts-chart-box {
+        height: 280px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Common Header Auto-Mounted with 'progress' active -->
+  <header data-kz-header="progress"></header>
+
+  <!-- React & Recharts Dashboard Root -->
+  <div id="progress-dashboard-root">
+    <div style="text-align: center; padding: 4rem 1rem; font-family: 'Fredoka', sans-serif;">
+      <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">📊</div>
+      <h2 style="font-weight: 800; color: #059669;">Loading Progress Dashboard...</h2>
+      <p style="color: #64748b;">Gathering your on-device score history...</p>
+    </div>
+  </div>
+
+  <!-- Common Footer Auto-Mounted -->
+  <footer data-kz-footer></footer>
+
+  <!-- React + Recharts Application Code -->
+  <script>
+    (function () {
+      'use strict';
+
+      const React = window.React;
+      const ReactDOM = window.ReactDOM;
+      const Recharts = window.Recharts;
+
+      if (!React || !ReactDOM || !Recharts) {
+        document.getElementById('progress-dashboard-root').innerHTML = `
+          <div class="empty-progress-state">
+            <div class="icon">⚠️</div>
+            <h3>Unable to initialize Chart Engine</h3>
+            <p>Please refresh the page to reload the local dashboard resources.</p>
+          </div>
+        `;
+        return;
+      }
+
+      const { useState, useEffect, useMemo, useCallback } = React;
+      const {
+        ResponsiveContainer,
+        AreaChart, Area,
+        BarChart, Bar,
+        LineChart, Line,
+        XAxis, YAxis, CartesianGrid,
+        Tooltip, Legend, Cell, ReferenceLine
+      } = Recharts;
+
+      function DashboardApp() {
+        // Kid Profile State
+        const [profile, setProfile] = useState(() => {
+          return window.KZProgress ? window.KZProgress.getProfile() : { name: '', avatar: '🌟' };
+        });
+
+        // Scores state
+        const [scores, setScores] = useState(() => {
+          return window.KZProgress ? window.KZProgress.getAllScores() : [];
+        });
+
+        // Selected Game Filter ('all' or specific gameId)
+        const [selectedGame, setSelectedGame] = useState(() => {
+          const params = new URLSearchParams(window.location.search);
+          return params.get('game') || 'all';
+        });
+
+        // Chart metric toggle for game-specific view ('accuracy' | 'duration')
+        const [chartMetric, setChartMetric] = useState('accuracy');
+
+        // Games catalog from KZ.games
+        const gamesList = useMemo(() => {
+          return (window.KZ && window.KZ.games) ? window.KZ.games : [];
+        }, []);
+
+        // Listen to external score or profile updates
+        useEffect(() => {
+          const onProfileUpdated = (e) => {
+            if (e.detail) setProfile(e.detail);
+          };
+          const onScoresUpdated = () => {
+            if (window.KZProgress) setScores(window.KZProgress.getAllScores());
+          };
+          window.addEventListener('kz_profile_updated', onProfileUpdated);
+          window.addEventListener('kz_score_recorded', onScoresUpdated);
+          window.addEventListener('kz_scores_cleared', onScoresUpdated);
+
+          return () => {
+            window.removeEventListener('kz_profile_updated', onProfileUpdated);
+            window.removeEventListener('kz_score_recorded', onScoresUpdated);
+            window.removeEventListener('kz_scores_cleared', onScoresUpdated);
+          };
+        }, []);
+
+        // If kid has no name yet and visits directly, show friendly welcome modal after gentle delay
+        useEffect(() => {
+          if (!profile.name) {
+            const timer = setTimeout(() => {
+              if (window.KZProgress && !window.KZProgress.getProfile().name) {
+                window.KZProgress.promptKidNameModal((newProf) => {
+                  setProfile(newProf);
+                });
+              }
+            }, 600);
+            return () => clearTimeout(timer);
+          }
+        }, []);
+
+        // Handle URL parameter changes
+        const handleSelectGame = (gameId) => {
+          if (window.KZAudio) window.KZAudio.playClick();
+          setSelectedGame(gameId);
+          const url = new URL(window.location.href);
+          if (gameId === 'all') {
+            url.searchParams.delete('game');
+          } else {
+            url.searchParams.set('game', gameId);
+          }
+          window.history.replaceState({}, '', url.toString());
+        };
+
+        // Filter scores based on selectedGame
+        const filteredScores = useMemo(() => {
+          if (selectedGame === 'all') return scores;
+          return scores.filter(s => s.gameId === selectedGame);
+        }, [scores, selectedGame]);
+
+        // Aggregate KPIs
+        const stats = useMemo(() => {
+          const totalSessions = filteredScores.length;
+          if (totalSessions === 0) {
+            return {
+              totalSessions: 0,
+              bestAccuracy: 0,
+              avgAccuracy: 0,
+              totalTimeSec: 0,
+              activitiesPlayedCount: 0
+            };
+          }
+
+          let bestAcc = 0;
+          let sumAcc = 0;
+          let totalSec = 0;
+          const uniqueGames = new Set();
+
+          filteredScores.forEach(s => {
+            const acc = Number(s.pct) || 0;
+            if (acc > bestAcc) bestAcc = acc;
+            sumAcc += acc;
+            totalSec += (Number(s.durationSec) || 0);
+            uniqueGames.add(s.gameId);
+          });
+
+          return {
+            totalSessions,
+            bestAccuracy: Math.round(bestAcc),
+            avgAccuracy: Math.round(sumAcc / totalSessions),
+            totalTimeSec: totalSec,
+            activitiesPlayedCount: uniqueGames.size
+          };
+        }, [filteredScores]);
+
+        // Recharts Data Prep for "Overview / All Games" Bar Chart (Mastery by Game)
+        const overviewMasteryData = useMemo(() => {
+          if (scores.length === 0) return [];
+          const gameMap = {};
+          
+          scores.forEach(s => {
+            if (!gameMap[s.gameId]) {
+              const gInfo = gamesList.find(g => g.id === s.gameId) || {};
+              gameMap[s.gameId] = {
+                gameId: s.gameId,
+                name: (gInfo.title || s.gameTitle || s.gameId).replace(' Trail', ''),
+                icon: gInfo.icon || '🎮',
+                color: gInfo.color || '#059669',
+                bestPct: 0,
+                sumPct: 0,
+                count: 0
+              };
+            }
+            const acc = Number(s.pct) || 0;
+            if (acc > gameMap[s.gameId].bestPct) gameMap[s.gameId].bestPct = acc;
+            gameMap[s.gameId].sumPct += acc;
+            gameMap[s.gameId].count += 1;
+          });
+
+          return Object.values(gameMap).map(item => ({
+            name: `${item.icon} ${item.name}`,
+            rawName: item.name,
+            icon: item.icon,
+            color: item.color,
+            best: item.bestPct,
+            average: Math.round(item.sumPct / item.count),
+            sessions: item.count
+          }));
+        }, [scores, gamesList]);
+
+        // Recharts Data Prep for Single Game History Timeline (Chronological: old to new)
+        const singleGameTimelineData = useMemo(() => {
+          if (filteredScores.length === 0) return [];
+          const copy = [...filteredScores];
+          // reverse so earliest session is on left, latest on right
+          copy.reverse();
+
+          return copy.map((s, idx) => ({
+            index: idx + 1,
+            label: `#${idx + 1} (${s.dateStr.split(',')[0]})`,
+            fullDate: s.dateStr,
+            accuracy: s.pct,
+            score: s.score,
+            total: s.total,
+            mode: s.mode,
+            durationSec: s.durationSec || 0,
+            scoreLabel: s.total ? `${s.score}/${s.total}` : `${s.score} pts`
+          }));
+        }, [filteredScores]);
+
+        // Open Name Prompt Modal
+        const handleOpenNamePrompt = () => {
+          if (window.KZProgress) {
+            window.KZProgress.promptKidNameModal((newProf) => {
+              setProfile(newProf);
+            });
+          }
+        };
+
+        // Clear scores
+        const handleClearScores = (targetGameId = null) => {
+          const msg = targetGameId 
+            ? `Clear all recorded scores for this activity?`
+            : `Clear all recorded game scores from this device? (Your nickname will be kept)`;
+          if (window.confirm(msg)) {
+            if (window.KZProgress) window.KZProgress.clearScores(targetGameId);
+            if (window.KZAudio) window.KZAudio.playClick();
+          }
+        };
+
+        // Reset everything
+        const handleResetAll = () => {
+          if (window.confirm('Reset everything? This will clear all score history and remove your player profile.')) {
+            if (window.KZProgress) window.KZProgress.resetAllData();
+            if (window.KZAudio) window.KZAudio.playWrong();
+          }
+        };
+
+        // Export data
+        const handleExport = () => {
+          if (window.KZProgress) {
+            window.KZProgress.exportData();
+            if (window.KZAudio) window.KZAudio.playOk();
+          }
+        };
+
+        // Load sample data
+        const handleLoadSample = () => {
+          if (window.KZProgress) {
+            window.KZProgress.loadSampleData();
+            if (window.KZAudio) window.KZAudio.playOk();
+            if (window.KZ && window.KZ.confetti) window.KZ.confetti({ count: 90, spread: 60 });
+          }
+        };
+
+        // Current active game info
+        const activeGameInfo = useMemo(() => {
+          if (selectedGame === 'all') return null;
+          return gamesList.find(g => g.id === selectedGame) || {
+            id: selectedGame,
+            title: selectedGame,
+            icon: '🎮',
+            color: '#059669',
+            category: 'Learning'
+          };
+        }, [selectedGame, gamesList]);
+
+        // Format duration seconds to min:sec
+        const formatDuration = (sec) => {
+          const m = Math.floor(sec / 60);
+          const s = sec % 60;
+          if (m === 0) return `${s}s`;
+          return `${m}m ${s}s`;
+        };
+
+        return React.createElement('div', { className: 'dashboard-page' }, [
+          // 1. Profile Hero Card
+          React.createElement('div', { key: 'hero', className: 'profile-hero-card' }, [
+            React.createElement('div', { key: 'hero-left', className: 'profile-hero-left' }, [
+              React.createElement('div', {
+                key: 'avatar',
+                className: 'profile-avatar-large',
+                title: 'Click to change avatar',
+                onClick: handleOpenNamePrompt
+              }, profile.avatar || '🌟'),
+              React.createElement('div', { key: 'info', className: 'profile-hero-info' }, [
+                React.createElement('h1', { key: 'title' }, 
+                  profile.name ? `${profile.name}'s Learning Journey` : 'Welcome to Your Learning Journey!'
+                ),
+                React.createElement('p', { key: 'desc' }, 
+                  profile.name 
+                    ? `Awesome work, ${profile.name}! Track your math scores, accuracy over time, and celebrate your skills as you practice!`
+                    : 'Personalize your dashboard with your name and favorite mascot. Stored 100% safely on your device with zero cloud tracking.'
+                )
+              ])
+            ]),
+            React.createElement('div', { key: 'hero-actions', className: 'profile-hero-actions' }, [
+              React.createElement('button', {
+                key: 'btn-name',
+                type: 'button',
+                className: 'btn-profile-edit',
+                onClick: handleOpenNamePrompt
+              }, [
+                React.createElement('span', { key: 'i' }, '✏️'),
+                React.createElement('span', { key: 't' }, profile.name ? 'Change Nickname' : 'Set Your Name')
+              ]),
+              scores.length === 0 ? React.createElement('button', {
+                key: 'btn-sample',
+                type: 'button',
+                className: 'btn-secondary-action',
+                onClick: handleLoadSample,
+                title: 'Load sample progress data to see charts in action'
+              }, [
+                React.createElement('span', { key: 'i' }, '🌟'),
+                React.createElement('span', { key: 't' }, 'Load Sample Demo')
+              ]) : null
+            ])
+          ]),
+
+          // 2. KPI Summary Cards Grid
+          React.createElement('div', { key: 'kpis', className: 'kpi-grid' }, [
+            React.createElement('div', { key: 'kpi-sessions', className: 'kpi-card' }, [
+              React.createElement('div', { key: 'ic', className: 'kpi-icon-box' }, '🎯'),
+              React.createElement('div', { key: 'meta' }, [
+                React.createElement('div', { key: 'v', className: 'kpi-val' }, stats.totalSessions),
+                React.createElement('div', { key: 'l', className: 'kpi-lbl' }, selectedGame === 'all' ? 'Total Sessions' : 'Activity Attempts')
+              ])
+            ]),
+            React.createElement('div', { key: 'kpi-best', className: 'kpi-card' }, [
+              React.createElement('div', { key: 'ic', className: 'kpi-icon-box', style: { background: 'rgba(245, 158, 11, 0.12)' } }, '🏆'),
+              React.createElement('div', { key: 'meta' }, [
+                React.createElement('div', { key: 'v', className: 'kpi-val', style: { color: '#d97706' } }, `${stats.bestAccuracy}%`),
+                React.createElement('div', { key: 'l', className: 'kpi-lbl' }, 'Highest Score / Accuracy')
+              ])
+            ]),
+            React.createElement('div', { key: 'kpi-avg', className: 'kpi-card' }, [
+              React.createElement('div', { key: 'ic', className: 'kpi-icon-box', style: { background: 'rgba(37, 99, 235, 0.12)' } }, '📈'),
+              React.createElement('div', { key: 'meta' }, [
+                React.createElement('div', { key: 'v', className: 'kpi-val', style: { color: '#2563eb' } }, `${stats.avgAccuracy}%`),
+                React.createElement('div', { key: 'l', className: 'kpi-lbl' }, 'Average Mastery')
+              ])
+            ]),
+            React.createElement('div', { key: 'kpi-time', className: 'kpi-card' }, [
+              React.createElement('div', { key: 'ic', className: 'kpi-icon-box', style: { background: 'rgba(236, 72, 153, 0.12)' } }, '⏱️'),
+              React.createElement('div', { key: 'meta' }, [
+                React.createElement('div', { key: 'v', className: 'kpi-val', style: { color: '#db2777' } }, formatDuration(stats.totalTimeSec)),
+                React.createElement('div', { key: 'l', className: 'kpi-lbl' }, 'Time Practiced')
+              ])
+            ])
+          ]),
+
+          // 3. Game Selector Filter Tabs
+          React.createElement('div', { key: 'filter-bar', className: 'filter-tabs-wrapper' }, [
+            React.createElement('div', { key: 'title', className: 'filter-tabs-title' }, [
+              React.createElement('span', { key: 't' }, 'Select an Activity to View Progress:'),
+              selectedGame !== 'all' ? React.createElement('button', {
+                key: 'back-btn',
+                type: 'button',
+                className: 'filter-tab-pill',
+                style: { fontSize: '0.8rem', padding: '0.25rem 0.65rem' },
+                onClick: () => handleSelectGame('all')
+              }, '← Back to Overview') : null
+            ]),
+            React.createElement('div', { key: 'scroll', className: 'filter-tabs-scroll' }, [
+              React.createElement('button', {
+                key: 'tab-all',
+                type: 'button',
+                className: `filter-tab-pill ${selectedGame === 'all' ? 'active' : ''}`,
+                onClick: () => handleSelectGame('all')
+              }, '🌟 All Games Overview'),
+              gamesList.map(g => {
+                const count = scores.filter(s => s.gameId === g.id).length;
+                return React.createElement('button', {
+                  key: `tab-${g.id}`,
+                  type: 'button',
+                  className: `filter-tab-pill ${selectedGame === g.id ? 'active' : ''}`,
+                  onClick: () => handleSelectGame(g.id)
+                }, [
+                  React.createElement('span', { key: 'ic' }, g.icon),
+                  React.createElement('span', { key: 't' }, g.title),
+                  count > 0 ? React.createElement('span', {
+                    key: 'badge',
+                    style: {
+                      background: selectedGame === g.id ? 'rgba(255,255,255,0.25)' : 'rgba(5, 150, 105, 0.12)',
+                      padding: '2px 6px',
+                      borderRadius: '8px',
+                      fontSize: '0.75rem',
+                      fontWeight: 800
+                    }
+                  }, count) : null
+                ]);
+              })
+            ])
+          ]),
+
+          // 4. Main Chart Panel
+          React.createElement('div', { key: 'chart-panel', className: 'chart-panel-card' }, [
+            // Chart Header
+            React.createElement('div', { key: 'panel-header', className: 'chart-panel-header' }, [
+              React.createElement('div', { key: 'title-box', className: 'chart-title-box' }, [
+                React.createElement('h2', { key: 'h2' }, [
+                  selectedGame === 'all' 
+                    ? '📊 Skill Mastery Across Games' 
+                    : `${activeGameInfo ? activeGameInfo.icon : '🎮'} ${activeGameInfo ? activeGameInfo.title : ''} — Score History Over Time`
+                ]),
+                React.createElement('p', { key: 'sub' }, [
+                  selectedGame === 'all'
+                    ? 'Compare your highest and average scores across each game you have played.'
+                    : `Visualizing your progress across successive sessions. Strive for 80%+ mastery!`
+                ])
+              ]),
+
+              // Toggles or Game Play shortcut
+              React.createElement('div', { key: 'controls', style: { display: 'flex', gap: '0.6rem', alignItems: 'center' } }, [
+                selectedGame !== 'all' ? React.createElement('div', { key: 'toggles', className: 'chart-view-toggles' }, [
+                  React.createElement('button', {
+                    key: 'acc',
+                    type: 'button',
+                    className: `chart-toggle-btn ${chartMetric === 'accuracy' ? 'active' : ''}`,
+                    onClick: () => setChartMetric('accuracy')
+                  }, 'Accuracy (%)'),
+                  React.createElement('button', {
+                    key: 'dur',
+                    type: 'button',
+                    className: `chart-toggle-btn ${chartMetric === 'duration' ? 'active' : ''}`,
+                    onClick: () => setChartMetric('duration')
+                  }, 'Speed (Seconds)')
+                ]) : null,
+
+                selectedGame !== 'all' && activeGameInfo ? React.createElement('a', {
+                  key: 'play-now-btn',
+                  href: activeGameInfo.isExternal ? activeGameInfo.externalUrl : `${activeGameInfo.dir}/index.html`,
+                  target: activeGameInfo.isExternal ? '_blank' : '_self',
+                  rel: 'noopener noreferrer',
+                  className: 'btn-profile-edit',
+                  style: { padding: '0.45rem 0.95rem', fontSize: '0.85rem' }
+                }, `Play Now ➔`) : null
+              ])
+            ]),
+
+            // Chart Render Section
+            filteredScores.length === 0 ? React.createElement('div', { key: 'empty-chart', className: 'empty-progress-state' }, [
+              React.createElement('div', { key: 'ic', className: 'icon' }, selectedGame === 'all' ? '🚀' : (activeGameInfo ? activeGameInfo.icon : '🎯')),
+              React.createElement('h3', { key: 'h3' }, selectedGame === 'all' ? 'No Games Played Yet' : `No scores recorded yet for ${activeGameInfo ? activeGameInfo.title : 'this activity'}`),
+              React.createElement('p', { key: 'p' }, 'Complete a game session or quiz to see your visual progress graphs, streak records, and accuracy history right here!'),
+              React.createElement('div', { key: 'actions', style: { display: 'flex', gap: '0.8rem', justifyContent: 'center' } }, [
+                selectedGame !== 'all' && activeGameInfo ? React.createElement('a', {
+                  key: 'start-btn',
+                  href: activeGameInfo.isExternal ? activeGameInfo.externalUrl : `${activeGameInfo.dir}/index.html`,
+                  className: 'btn-profile-edit'
+                }, `Play ${activeGameInfo.title} Now ➔`) : React.createElement('a', {
+                  key: 'home-btn',
+                  href: 'index.html',
+                  className: 'btn-profile-edit'
+                }, 'Browse All Games ➔'),
+                React.createElement('button', {
+                  key: 'demo-btn',
+                  type: 'button',
+                  className: 'btn-secondary-action',
+                  onClick: handleLoadSample
+                }, 'Load Sample Progress Demo')
+              ])
+            ]) : (
+              selectedGame === 'all' ? (
+                // ALL GAMES BAR CHART
+                React.createElement('div', { key: 'bar-chart-wrap', className: 'recharts-chart-box' }, [
+                  React.createElement(ResponsiveContainer, { key: 'rc', width: '100%', height: '100%' }, [
+                    React.createElement(BarChart, {
+                      key: 'bc',
+                      data: overviewMasteryData,
+                      margin: { top: 20, right: 20, left: -10, bottom: 20 }
+                    }, [
+                      React.createElement(CartesianGrid, { key: 'grid', strokeDasharray: '3 3', stroke: 'rgba(0,0,0,0.06)' }),
+                      React.createElement(XAxis, { 
+                        key: 'x', 
+                        dataKey: 'name', 
+                        tick: { fill: 'var(--muted)', fontSize: 12, fontWeight: 700 },
+                        interval: 0
+                      }),
+                      React.createElement(YAxis, { 
+                        key: 'y', 
+                        domain: [0, 100], 
+                        unit: '%', 
+                        tick: { fill: 'var(--muted)', fontSize: 12, fontWeight: 700 } 
+                      }),
+                      React.createElement(Tooltip, {
+                        key: 'tt',
+                        content: ({ active, payload }) => {
+                          if (!active || !payload || !payload.length) return null;
+                          const d = payload[0].payload;
+                          return React.createElement('div', { className: 'recharts-custom-tooltip' }, [
+                            React.createElement('div', { key: 't', className: 'recharts-tooltip-title' }, `${d.icon} ${d.rawName}`),
+                            React.createElement('div', { key: 'best', className: 'recharts-tooltip-metric', style: { color: '#059669' } }, [
+                              React.createElement('span', { key: 'l' }, '🏆 Best Score:'),
+                              React.createElement('span', { key: 'v' }, `${d.best}%`)
+                            ]),
+                            React.createElement('div', { key: 'avg', className: 'recharts-tooltip-metric', style: { color: '#2563eb' } }, [
+                              React.createElement('span', { key: 'l' }, '📈 Average:'),
+                              React.createElement('span', { key: 'v' }, `${d.average}%`)
+                            ]),
+                            React.createElement('div', { key: 'sub', className: 'recharts-tooltip-sub' }, [
+                              React.createElement('span', { key: 'l' }, 'Total Sessions:'),
+                              React.createElement('strong', { key: 'v' }, d.sessions)
+                            ])
+                          ]);
+                        }
+                      }),
+                      React.createElement(Legend, { 
+                        key: 'leg', 
+                        verticalAlign: 'top', 
+                        height: 36,
+                        wrapperStyle: { fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: '0.88rem' }
+                      }),
+                      React.createElement(Bar, {
+                        key: 'bar-best',
+                        name: 'Best Score %',
+                        dataKey: 'best',
+                        fill: '#10b981',
+                        radius: [8, 8, 0, 0]
+                      }),
+                      React.createElement(Bar, {
+                        key: 'bar-avg',
+                        name: 'Average Score %',
+                        dataKey: 'average',
+                        fill: '#3b82f6',
+                        radius: [8, 8, 0, 0]
+                      })
+                    ])
+                  ])
+                ])
+              ) : (
+                // SINGLE GAME AREA / LINE CHART
+                React.createElement('div', { key: 'line-chart-wrap', className: 'recharts-chart-box' }, [
+                  React.createElement(ResponsiveContainer, { key: 'rc', width: '100%', height: '100%' }, [
+                    chartMetric === 'accuracy' ? (
+                      React.createElement(AreaChart, {
+                        key: 'ac',
+                        data: singleGameTimelineData,
+                        margin: { top: 20, right: 20, left: -10, bottom: 20 }
+                      }, [
+                        React.createElement('defs', { key: 'defs' }, [
+                          React.createElement('linearGradient', { id: 'scoreGradient', key: 'sg', x1: '0', y1: '0', x2: '0', y2: '1' }, [
+                            React.createElement('stop', { key: 's1', offset: '5%', stopColor: '#059669', stopOpacity: 0.4 }),
+                            React.createElement('stop', { key: 's2', offset: '95%', stopColor: '#059669', stopOpacity: 0.0 })
+                          ])
+                        ]),
+                        React.createElement(CartesianGrid, { key: 'grid', strokeDasharray: '3 3', stroke: 'rgba(0,0,0,0.06)' }),
+                        React.createElement(XAxis, { 
+                          key: 'x', 
+                          dataKey: 'label', 
+                          tick: { fill: 'var(--muted)', fontSize: 11, fontWeight: 700 } 
+                        }),
+                        React.createElement(YAxis, { 
+                          key: 'y', 
+                          domain: [0, 100], 
+                          unit: '%', 
+                          tick: { fill: 'var(--muted)', fontSize: 12, fontWeight: 700 } 
+                        }),
+                        React.createElement(ReferenceLine, { 
+                          key: 'ref80', 
+                          y: 80, 
+                          stroke: '#f59e0b', 
+                          strokeDasharray: '4 4', 
+                          label: { value: '80% Goal', position: 'insideTopRight', fill: '#d97706', fontSize: 11, fontWeight: 700 } 
+                        }),
+                        React.createElement(ReferenceLine, { 
+                          key: 'ref100', 
+                          y: 100, 
+                          stroke: '#10b981', 
+                          strokeDasharray: '2 2', 
+                          label: { value: '100% Champion', position: 'insideTopLeft', fill: '#059669', fontSize: 11, fontWeight: 700 } 
+                        }),
+                        React.createElement(Tooltip, {
+                          key: 'tt',
+                          content: ({ active, payload }) => {
+                            if (!active || !payload || !payload.length) return null;
+                            const d = payload[0].payload;
+                            return React.createElement('div', { className: 'recharts-custom-tooltip' }, [
+                              React.createElement('div', { key: 'dt', className: 'recharts-tooltip-date' }, d.fullDate),
+                              React.createElement('div', { key: 't', className: 'recharts-tooltip-title' }, `Attempt #${d.index}`),
+                              React.createElement('div', { key: 'acc', className: 'recharts-tooltip-metric' }, [
+                                React.createElement('span', { key: 'l' }, '🎯 Accuracy:'),
+                                React.createElement('span', { key: 'v' }, `${d.accuracy}%`)
+                              ]),
+                              React.createElement('div', { key: 'sc', className: 'recharts-tooltip-metric', style: { color: '#2563eb' } }, [
+                                React.createElement('span', { key: 'l' }, 'Score:'),
+                                React.createElement('span', { key: 'v' }, d.scoreLabel)
+                              ]),
+                              React.createElement('div', { key: 'sub', className: 'recharts-tooltip-sub' }, [
+                                React.createElement('span', { key: 'm' }, `Mode: ${d.mode}`),
+                                React.createElement('span', { key: 't' }, d.durationSec ? `${d.durationSec}s` : '')
+                              ])
+                            ]);
+                          }
+                        }),
+                        React.createElement(Area, {
+                          key: 'area',
+                          type: 'monotone',
+                          dataKey: 'accuracy',
+                          stroke: '#059669',
+                          strokeWidth: 3,
+                          fillOpacity: 1,
+                          fill: 'url(#scoreGradient)',
+                          dot: { r: 5, fill: '#059669', stroke: '#ffffff', strokeWidth: 2 }
+                        })
+                      ])
+                    ) : (
+                      // SPEED / DURATION LINE CHART
+                      React.createElement(LineChart, {
+                        key: 'lc',
+                        data: singleGameTimelineData,
+                        margin: { top: 20, right: 20, left: -10, bottom: 20 }
+                      }, [
+                        React.createElement(CartesianGrid, { key: 'grid', strokeDasharray: '3 3', stroke: 'rgba(0,0,0,0.06)' }),
+                        React.createElement(XAxis, { 
+                          key: 'x', 
+                          dataKey: 'label', 
+                          tick: { fill: 'var(--muted)', fontSize: 11, fontWeight: 700 } 
+                        }),
+                        React.createElement(YAxis, { 
+                          key: 'y', 
+                          unit: 's', 
+                          tick: { fill: 'var(--muted)', fontSize: 12, fontWeight: 700 } 
+                        }),
+                        React.createElement(Tooltip, {
+                          key: 'tt',
+                          content: ({ active, payload }) => {
+                            if (!active || !payload || !payload.length) return null;
+                            const d = payload[0].payload;
+                            return React.createElement('div', { className: 'recharts-custom-tooltip' }, [
+                              React.createElement('div', { key: 'dt', className: 'recharts-tooltip-date' }, d.fullDate),
+                              React.createElement('div', { key: 't', className: 'recharts-tooltip-title' }, `Attempt #${d.index}`),
+                              React.createElement('div', { key: 'dur', className: 'recharts-tooltip-metric', style: { color: '#db2777' } }, [
+                                React.createElement('span', { key: 'l' }, '⏱️ Time Taken:'),
+                                React.createElement('span', { key: 'v' }, `${d.durationSec}s`)
+                              ]),
+                              React.createElement('div', { key: 'sub', className: 'recharts-tooltip-sub' }, [
+                                React.createElement('span', { key: 'm' }, `Mode: ${d.mode}`),
+                                React.createElement('span', { key: 'a' }, `${d.accuracy}%`)
+                              ])
+                            ]);
+                          }
+                        }),
+                        React.createElement(Line, {
+                          key: 'line',
+                          type: 'monotone',
+                          dataKey: 'durationSec',
+                          stroke: '#ec4899',
+                          strokeWidth: 3,
+                          dot: { r: 5, fill: '#ec4899', stroke: '#ffffff', strokeWidth: 2 }
+                        })
+                      ])
+                    )
+                  ])
+                ])
+              )
+            )
+          ]),
+
+          // 5. Detailed Sessions History Table
+          filteredScores.length > 0 ? React.createElement('div', { key: 'history-card', className: 'history-card' }, [
+            React.createElement('div', { key: 'hh', className: 'history-header' }, [
+              React.createElement('h3', { key: 'h3', style: { fontFamily: 'var(--font-main)', fontSize: '1.25rem', fontWeight: 800, color: 'var(--text)' } }, 
+                selectedGame === 'all' ? 'Recent Learning Sessions (All Games)' : `Session History for ${activeGameInfo ? activeGameInfo.title : 'Activity'}`
+              ),
+              React.createElement('div', { key: 'ha', style: { display: 'flex', gap: '0.6rem' } }, [
+                React.createElement('button', {
+                  key: 'clear-btn',
+                  type: 'button',
+                  className: 'btn-danger-outline',
+                  style: { padding: '0.35rem 0.75rem', fontSize: '0.8rem' },
+                  onClick: () => handleClearScores(selectedGame === 'all' ? null : selectedGame)
+                }, selectedGame === 'all' ? 'Clear History' : 'Clear This Game')
+              ])
+            ]),
+
+            React.createElement('div', { key: 'tbl-wrap', className: 'history-table-wrapper' }, [
+              React.createElement('table', { key: 'tbl', className: 'history-table' }, [
+                React.createElement('thead', { key: 'th' }, [
+                  React.createElement('tr', { key: 'thr' }, [
+                    React.createElement('th', { key: 'date' }, 'Date & Time'),
+                    React.createElement('th', { key: 'game' }, 'Activity'),
+                    React.createElement('th', { key: 'mode' }, 'Mode'),
+                    React.createElement('th', { key: 'score' }, 'Score'),
+                    React.createElement('th', { key: 'acc' }, 'Accuracy'),
+                    React.createElement('th', { key: 'time' }, 'Duration')
+                  ])
+                ]),
+                React.createElement('tbody', { key: 'tb' }, [
+                  filteredScores.slice(0, 15).map(s => {
+                    const g = gamesList.find(x => x.id === s.gameId) || {};
+                    const pct = Number(s.pct) || 0;
+                    const badgeClass = pct >= 90 ? 'score-excellent' : (pct >= 70 ? 'score-good' : 'score-fair');
+                    const badgeText = pct === 100 ? '🏆 100%' : `${pct}%`;
+
+                    return React.createElement('tr', { key: s.id }, [
+                      React.createElement('td', { key: 'date', style: { color: 'var(--muted)', fontSize: '0.84rem' } }, s.dateStr),
+                      React.createElement('td', { key: 'game' }, [
+                        React.createElement('span', { key: 'ic', style: { marginRight: '0.4rem' } }, g.icon || '🎮'),
+                        React.createElement('span', { key: 't' }, g.title || s.gameTitle || s.gameId)
+                      ]),
+                      React.createElement('td', { key: 'mode', style: { textTransform: 'capitalize', color: 'var(--muted)' } }, s.mode || 'Standard'),
+                      React.createElement('td', { key: 'score' }, s.total ? `${s.score} / ${s.total}` : `${s.score} pts`),
+                      React.createElement('td', { key: 'acc' }, [
+                        React.createElement('span', { key: 'b', className: `badge-pill-score ${badgeClass}` }, badgeText)
+                      ]),
+                      React.createElement('td', { key: 'time', style: { color: 'var(--muted)' } }, s.durationSec ? `${s.durationSec}s` : '—')
+                    ]);
+                  })
+                ])
+              ])
+            ])
+          ]) : null,
+
+          // 6. Data Management & Privacy Guarantee Box
+          React.createElement('div', { key: 'privacy-box', className: 'privacy-controls-box' }, [
+            React.createElement('div', { key: 'p-info', className: 'privacy-info-block' }, [
+              React.createElement('h3', { key: 'h3' }, [
+                React.createElement('span', { key: 'ic' }, '🛡️'),
+                React.createElement('span', { key: 't' }, '100% Local Device Storage')
+              ]),
+              React.createElement('p', { key: 'p' }, 
+                'Kids Zone saves your scores strictly inside your local web browser. No accounts, zero cloud servers, zero advertisements, and zero tracking cookies. You remain in complete control of your data at all times.'
+              )
+            ]),
+            React.createElement('div', { key: 'p-actions', className: 'privacy-actions' }, [
+              React.createElement('button', {
+                key: 'export',
+                type: 'button',
+                className: 'btn-secondary-action',
+                onClick: handleExport,
+                title: 'Export learning summary as JSON'
+              }, [
+                React.createElement('span', { key: 'i' }, '💾'),
+                React.createElement('span', { key: 't' }, 'Export Data')
+              ]),
+              React.createElement('button', {
+                key: 'reset-all',
+                type: 'button',
+                className: 'btn-danger-outline',
+                onClick: handleResetAll,
+                title: 'Clear all local data and nickname'
+              }, '⚠️ Reset All Data')
+            ])
+          ])
+        ]);
+      }
+
+      // Render React App
+      document.addEventListener('DOMContentLoaded', () => {
+        const rootEl = document.getElementById('progress-dashboard-root');
+        if (rootEl && ReactDOM) {
+          if (ReactDOM.createRoot) {
+            ReactDOM.createRoot(rootEl).render(React.createElement(DashboardApp));
+          } else {
+            ReactDOM.render(React.createElement(DashboardApp), rootEl);
+          }
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

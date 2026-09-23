@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Kids Zone — Safe, Fun & Educational Games</title>
+  <meta name="description" content="Safe, fun, and educational web games for children including multiplication tables, addition & subtraction, decimals & fractions, geometry, number nature, abacus, memory, puzzles, and two-player Tug War of Math arena." />
+  <meta property="og:title" content="Kids Zone" />
+  <meta property="og:description" content="Safe, fun, and educational web games for children including multiplication tables, addition & subtraction, decimals & fractions, geometry, number nature, abacus, memory, puzzles, and two-player Tug War of Math arena." />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="common/logo.svg" />
+  <link rel="apple-touch-icon" href="common/logo.svg" />
+
+  <!-- Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <!-- Common Design System & Audio -->
+  <link rel="stylesheet" href="common/common.css" />
+  <script src="common/audio.js"></script>
+  <script src="common/progress.js"></script>
+  <script src="common/common.js"></script>
+
+  <style>
+    /* Home Portal Specific Styles */
+    .hero {
+      max-width: 1100px;
+      margin: 1.5rem auto 1rem;
+      padding: 0 1.5rem;
+      text-align: center;
+    }
+
+    .hero-logo-box {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 0.8rem;
+    }
+
+    .hero-logo-img {
+      width: min(220px, 48vw);
+      height: auto;
+      filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.08));
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      cursor: pointer;
+    }
+
+    .hero-logo-img:hover {
+      transform: scale(1.06) rotate(-2deg);
+    }
+
+    .hero-title {
+      font-size: 2.8rem;
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 0.6rem;
+      color: var(--text);
+    }
+
+    .hero-title span {
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-desc {
+      font-family: var(--font-body);
+      font-size: 1.15rem;
+      max-width: 700px;
+      margin: 0 auto 1.5rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .pill-features {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-bottom: 2rem;
+    }
+
+    .pill-feature {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      background: var(--card);
+      border: 2px solid var(--border);
+      padding: 0.35rem 0.9rem;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    }
+
+    /* Controls Bar */
+    .controls-bar {
+      max-width: 1100px;
+      margin: 0 auto 1.5rem;
+      padding: 0 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .search-box {
+      display: flex;
+      align-items: center;
+      background: var(--card);
+      border: 3px solid var(--primary);
+      border-radius: 18px;
+      padding: 0.4rem 1rem;
+      box-shadow: var(--shadow);
+      max-width: 600px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .search-box input {
+      border: none;
+      outline: none;
+      background: transparent;
+      width: 100%;
+      font-family: inherit;
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--text);
+      padding: 0.3rem 0.5rem;
+    }
+
+    .search-box span {
+      font-size: 1.3rem;
+    }
+
+    .filter-pills {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .filter-btn {
+      font-family: inherit;
+      font-size: 0.95rem;
+      font-weight: 700;
+      border: 2px solid var(--primary);
+      background: var(--card);
+      color: var(--text);
+      padding: 0.4rem 1rem;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .filter-btn.active, .filter-btn:hover {
+      background: var(--primary);
+      color: #ffffff;
+    }
+
+    /* Games Grid */
+    main {
+      flex: 1;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1.5rem 3.5rem;
+      width: 100%;
+    }
+
+    .games-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .game-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      border: 3px solid var(--border);
+      box-shadow: var(--shadow);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      text-decoration: none;
+      color: inherit;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .game-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--card-accent, var(--primary));
+      box-shadow: var(--shadow-lg);
+    }
+
+    .game-top {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 0.9rem;
+    }
+
+    .game-icon-box {
+      width: 58px;
+      height: 58px;
+      border-radius: 16px;
+      background: var(--bg);
+      border: 2px solid var(--card-accent, var(--primary));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.9rem;
+      flex-shrink: 0;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    .game-header-info {
+      flex: 1;
+    }
+
+    .game-title {
+      font-size: 1.3rem;
+      font-weight: 800;
+      line-height: 1.2;
+      color: var(--text);
+    }
+
+    .game-subtitle {
+      font-size: 0.88rem;
+      color: var(--muted);
+      font-family: var(--font-body);
+      font-weight: 600;
+    }
+
+    .game-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .badge-tag {
+      font-size: 0.75rem;
+      font-family: var(--font-body);
+      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--muted);
+    }
+
+    .badge-age {
+      background: rgba(5, 150, 105, 0.12);
+      border-color: rgba(5, 150, 105, 0.3);
+      color: var(--primary);
+    }
+
+    .game-desc {
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      line-height: 1.45;
+      color: var(--muted);
+      margin-bottom: 1.2rem;
+      flex: 1;
+    }
+
+    .game-action {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 2px dashed var(--border);
+      padding-top: 0.9rem;
+      margin-top: auto;
+    }
+
+    .play-link {
+      background: var(--card-accent, var(--primary));
+      color: #ffffff;
+      padding: 0.5rem 1.15rem;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      font-weight: 800;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      box-shadow: 0 4px 0 rgba(0, 0, 0, 0.12);
+      transition: filter 0.15s ease, transform 0.1s ease;
+    }
+
+    .game-card:hover .play-link {
+      filter: brightness(1.1);
+      transform: scale(1.03);
+    }
+
+    .offline-tag {
+      font-size: 0.8rem;
+      color: var(--ok);
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .empty-state {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 3rem 1rem;
+      background: var(--card);
+      border-radius: var(--radius);
+      border: 2px dashed var(--border);
+    }
+  </style>
+</head>
+
+<body class="theme-jungle">
+  <!-- Common Header Auto-Mounted -->
+  <header data-kz-header="home"></header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-logo-box">
+      <img src="common/logo.svg" alt="Kids Zone - Safe & Fun Educational Games" class="hero-logo-img" onclick="KZ.confetti()" title="Welcome to Kids Zone! 🚀" />
+    </div>
+    <h1 class="hero-title">Safe, Fun & <span>Educational Play</span></h1>
+    <p class="hero-desc">
+      A collection of distraction-free learning games designed for children.
+      Zero ads, zero accounts, zero trackers — pure curiosity and skill building.
+    </p>
+
+    <div class="pill-features">
+      <div class="pill-feature">✨ 13 Interactive Games</div>
+      <div class="pill-feature">📶 Offline Friendly</div>
+      <div class="pill-feature">🛡️ 100% Kids Safe</div>
+      <div class="pill-feature">🚀 Fast & Lightweight</div>
+      <div class="pill-feature">🎓 Math, Logic & Geometry</div>
+    </div>
+  </section>
+
+  <!-- Controls Bar -->
+  <section class="controls-bar">
+    <div class="search-box">
+      <span>🔍</span>
+      <input type="text" id="search-input" placeholder="Search activities (e.g. multiplication, fraction, puzzle)..." oninput="filterGames()" />
+    </div>
+
+    <div class="filter-pills">
+      <button class="filter-btn active" data-category="all" onclick="setCategory('all', this)">All Games (13)</button>
+      <button class="filter-btn" data-category="Math & Arithmetic" onclick="setCategory('Math & Arithmetic', this)">🧮 Math & Arithmetic (5)</button>
+      <button class="filter-btn" data-category="Number Sense" onclick="setCategory('Number Sense', this)">🔢 Number Sense (2)</button>
+      <button class="filter-btn" data-category="Geometry" onclick="setCategory('Geometry', this)">📐 Geometry (1)</button>
+      <button class="filter-btn" data-category="Logic & Puzzles" onclick="setCategory('Logic & Puzzles', this)">🧩 Logic & Puzzles (4)</button>
+      <button class="filter-btn" data-category="Brain & Memory" onclick="setCategory('Brain & Memory', this)">🧠 Memory (1)</button>
+    </div>
+  </section>
+
+  <!-- Main Game Directory -->
+  <main>
+    <div class="games-grid" id="games-container">
+      <!-- Populated via KZ.games -->
+    </div>
+  </main>
+
+  <!-- Common Footer Auto-Mounted -->
+  <footer data-kz-footer></footer>
+
+  <script>
+    let currentCategory = 'all';
+
+    function renderGames(list) {
+      const container = document.getElementById('games-container');
+      if (!list || list.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <div style="font-size: 3rem; margin-bottom: 0.5rem;">🔍</div>
+            <h3 style="font-size: 1.4rem; font-weight: 800;">No activities found</h3>
+            <p style="font-family: var(--font-body); color: var(--muted); margin-top: 0.2rem;">Try typing another keyword or choose "All Games"!</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = list.map(g => {
+        const href = g.isExternal ? g.externalUrl : `${g.dir}/index.html`;
+        const targetAttr = g.isExternal ? 'target="_blank" rel="noopener noreferrer"' : '';
+        const playText = g.isExternal ? 'Play Game ↗' : 'Play Now ➔';
+        const offlineLabel = g.isExternal ? '🌐 Live Arena' : '✓ Offline Ready';
+        return `
+        <a href="${href}" ${targetAttr} class="game-card" style="--card-accent: ${g.color};">
+          <div>
+            <div class="game-top">
+              <div class="game-icon-box">${g.icon}</div>
+              <div class="game-header-info">
+                <h3 class="game-title">${g.title} ${g.isExternal ? '<span style="font-size:0.75rem; vertical-align:middle; background:rgba(225,29,72,0.12); color:#e11d48; padding:2px 7px; border-radius:6px; font-weight:700;">Battle</span>' : ''}</h3>
+                <div class="game-subtitle">${g.subtitle}</div>
+              </div>
+            </div>
+
+            <div class="game-badges">
+              <span class="badge-tag badge-age">${g.badge}</span>
+              <span class="badge-tag">${g.category}</span>
+              ${g.isExternal ? '<span class="badge-tag" style="background:#fee2e2; color:#be123c; font-weight:700;">Two-Team Arena</span>' : ''}
+            </div>
+
+            <p class="game-desc">${g.description}</p>
+          </div>
+
+          <div class="game-action">
+            <span class="offline-tag">${offlineLabel}</span>
+            <span class="play-link">${playText}</span>
+          </div>
+        </a>
+      `;
+      }).join('');
+    }
+
+    function filterGames() {
+      const query = document.getElementById('search-input').value.toLowerCase().trim();
+      const list = window.KZ ? window.KZ.games : [];
+      const filtered = list.filter(g => {
+        const matchesCategory = currentCategory === 'all' || g.category === currentCategory;
+        const matchesQuery = !query || 
+          g.title.toLowerCase().includes(query) || 
+          g.subtitle.toLowerCase().includes(query) || 
+          g.description.toLowerCase().includes(query) ||
+          g.category.toLowerCase().includes(query);
+        return matchesCategory && matchesQuery;
+      });
+      renderGames(filtered);
+    }
+
+    function setCategory(cat, btn) {
+      if (window.KZAudio) KZAudio.playClick();
+      currentCategory = cat;
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      filterGames();
+    }
+
+    function initGames() {
+      if (window.KZ && Array.isArray(window.KZ.games) && window.KZ.games.length > 0) {
+        renderGames(window.KZ.games);
+      } else {
+        setTimeout(() => {
+          if (window.KZ && Array.isArray(window.KZ.games)) {
+            renderGames(window.KZ.games);
+          }
+        }, 100);
+      }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initGames);
+    } else {
+      initGames();
+    }
+    window.addEventListener('load', initGames);
+  </script>
+</body>
+</html>

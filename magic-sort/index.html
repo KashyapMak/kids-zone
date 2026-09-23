@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Magic Sort — Test Tube Liquid Color Puzzle | Kids Zone</title>
+  <link rel="icon" type="image/svg+xml" href="../common/logo.svg" />
+  <link rel="apple-touch-icon" href="../common/logo.svg" />
+
+  <!-- Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <!-- Common Design System & Audio -->
+  <link rel="stylesheet" href="../common/common.css" />
+  <script src="../common/audio.js"></script>
+  <script src="../common/common.js"></script>
+
+  <!-- Game Specific CSS & JS -->
+  <link rel="stylesheet" href="magic-sort.css" />
+  <script src="magic-sort.js" defer></script>
+</head>
+
+<body>
+  <!-- Common Header Auto-Mounted -->
+  <header data-kz-header="magic-sort"></header>
+
+  <main>
+    <!-- SETUP SCREEN -->
+    <section id="setupScreen" class="screen active setup">
+      <div class="hero">
+        <div class="e">🧪✨</div>
+        <h1>Magic Sort</h1>
+        <p>Sort bright magic potions into glass test tubes. Each tube must end with one color only!</p>
+      </div>
+
+      <div class="panel">
+        <div class="label">Difficulty</div>
+        <div id="difficultyGroup" class="chips">
+          <button class="chip active" data-value="easy">😊 Easy</button>
+          <button class="chip" data-value="medium">🧐 Medium</button>
+          <button class="chip" data-value="hard">🔥 Hard</button>
+        </div>
+
+        <div class="label">Mode</div>
+        <div id="modeGroup" class="chips" style="margin-bottom:0">
+          <button class="chip active" data-value="practice">🧘 Practice</button>
+          <button class="chip" data-value="timed">⏰ Timed</button>
+        </div>
+      </div>
+
+      <div class="btns">
+        <button id="startBtn" class="btn primary">▶ Start Game</button>
+        <button id="continueBtn" class="btn secondary hidden">🔁 Continue</button>
+        <button id="resetBtn" class="btn danger hidden">❌ Reset Progress</button>
+      </div>
+    </section>
+
+    <!-- GAME SCREEN -->
+    <section id="gameScreen" class="screen game">
+      <div class="status">
+        <div class="lvl">
+          <span class="cap">Level</span>
+          <span id="levelLabel" class="title">Level 1</span>
+          <br>
+          <span id="moveLabel" class="moves">Moves: 0</span>
+        </div>
+
+        <div id="timerWrap" class="timer hidden">
+          <div class="timer-meta">
+            <span>⏰ Time</span>
+            <span id="timerText">00:00</span>
+          </div>
+          <div class="track">
+            <div id="timerFill" class="fill"></div>
+          </div>
+        </div>
+
+        <div style="display:flex; gap:8px">
+          <button id="undoBtn" class="icon-btn" title="Undo (Z)">↩️</button>
+          <button id="restartBtn" class="icon-btn" title="Restart Level (R)">🔄</button>
+          <button id="quitBtn" class="icon-btn" title="Quit to Setup">🏁</button>
+        </div>
+      </div>
+
+      <div id="tubesGrid" class="tube-grid"></div>
+      <p class="hint">Tap one tube, then tap another tube to pour.</p>
+    </section>
+
+    <!-- RESULT SCREEN -->
+    <section id="resultScreen" class="screen result">
+      <div class="card">
+        <div id="resultIcon" class="res-icon">🏆</div>
+        <h2 id="resultTitle" style="font-size:1.8rem; font-weight:900; margin:0.3rem 0;">Level Complete!</h2>
+        <p id="resultSubtitle" style="color:var(--muted); font-weight:800;">Amazing sorting skills!</p>
+        <div style="margin:14px 0 20px; font-weight:900; font-size:1.2rem;">Level <span id="resultLevel">1</span></div>
+        <div class="btns" style="width:100%">
+          <button id="nextLevelBtn" class="btn primary">➡️ Next Level</button>
+          <button id="retryBtn" class="btn secondary">🔁 Retry</button>
+          <button id="resultRestartBtn" class="btn secondary">🔄 Restart</button>
+          <button id="homeBtn" class="btn ghost">🏠 Home</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="toast" class="toast"></div>
+
+  <!-- Common Footer Auto-Mounted -->
+  <footer data-kz-footer></footer>
+</body>
+</html>
